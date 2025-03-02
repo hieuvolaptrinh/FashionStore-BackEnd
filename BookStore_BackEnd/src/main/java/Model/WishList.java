@@ -3,8 +3,7 @@ package Model;
 import java.util.List;
 
 import jakarta.persistence.*;
-import lombok.Data;
-@Data
+
 @Entity
 public class WishList {
     @Id
@@ -16,4 +15,38 @@ public class WishList {
     private Users user;
     @OneToMany(mappedBy = "wishList")
     private List<WishListDetail> listWishListDetails;
+
+    public WishList() {
+
+    }
+
+    public List<WishListDetail> getListWishListDetails() {
+        return listWishListDetails;
+    }
+
+    public void setListWishListDetails(List<WishListDetail> listWishListDetails) {
+        this.listWishListDetails = listWishListDetails;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    public int getWishListId() {
+        return wishListId;
+    }
+
+    public void setWishListId(int wishListId) {
+        this.wishListId = wishListId;
+    }
+
+    public WishList(List<WishListDetail> listWishListDetails, Users user, int wishListId) {
+        this.listWishListDetails = listWishListDetails;
+        this.user = user;
+        this.wishListId = wishListId;
+    }
 }

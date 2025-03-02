@@ -3,8 +3,7 @@ package Model;
 import java.sql.Blob;
 
 import jakarta.persistence.*;
-import lombok.Data;
-@Data
+
 @Entity
 public class Image {
 
@@ -19,7 +18,7 @@ public class Image {
     private boolean icon;
 
 //    cái này là optional
-    @Lob
+
     private String data;
 
     @ManyToOne( cascade ={

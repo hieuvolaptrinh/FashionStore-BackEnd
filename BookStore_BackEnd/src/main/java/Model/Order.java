@@ -4,8 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
-import lombok.Data;
-@Data
+
 @Entity
 public class Order {
 

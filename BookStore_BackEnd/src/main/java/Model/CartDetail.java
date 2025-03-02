@@ -1,7 +1,6 @@
 package Model;
 import jakarta.persistence.*;
-import lombok.Data;
-@Data
+
 @Entity
 public class CartDetail {
 
@@ -30,4 +29,55 @@ public class CartDetail {
     })
     @JoinColumn(name = "order_id")
     private Order cart;
+
+    public CartDetail() {
+    }
+
+    public Order getCart() {
+        return cart;
+    }
+
+    public void setCart(Order cart) {
+        this.cart = cart;
+    }
+
+    public int getCartDetailId() {
+        return cartDetailId;
+    }
+
+    public void setCartDetailId(int cartDetailId) {
+        this.cartDetailId = cartDetailId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public CartDetail(Order cart, int cartDetailId, double price, Product product, int quantity) {
+        this.cart = cart;
+        this.cartDetailId = cartDetailId;
+        this.price = price;
+        this.product = product;
+        this.quantity = quantity;
+    }
 }

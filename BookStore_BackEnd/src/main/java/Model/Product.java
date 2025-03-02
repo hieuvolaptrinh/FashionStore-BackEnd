@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
-import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "product")
 public class Product {

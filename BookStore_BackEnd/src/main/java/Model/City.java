@@ -5,9 +5,7 @@ import java.util.List;
 import Model.Country;
 import Model.District;
 import jakarta.persistence.*;
-import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "City")
 public class City {
@@ -29,5 +27,35 @@ public class City {
     // Constructor không tham số (bắt buộc)
     public City() {}
 
+    public int getCityId() {
+        return cityId;
+    }
 
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public List<District> getDistricts() {
+        return districts;
+    }
+
+    public void setDistricts(List<District> districts) {
+        this.districts = districts;
+    }
 }

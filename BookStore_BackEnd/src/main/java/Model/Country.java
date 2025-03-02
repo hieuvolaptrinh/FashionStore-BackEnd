@@ -1,11 +1,11 @@
 package Model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 import Model.City;
 
 import java.util.List;
-@Data
+
 @Entity
 public class Country {
     @Id
@@ -20,5 +20,27 @@ public class Country {
 
     }
 
+    public List<City> getCitys() {
+        return citys;
+    }
 
+    public void setCitys(List<City> citys) {
+        this.citys = citys;
+    }
+
+    public Integer getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Integer countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
 }
