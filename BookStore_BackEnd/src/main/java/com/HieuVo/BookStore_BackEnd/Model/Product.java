@@ -1,4 +1,4 @@
-package Model;
+package com.HieuVo.BookStore_BackEnd.Model;
 
 import jakarta.persistence.*;
 
@@ -14,7 +14,7 @@ public class Product {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int productId;
 
-    @Column(length = 256)
+    @Column(columnDefinition = "NVARCHAR(256)")
     private String productName;
 
     @Column(length = 256, columnDefinition = "NVARCHAR(256)")
@@ -22,6 +22,7 @@ public class Product {
 
     private double originalPrice;
 
+    @Column(columnDefinition = "NVARCHAR(256)")
     private String author;
 
     private double salePrice;

@@ -1,6 +1,4 @@
-package Model;
-
-import java.sql.Blob;
+package com.HieuVo.BookStore_BackEnd.Model;
 
 import jakarta.persistence.*;
 

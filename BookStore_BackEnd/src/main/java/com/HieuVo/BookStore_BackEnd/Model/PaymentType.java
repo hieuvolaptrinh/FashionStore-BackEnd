@@ -1,18 +1,18 @@
-package Model;
+package com.HieuVo.BookStore_BackEnd.Model;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class PaymentType {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int paymentTypeID;
 
+    @Column(columnDefinition = "NVARCHAR(500)")
     private String paymentTypeName;
 
     private String description;

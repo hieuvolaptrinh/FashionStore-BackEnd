@@ -1,21 +1,23 @@
-package Model;
+package com.HieuVo.BookStore_BackEnd.Model;
 
 import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
+@Table(name = "orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int orderId;
-
     private Date createAt;
 
     private Date deliveryDate;
 
+    @Column(columnDefinition = "NVARCHAR(500)")
     private String status;
 
     private double totalPrice;

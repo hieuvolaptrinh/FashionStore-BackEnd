@@ -1,0 +1,21 @@
+package com.HieuVo.BookStore_BackEnd.Model;
+
+import java.util.List;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Data
+@Entity
+public class WishList {
+    @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    private int wishListId;
+
+    @OneToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private Users user;
+    @OneToMany(mappedBy = "wishList")
+    private List<WishListDetail> listWishListDetails;
+
+}

@@ -1,4 +1,4 @@
-package Model;
+package com.HieuVo.BookStore_BackEnd.Model;
 
 
 import jakarta.persistence.*;
