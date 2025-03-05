@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 @Entity
+
 public class ShippingMethod {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -19,6 +20,5 @@ public class ShippingMethod {
     private double fee;
     @OneToMany(mappedBy = "shippingMethod")
     private List<Order> listOrder;
-
 
 }

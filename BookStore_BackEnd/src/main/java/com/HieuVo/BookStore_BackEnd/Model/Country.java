@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
+
 public class Country {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -17,6 +18,5 @@ public class Country {
 
     @OneToMany(mappedBy = "country")
     private List<City> citys;
-
 
 }

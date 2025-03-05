@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 @Entity
+
 public class PaymentType {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)

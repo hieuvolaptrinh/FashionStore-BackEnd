@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
+
 @Entity
 public class Cart {
     @Id
@@ -21,9 +22,7 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    private Users user;
-
-
+    private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartDetail> cartDetails;

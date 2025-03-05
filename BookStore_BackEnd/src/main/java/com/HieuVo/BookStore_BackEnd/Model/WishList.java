@@ -7,14 +7,15 @@ import lombok.Data;
 
 @Data
 @Entity
+
 public class WishList {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int wishListId;
 
     @OneToOne
-    @JoinColumn(name = "user_id",nullable = false)
-    private Users user;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @OneToMany(mappedBy = "wishList")
     private List<WishListDetail> listWishListDetails;
 

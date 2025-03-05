@@ -7,14 +7,14 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "City")
+
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "city_id") // Đặt tên cột rõ ràng
     private int cityId;
 
-    @Column(name = "cityName",columnDefinition = "NVARCHAR(500)")
+    @Column(name = "cityName", columnDefinition = "NVARCHAR(500)")
     private String cityName;
 
     @ManyToOne

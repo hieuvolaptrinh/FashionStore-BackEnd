@@ -1,10 +1,12 @@
 package com.HieuVo.BookStore_BackEnd.Model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
-public class Image {
 
+public class Image {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int imageId;
@@ -15,16 +17,16 @@ public class Image {
 
     private boolean icon;
 
-//    cái này là optional
+    // cái này là optional
 
     private String data;
 
-    @ManyToOne( cascade ={
+    @ManyToOne(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.DETACH,
             CascadeType.REFRESH
     })
-    @JoinColumn(name = "product_id",nullable = false) // ko cho null
+    @JoinColumn(name = "product_id", nullable = false) // ko cho null
     private Product product;
 }

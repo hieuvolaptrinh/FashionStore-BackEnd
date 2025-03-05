@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
+
 public class District {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +18,4 @@ public class District {
     @JoinColumn(name = "city_id") // Khóa ngoại
     private City city;
 
-
 }
-
-

@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
+
 public class Ward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,7 @@ public class Ward {
     private District district;
 
     @OneToMany(mappedBy = "address")
-    private List<Users> listUsers;
+    private List<User> listUsers;
 
     @OneToMany(mappedBy = "shippingWard")
     private List<Order> listOrders;
