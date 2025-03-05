@@ -34,12 +34,12 @@ public class MethodRestConfig implements RepositoryRestConfigurer {
                 .map(entityType -> entityType.getJavaType())
                 .toArray(Class[]::new));
 
-        HttpMethod[] deleteMethod = {
-                HttpMethod.DELETE
-        };
+        // HttpMethod[] deleteMethod = {
+        // HttpMethod.DELETE
+        // };
 
-        disableHttpMethods(Type.class, config, blockMethods);
-        disableHttpMethods(User.class, config, deleteMethod);
+        // disableHttpMethods(Type.class, config, blockMethods);
+        // disableHttpMethods(User.class, config, deleteMethod);
 
     }
 
