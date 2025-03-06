@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 @Entity
-
 public class Image {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -13,12 +12,13 @@ public class Image {
 
     private String imageName;
 
-    private String link;
-
     private boolean icon;
 
+    private String link;
     // cái này là optional
 
+    @Lob
+    @Column(columnDefinition = "VARCHAR(MAX)")
     private String data;
 
     @ManyToOne(cascade = {
