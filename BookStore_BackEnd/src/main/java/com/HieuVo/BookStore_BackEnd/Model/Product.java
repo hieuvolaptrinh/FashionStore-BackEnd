@@ -58,4 +58,126 @@ public class Product {
 
         @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
         private List<WishListDetail> listWishListDetails;
+
+
+
+        public int getProductId() {
+                return productId;
+        }
+
+        public void setProductId(int productId) {
+                this.productId = productId;
+        }
+
+        public String getProductName() {
+                return productName;
+        }
+
+        public void setProductName(String productName) {
+                this.productName = productName;
+        }
+
+        public String getDescription() {
+                return description;
+        }
+
+        public void setDescription(String description) {
+                this.description = description;
+        }
+
+        public double getOriginalPrice() {
+                return originalPrice;
+        }
+
+        public void setOriginalPrice(double originalPrice) {
+                this.originalPrice = originalPrice;
+        }
+
+        public String getAuthor() {
+                return author;
+        }
+
+        public void setAuthor(String author) {
+                this.author = author;
+        }
+
+        public double getSalePrice() {
+                return salePrice;
+        }
+
+        public void setSalePrice(double salePrice) {
+                this.salePrice = salePrice;
+        }
+
+        public int getQuantity() {
+                return quantity;
+        }
+
+        public void setQuantity(int quantity) {
+                this.quantity = quantity;
+        }
+
+        public Date getManufactureDate() {
+                return manufactureDate;
+        }
+
+        public void setManufactureDate(Date manufactureDate) {
+                this.manufactureDate = manufactureDate;
+        }
+
+        public float getAvgStars() {
+                return avgStars;
+        }
+
+        public void setAvgStars(float avgStars) {
+                this.avgStars = avgStars;
+        }
+
+        public List<Type> getListTypes() {
+                return listTypes;
+        }
+
+        public void setListTypes(List<Type> listTypes) {
+                this.listTypes = listTypes;
+        }
+
+        public List<Image> getListImages() {
+                return listImages;
+        }
+
+        public void setListImages(List<Image> listImages) {
+                this.listImages = listImages;
+        }
+
+        public List<Review> getListReviews() {
+                return listReviews;
+        }
+
+        public void setListReviews(List<Review> listReviews) {
+                this.listReviews = listReviews;
+        }
+
+        public List<OrderDetail> getListOrderDetails() {
+                return listOrderDetails;
+        }
+
+        public void setListOrderDetails(List<OrderDetail> listOrderDetails) {
+                this.listOrderDetails = listOrderDetails;
+        }
+
+        public List<CartDetail> getListCartDetails() {
+                return listCartDetails;
+        }
+
+        public void setListCartDetails(List<CartDetail> listCartDetails) {
+                this.listCartDetails = listCartDetails;
+        }
+
+        public List<WishListDetail> getListWishListDetails() {
+                return listWishListDetails;
+        }
+
+        public void setListWishListDetails(List<WishListDetail> listWishListDetails) {
+                this.listWishListDetails = listWishListDetails;
+        }
 }

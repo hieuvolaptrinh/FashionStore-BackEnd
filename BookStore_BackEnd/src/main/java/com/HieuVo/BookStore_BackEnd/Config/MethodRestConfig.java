@@ -23,21 +23,23 @@ public class MethodRestConfig implements RepositoryRestConfigurer {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        //
+
+
+        // Lấy tất cả các entity và expose ID
+        config.exposeIdsFor(entityManager.getMetamodel().getEntities().stream()
+                .map(entityType -> entityType.getJavaType())
+                .toArray(Class[]::new));
+        //CORS configuration
+        cors.addMapping("/**")
+                .allowedOrigins(url)
+                .allowedMethods("GET", "POST", "PUT", "DELETE");
+
+
         HttpMethod[] blockMethods = {
                 HttpMethod.POST,
                 HttpMethod.PUT,
                 HttpMethod.DELETE
         };
-        // Lấy tất cả các entity và expose ID
-        config.exposeIdsFor(entityManager.getMetamodel().getEntities().stream()
-                .map(entityType -> entityType.getJavaType())
-                .toArray(Class[]::new));
-
-        // HttpMethod[] deleteMethod = {
-        // HttpMethod.DELETE
-        // };
-
         // disableHttpMethods(Type.class, config, blockMethods);
         // disableHttpMethods(User.class, config, deleteMethod);
 
