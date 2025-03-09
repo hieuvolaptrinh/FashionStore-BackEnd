@@ -39,8 +39,8 @@ public class Order {
                         jakarta.persistence.CascadeType.DETACH,
                         jakarta.persistence.CascadeType.REFRESH
         })
-        @JoinColumn(name = "shipping_ward_id", nullable = false)
-        private Ward shippingWard;
+        @JoinColumn(name = "shipping_address_id", nullable = false)
+        private Address shippingAddress;
 
         @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
         private List<OrderDetail> orderDetails;

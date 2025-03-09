@@ -8,22 +8,29 @@ import java.util.List;
 @Data
 @Entity
 
-public class Ward {
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer wardId;
+    private Integer addressId;
+
+    @Column(columnDefinition = "NVARCHAR(256)")
+    private String streetName;
+
+    @Column(columnDefinition = "NVARCHAR(256)")
+    private String cityName;
+
+    @Column(columnDefinition = "NVARCHAR(256)")
+
+    private String districtName;
 
     @Column(columnDefinition = "NVARCHAR(256)")
     private String wardName;
 
-    @ManyToOne
-    @JoinColumn(name = "district_id") // Đảm bảo không null
-    private District district;
 
     @OneToMany(mappedBy = "address")
     private List<User> listUsers;
 
-    @OneToMany(mappedBy = "shippingWard")
+    @OneToMany(mappedBy = "shippingAddress")
     private List<Order> listOrders;
 
 }

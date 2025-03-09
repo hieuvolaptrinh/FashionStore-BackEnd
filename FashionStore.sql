@@ -35,25 +35,20 @@ INSERT INTO payment_type (payment_type_name, description, fee) VALUES
 (N'PayPal', N'Thanh toán quốc tế qua PayPal', 15000);
 GO
 
--- Insert vào bảng country
-INSERT INTO country (country_name) VALUES 
-(N'Việt Nam'), (N'Mỹ'), (N'Nhật Bản'), (N'Anh'), (N'Pháp');
-GO
 
--- Insert vào bảng city
-INSERT INTO city (country_id, city_name) VALUES 
-(1, N'Hà Nội'), (1, N'Hồ Chí Minh'), (2, N'New York'), (3, N'Tokyo'), (4, N'London');
-GO
+INSERT INTO Address (street_name, city_name, district_name, ward_name)
+VALUES 
+(N'123 Đường Lê Lợi', N'Hà Nội', N'Ba Đình', N'Phúc Xá'),
+(N'456 Đường Trần Hưng Đạo', N'TP. Hồ Chí Minh', N'Quận 1', N'Bến Nghé'),
+(N'789 Đường Nguyễn Trãi', N'Đà Nẵng', N'Hải Châu', N'Hòa Thuận Tây'),
+(N'321 Đường Phạm Văn Đồng', N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng'),
+(N'654 Đường Nguyễn Văn Linh', N'Hải Phòng', N'Lê Chân', N'Vĩnh Niệm'),
+(N'987 Đường Võ Văn Kiệt', N'TP. Hồ Chí Minh', N'Quận 5', N'Phường 10'),
+(N'741 Đường Điện Biên Phủ', N'Cần Thơ', N'Ninh Kiều', N'An Hòa'),
+(N'852 Đường Lý Thường Kiệt', N'Bình Dương', N'Thủ Dầu Một', N'Phú Cường'),
+(N'159 Đường Quang Trung', N'Đà Lạt', N'Trạm Hành', N'Xuân Trường'),
+(N'357 Đường Trường Chinh', N'Nha Trang', N'Vĩnh Hải', N'Vĩnh Phước');
 
--- Insert vào bảng district
-INSERT INTO district (city_id, district_name) VALUES 
-(1, N'Ba Đình'), (1, N'Hoàn Kiếm'), (2, N'Quận 1'), (3, N'Shibuya'), (4, N'Westminster');
-GO
-
--- Insert vào bảng ward
-INSERT INTO ward (district_id, ward_name) VALUES 
-(1, N'Kim Mã'), (2, N'Hàng Bông'), (3, N'Bến Nghé'), (4, N'Harajuku'), (5, N'Soho');
-GO
 
 -- Insert vào bảng users
 INSERT INTO users (user_name, first_name, last_name, email, password, phone_number, sex, address_id) 
@@ -76,22 +71,40 @@ INSERT INTO user_role (user_id, role_id) VALUES
 (1, 1), (2, 2), (3, 2), (4, 2), (5, 3);
 GO
 
--- Insert vào bảng product
 INSERT INTO product (product_name, description, author, original_price, sale_price, manufacture_date, quantity, avg_stars)
-VALUES (N'Lập Trình Java', N'Học Java từ cơ bản đến nâng cao', N'Nguyễn Văn A', 200000, 180000, '2023-01-01', 50, 4.5),
-       (N'Spring Boot Toàn Tập', N'Hướng dẫn đầy đủ về Spring Boot', N'Trần Thị B', 250000, 220000, '2023-02-15', 40, 4.7),
-       (N'Cấu Trúc Dữ Liệu', N'Tư duy thuật toán và dữ liệu', N'Lê Quốc D', 180000, 150000, '2022-10-10', 60, 4.3),
-       (N'Học SQL Server', N'Từ cơ bản đến chuyên sâu', N'Phạm Thị E', 230000, 210000, '2023-03-05', 30, 4.6),
-       (N'Thuật Toán Cơ Bản', N'Những thuật toán quan trọng trong lập trình', N'Hoàng Minh', 190000, 170000, '2023-05-20', 55, 4.4),
-	   (N'Áo sơ mi nam', N'Áo sơ mi nam dài tay, chất liệu cotton', N'Thời trang Nam', 300000, 250000, '2024-01-10', 100, 4.6),
-	(N'Áo thun nữ', N'Áo thun nữ cổ tròn, phong cách trẻ trung', N'Thời trang Nữ', 200000, 180000, '2024-02-05', 120, 4.5),
-	(N'Quần jean nam', N'Quần jean nam ống đứng, chất vải bền đẹp', N'Thời trang Nam', 450000, 400000, '2024-01-15', 80, 4.7),
-	(N'Giày sneaker', N'Giày sneaker phong cách thể thao, phù hợp đi chơi, đi học', N'Thời trang Giày dép', 500000, 450000, '2024-01-20', 90, 4.8),
-	(N'Giày cao gót nữ', N'Giày cao gót nữ thanh lịch, gót 5cm', N'Thời trang Nữ', 550000, 500000, '2024-02-01', 70, 4.6);
-
+VALUES 
+    (N'Áo sơ mi nam', N'Áo sơ mi nam dài tay, chất liệu cotton', N'Thời trang Nam', 300000, 250000, '2024-01-10', 100, 4.6),
+    (N'Áo thun nữ', N'Áo thun nữ cổ tròn, phong cách trẻ trung', N'Thời trang Nữ', 200000, 180000, '2024-02-05', 120, 4.5),
+    (N'Quần jean nam', N'Quần jean nam ống đứng, chất vải bền đẹp', N'Thời trang Nam', 450000, 400000, '2024-01-15', 80, 4.7),
+    (N'Giày sneaker', N'Giày sneaker phong cách thể thao, phù hợp đi chơi, đi học', N'Thời trang Giày dép', 500000, 450000, '2024-01-20', 90, 4.8),
+    (N'Giày cao gót nữ', N'Giày cao gót nữ thanh lịch, gót 5cm', N'Thời trang Nữ', 550000, 500000, '2024-02-01', 70, 4.6),
+    (N'Áo khoác da nam', N'Áo khoác da cao cấp, phong cách lịch lãm', N'Thời trang Nam', 800000, 750000, '2024-02-10', 50, 4.9),
+    (N'Váy dạ hội', N'Váy dạ hội sang trọng, chất liệu cao cấp', N'Thời trang Nữ', 1200000, 1100000, '2024-03-01', 40, 4.8),
+    (N'Túi xách nữ', N'Túi xách nữ hàng hiệu, kiểu dáng thanh lịch', N'Phụ kiện', 600000, 550000, '2024-03-10', 60, 4.7),
+    (N'Kính mát nam', N'Kính mát chống tia UV, phong cách hiện đại', N'Phụ kiện', 300000, 270000, '2024-03-15', 75, 4.6),
+    (N'Đồng hồ nam', N'Đồng hồ thời trang, chống nước, bảo hành 2 năm', N'Phụ kiện', 1500000, 1400000, '2024-03-20', 30, 4.9);
 GO
 
+INSERT INTO type (type_name) VALUES 
+    (N'Áo quần nam'),
+    (N'Áo quần nữ'),
+    (N'Giày dép'),
+    (N'Phụ kiện');
+GO
 
+-- Insert vào bảng product
+INSERT INTO product_type (type_id, product_id) VALUES 
+    (1, 1), -- Áo sơ mi nam -> Áo quần nam
+    (2, 2), -- Áo thun nữ -> Áo quần nữ
+    (1, 3), -- Quần jean nam -> Áo quần nam
+    (3, 4), -- Giày sneaker -> Giày dép
+    (3, 5), -- Giày cao gót nữ -> Giày dép
+    (1, 6), -- Áo khoác da nam -> Áo quần nam
+    (2, 7), -- Váy dạ hội -> Áo quần nữ
+    (4, 8), -- Túi xách nữ -> Phụ kiện
+    (4, 9), -- Kính mát nam -> Phụ kiện
+    (4, 10); -- Đồng hồ nam -> Phụ kiện
+GO
 
 
 -- Insert vào bảng cart
@@ -112,7 +125,7 @@ INSERT INTO cart_detail (cart_id, product_id, quantity, price) VALUES
 GO
 
 -- Insert vào bảng orders
-INSERT INTO orders (user_id, create_at, delivery_date, total_price, payment_type_id, shipping_method_id, shipping_ward_id, status) 
+INSERT INTO orders (user_id, create_at, delivery_date, total_price, payment_type_id, shipping_method_id, shipping_address_id, status) 
 VALUES (1, '2024-02-20', '2024-02-25', 380000, 1, 1, 1, N'Đã giao'),
        (2, '2024-02-22', '2024-02-27', 220000, 2, 2, 2, N'Chờ xử lý'),
        (3, '2024-02-23', '2024-02-28', 170000, 1, 3, 3, N'Đã giao'),
@@ -136,35 +149,6 @@ INSERT INTO review (user_id, product_id, stars, content) VALUES
 (4, 4, 4, N'Sách về SQL đầy đủ thông tin'),
 (5, 5, 5, N'Những thuật toán rất hữu ích cho lập trình viên');
 GO
-
-INSERT INTO type (type_name) VALUES 
-(N'Khoa học máy tính'),
-(N'Phát triển phần mềm'),
-(N'Lập trình'),
-(N'Cơ sở dữ liệu'),
-(N'Kỹ thuật phần mềm'),
-(N'Quần áo'),
-(N'Giày dép');
-GO
-
-
-INSERT INTO product_type (type_id, product_id) VALUES 
-(1, 1), 
-(2, 2), 
-(3, 1),
-(3, 3),
-(4, 4), 
-(5, 2),
-(5, 5),
-(1, 6),
-(1, 7), 
-(1, 8), 
-(2, 9), 
-(2, 10);
-GO
-
-
-
 
 
 GO

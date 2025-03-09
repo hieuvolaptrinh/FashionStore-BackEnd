@@ -39,7 +39,7 @@ public class User {
             jakarta.persistence.CascadeType.REFRESH
     })
     @JoinColumn(name = "address_id")
-    private Ward address;
+    private Address address;
     //
     // private Ward sellingWard;
 
@@ -58,11 +58,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> listOrders;
 
-    public Ward getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Ward address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
