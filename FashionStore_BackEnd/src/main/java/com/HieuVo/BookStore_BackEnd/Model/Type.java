@@ -2,6 +2,7 @@ package com.HieuVo.BookStore_BackEnd.Model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class Type {
         @Column(columnDefinition = "NVARCHAR(256)")
         private String typeName;
 
+        @JsonIgnore
         @ManyToMany(fetch = FetchType.LAZY, cascade = {
                         CascadeType.PERSIST,
                         CascadeType.MERGE,

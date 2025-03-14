@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.HieuVo</groupId>
-    <artifactId>BookStore_BackEnd</artifactId>
+    <artifactId>FashionStore_BackEnd</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>BookStore_BackEnd</name>
+    <name>FashionStore_BackEnd</name>
     <description>Project Book Store BackEnd</description>
     <url/>
     <licenses>

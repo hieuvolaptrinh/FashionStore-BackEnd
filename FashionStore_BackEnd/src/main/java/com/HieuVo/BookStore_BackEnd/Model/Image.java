@@ -1,5 +1,6 @@
 package com.HieuVo.BookStore_BackEnd.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class Image {
     @Column(columnDefinition = "VARCHAR(MAX)")
     private String data;
 
+    @JsonIgnore
     @ManyToOne(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE,

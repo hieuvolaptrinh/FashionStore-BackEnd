@@ -1,5 +1,6 @@
 package com.HieuVo.BookStore_BackEnd.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -22,8 +23,8 @@ public class Product {
 
         private double originalPrice;
 
-        @Column(columnDefinition = "NVARCHAR(256)")
-        private String author;
+        @Column(columnDefinition = "NVARCHAR(MAX)")
+        private String productionInfor;
 
         private double salePrice;
 
@@ -35,6 +36,7 @@ public class Product {
         // sao trung bình
         private float avgStars;
 
+        @JsonIgnore
         @ManyToMany(fetch = FetchType.LAZY, cascade = {
                         CascadeType.PERSIST,
                         CascadeType.MERGE,
@@ -93,12 +95,12 @@ public class Product {
                 this.originalPrice = originalPrice;
         }
 
-        public String getAuthor() {
-                return author;
+        public String getProductionInfor() {
+                return productionInfor;
         }
 
-        public void setAuthor(String author) {
-                this.author = author;
+        public void getProductionInfor(String author) {
+                this.productionInfor = author;
         }
 
         public double getSalePrice() {
