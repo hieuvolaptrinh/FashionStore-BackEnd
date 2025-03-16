@@ -122,8 +122,8 @@ public class User {
         this.password = password;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhoneNumber(String phoneNumber) {
+        return this.phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {

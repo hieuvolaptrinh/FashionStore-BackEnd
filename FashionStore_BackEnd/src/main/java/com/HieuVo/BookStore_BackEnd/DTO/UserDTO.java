@@ -8,6 +8,9 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
+    private String userName;
+    private String phoneNumber;
 
     public UserDTO(String firstName, String lastName, String email) {
         this.firstName = firstName;
@@ -15,5 +18,5 @@ public class UserDTO {
         this.email = email;
     }
 
-    // Getters & Setters
+
 }
