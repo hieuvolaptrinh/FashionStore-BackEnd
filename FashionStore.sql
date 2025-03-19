@@ -18,7 +18,7 @@ USE FashionStore1;
 GO
 */
 -- Insert vào bảng shipping_method
-INSERT INTO shipping_method (shipping_method_name, description, fee) VALUES
+INSERT INTO shipping_method(shipping_method_name, description, fee) VALUES
 (N'Giao hàng nhanh', N'Nhận hàng trong 1-2 ngày', 30000),
 (N'Giao hàng tiêu chuẩn', N'Nhận hàng trong 3-5 ngày', 20000),
 (N'Giao hàng tiết kiệm', N'Nhận hàng trong 5-7 ngày', 10000),
@@ -49,22 +49,23 @@ VALUES
 (N'159 Đường Quang Trung', N'Đà Lạt', N'Trạm Hành', N'Xuân Trường'),
 (N'357 Đường Trường Chinh', N'Nha Trang', N'Vĩnh Hải', N'Vĩnh Phước');
 
-
--- Insert vào bảng users
-INSERT INTO users (user_name, first_name, last_name, email, password, phone_number, sex, address_id) 
-VALUES (N'nguyenvana', N'Nguyễn Văn', N'A', N'vana@example.com', N'pass123', N'0987654321', N'Nam', 1),
-       (N'tranthib', N'Trần Thị', N'B', N'thib@example.com', N'pass456', N'0976543210', N'Nữ', 2),
-       (N'lequocd', N'Lê Quốc', N'D', N'quocd@example.com', N'pass789', N'0912345678', N'Nam', 3),
-       (N'phamthie', N'Phạm Thị', N'E', N'thie@example.com', N'pass321', N'0934567890', N'Nữ', 4),
-       (N'hoangminh', N'Hoàng', N'Minh', N'minh@example.com', N'pass654', N'0967891234', N'Nam', 5);
-GO
-
 -- Insert vào bảng role
 INSERT INTO role (role_name, description) VALUES 
-(N'Admin', N'Quản trị viên'), 
-(N'Khách hàng', N'Người mua hàng'), 
-(N'Nhân viên', N'Nhân viên cửa hàng');
+(N'ADMIN', N'Quản trị viên'), 
+(N'USER', N'Người mua hàng'), 
+(N'STAFF', N'Nhân viên cửa hàng');
 GO
+-- Insert vào bảng users
+INSERT INTO users (user_name, first_name, last_name, email, password, phone_number, sex, address_id) 
+VALUES (N'hieudaika', N'Hiếu Đại Ka', N'A', N'admin@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0987654321', N'Nam', 1),
+       (N'user', N'User', N'B', N'user@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0976543210', N'Nữ', 2),
+       (N'lequocd', N'Lê Quốc', N'D', N'quocd@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0912345678', N'Nam', 3),
+       (N'phamthie', N'Phạm Thị', N'E', N'thie@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0934567890', N'Nữ', 4),
+       (N'hoangminh', N'Hoàng', N'Minh', N'minh@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0967891234', N'Nam', 5);
+GO
+
+
+
 
 -- Insert vào bảng user_role
 INSERT INTO user_role (user_id, role_id) VALUES 
@@ -167,3 +168,7 @@ values('product-1.jpg',1,N'Ảnh 1.1',1),
 ('product-4.jpg',1,N'Ảnh 1.1',7),
 ('product-2.jpg',1,N'Ảnh 1.1',8),
 ('product-1.jpg',1,N'Ảnh 1.1',9);
+
+
+select users.password, users.user_name, user_role.role_id , role.role_name
+from users, user_role, role

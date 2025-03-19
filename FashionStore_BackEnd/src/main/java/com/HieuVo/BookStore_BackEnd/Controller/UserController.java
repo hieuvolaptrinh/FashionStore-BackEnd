@@ -7,14 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping("/exists")
-    public ResponseEntity<?> checkUserExists(@RequestBody UserDTO userDTO) {
+    @PostMapping("/register")
+    public ResponseEntity<?> registrerNewUser(@RequestBody UserDTO userDTO) {
         ResponseEntity<?> response = this.userService.registerUser(userDTO);
         return response;
     }

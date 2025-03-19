@@ -46,7 +46,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> listReviews;
 
-    @ManyToMany(cascade = {
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {
             jakarta.persistence.CascadeType.PERSIST,
             jakarta.persistence.CascadeType.MERGE,
             jakarta.persistence.CascadeType.DETACH,
@@ -152,5 +152,9 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+    @Override
+    public String toString() {
+        return "User{id=" + userId + ", username='" + userName + "'}"; // Don't include listRoles here
     }
 }
