@@ -2,6 +2,7 @@ package com.HieuVo.BookStore_BackEnd.Repository;
 
 
 
+import com.HieuVo.BookStore_BackEnd.Model.Image;
 import com.HieuVo.BookStore_BackEnd.Model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,4 +25,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product>findByProductNameContainingAndListTypes_TypeId(@RequestParam("productName") String productName,
             @RequestParam("typeId") int typeId,
             Pageable pageable);
+
+
 }

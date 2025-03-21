@@ -43,24 +43,9 @@ public class MethodRestConfig implements RepositoryRestConfigurer {
                 HttpMethod.DELETE
         };
         // disableHttpMethods(Type.class, config, blockMethods);
-        // disableHttpMethods(User.class, config, deleteMethod);
 
     }
-
-//    CORS với api tự viết
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")  // Cho phép tất cả API
-                        .allowedOrigins(url)  // Frontend
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
-        };
-    }
+    
     // tùy chọn chặn các phương thức HTTP
     private void disableHttpMethods(Class c, RepositoryRestConfiguration config, HttpMethod[] methods) {
 

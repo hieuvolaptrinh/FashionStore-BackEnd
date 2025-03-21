@@ -33,4 +33,5 @@ public class UserDTO {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
     }
+
 }
