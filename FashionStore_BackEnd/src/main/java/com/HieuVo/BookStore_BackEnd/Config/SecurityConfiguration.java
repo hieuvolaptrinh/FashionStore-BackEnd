@@ -3,15 +3,14 @@ package com.HieuVo.BookStore_BackEnd.Config;
 import com.HieuVo.BookStore_BackEnd.Service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -68,11 +67,14 @@ public class SecurityConfiguration {
                 }))
                 .csrf(csrf -> csrf.disable()) // Nếu cần tắt CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // Chỉ ADMIN mới truy cập được
-                        .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
-                        .requestMatchers( "/products/**").permitAll()
-                        .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/test/**").permitAll()
+                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // Chỉ ADMIN mới truy cập được
+//                        .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
+//                        .requestMatchers( "/types/**").permitAll()
+//                        .requestMatchers( "/products/**").permitAll()
+//                        .requestMatchers( "/api/v1/review-list/**").permitAll()
+//                        .requestMatchers("/public/**").permitAll()
+//                        .requestMatchers("/test/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults()) // Bật form login
                 .httpBasic(Customizer.withDefaults()); // Bật HTTP Basic Auth
