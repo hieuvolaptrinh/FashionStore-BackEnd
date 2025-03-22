@@ -17,6 +17,8 @@ public class User {
 
     private String email;
 
+    private String activationCode;
+
     private String phoneNumber;
 
     @Column(columnDefinition = "NVARCHAR(256)")
@@ -149,6 +151,26 @@ public class User {
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public void setUserName(String userName) {

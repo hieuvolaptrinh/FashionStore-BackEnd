@@ -33,4 +33,6 @@ public class Address {
     @OneToMany(mappedBy = "shippingAddress")
     private List<Order> listOrders;
 
+    @OneToMany(mappedBy = "address")
+    private List<Supplier> listSuppliers;
 }
