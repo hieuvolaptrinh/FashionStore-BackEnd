@@ -93,12 +93,17 @@ public class UserService implements UserDetailsService {
     private String randomOTP(){
         return UUID.randomUUID().toString();
     }
-    private void sendActivationEmail(String email, String activationCode){
+    private void sendActivationEmail(String email, String activationCode) {
         Dotenv dotenv = Dotenv.load();
-        String mailUsername = dotenv.get("MAIL_USERNAME");
+        String mail = dotenv.get("MAIL_USERNAME");
         String subject = "Kích hoạt tài khoản";
-        String message= " Vui lòng sử dụng mã sau để kích hoạt tài khoản của bạn: " + activationCode +" ";
-        this.emailService.sendMessage(mailUsername,email,subject,message);
-        System.out.println("Gửi mail thành công");
+        String message = "Vui lòng sử dụng mã sau để kích hoạt tài khoản của bạn: " + activationCode;
+
+        try {
+            this.emailService.sendMessage( mail,email, subject, message);
+            System.out.println("Gửi mail thành công");
+        } catch (Exception e) {
+            System.err.println("Lỗi gửi email: " + e.getMessage());
+        }
     }
 }
