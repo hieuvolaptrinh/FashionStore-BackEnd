@@ -36,7 +36,7 @@ public class Product {
         // sao trung bình
         private float avgStars;
 
-        @JsonIgnore
+//        @JsonIgnore
         @ManyToMany(fetch = FetchType.LAZY, cascade = {
                         CascadeType.PERSIST,
                         CascadeType.MERGE,

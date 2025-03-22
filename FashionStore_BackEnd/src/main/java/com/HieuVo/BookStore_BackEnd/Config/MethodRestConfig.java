@@ -24,7 +24,7 @@ public class MethodRestConfig implements RepositoryRestConfigurer {
     }
 
 
-//    config với api RepositoryRest
+//    config với api RepositoryRest nếu xài security rồi thì này không càn nữa
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         // Lấy tất cả các entity và expose ID

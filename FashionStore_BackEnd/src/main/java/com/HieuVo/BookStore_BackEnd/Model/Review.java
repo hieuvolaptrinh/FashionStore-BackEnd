@@ -29,7 +29,7 @@ public class Review {
         private Product product;
 
 
-        @JsonIgnore
+//        @JsonIgnore
         @ManyToOne(cascade = {
                         CascadeType.PERSIST,
                         CascadeType.MERGE,
