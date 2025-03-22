@@ -56,12 +56,12 @@ INSERT INTO role (role_name, description) VALUES
 (N'STAFF', N'Nhân viên cửa hàng');
 GO
 -- Insert vào bảng users
-INSERT INTO users (user_name, first_name, last_name, email, password, phone_number, sex, address_id) 
-VALUES (N'hieudaika', N'Hiếu Đại Ka', N'A', N'admin@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0987654321', N'Nam', 1),
-       (N'user', N'User', N'B', N'user@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0976543210', N'Nữ', 2),
-       (N'lequocd', N'Lê Quốc', N'D', N'quocd@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0912345678', N'Nam', 3),
-       (N'phamthie', N'Phạm Thị', N'E', N'thie@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0934567890', N'Nữ', 4),
-       (N'hoangminh', N'Hoàng', N'Minh', N'minh@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0967891234', N'Nam', 5);
+INSERT INTO users (user_name, first_name, last_name, email, password, phone_number, sex, address_id,is_active) 
+VALUES (N'hieudaika', N'Hiếu Đại Ka', N'A', N'admin@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0987654321', N'Nam', 1,1),
+       (N'user', N'User', N'B', N'user@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0976543210', N'Nữ', 2,1),
+       (N'lequocd', N'Lê Quốc', N'D', N'quocd@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0912345678', N'Nam', 3,1),
+       (N'phamthie', N'Phạm Thị', N'E', N'thie@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0934567890', N'Nữ', 4,1),
+       (N'hoangminh', N'Hoàng', N'Minh', N'minh@example.com', N'$2a$12$2.4hPnA9HII.Hzt3i1J2O.Bmhm0N.LRUTmChV4/ToBzveXZUV9kF6', N'0967891234', N'Nam', 5,1);
 GO
 
 

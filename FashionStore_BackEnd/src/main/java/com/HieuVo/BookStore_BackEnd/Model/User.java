@@ -6,10 +6,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-
 @Entity
 @Table(name = "users")
-
 public class User {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -28,6 +26,9 @@ public class User {
     private String lastName;
 
     private String password;
+
+    @Column(nullable = true )
+    private boolean isActive;
 
     private String userName;
 
