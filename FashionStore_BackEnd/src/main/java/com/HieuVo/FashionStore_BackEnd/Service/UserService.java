@@ -26,16 +26,17 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final   EmailService emailService;
+    private final EmailService emailService;
     private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder , EmailService emailService, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.roleRepository = roleRepository;
 
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.findByUserName(username)
@@ -50,6 +51,7 @@ public class UserService implements UserDetailsService {
         );
 
     }
+
     // Lấy danh sách role của user, tránh lỗi nếu roles == null
 //    vì chỗ này trả về GrantedAuthority nên bên security phải sử dụng hasAuthority("ADMIN") thay vì hasRole("ADMIN")
     private Collection<? extends GrantedAuthority> rolesToAuthorites(Collection<Role> roles) {
@@ -60,7 +62,7 @@ public class UserService implements UserDetailsService {
             return List.of(); // Trả về danh sách trống thay vì null]
         }
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority( role.getRoleName()))
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
     }
 
@@ -91,7 +93,7 @@ public class UserService implements UserDetailsService {
 
         User newUser = this.userRepository.save(user);
         //        send email
-        sendActivationEmail(user.getEmail(),user.getActivationCode());
+        sendActivationEmail(user.getEmail(), user.getActivationCode());
         return ResponseEntity.ok("Đăng ký thành công");
     }
 
@@ -100,6 +102,7 @@ public class UserService implements UserDetailsService {
         int otp = 100000 + random.nextInt(900000);
         return String.valueOf(otp);
     }
+
     public void sendActivationEmail(String email, String activationCode) {
         Dotenv dotenv = Dotenv.load();
         String url = dotenv.get("URL");
@@ -157,22 +160,23 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<?> confirmEmail(String email, String activationCode) {
+    public ResponseEntity<Notification> confirmEmail(String email, String activationCode) {
         User user = this.userRepository.findByEmail(email);
         System.out.println("Request activation code: '" + activationCode + "'");
-        System.out.println("DB activation code: '" + user.getActivationCode() + "'");
-        if(user == null){
-            return ResponseEntity.badRequest().body(new Notification("Email không tồn tại"));
+        System.out.println("DB activation code: '" + (user != null ? user.getActivationCode() : "null") + "'");
+
+        if (user == null) {
+            return ResponseEntity.ok(new Notification("Email không tồn tại"));
         }
-        if(user.isActive()){
-            return ResponseEntity.badRequest().body(new Notification("Tài khoản đã được kích hoạt"));
+        if (user.isActive()) {
+            return ResponseEntity.ok(new Notification("Tài khoản đã được kích hoạt"));
         }
-        if(activationCode.trim().equals(user.getActivationCode().trim())){
+        if (activationCode.trim().equals(user.getActivationCode().trim())) {
             user.setActive(true);
             this.userRepository.save(user);
-            return ResponseEntity.ok("Kích hoạt tài khoản thành công");
-        }else {
-            return ResponseEntity.badRequest().body(new Notification("Mã kích SAIIIIII !!!"));
+            return ResponseEntity.ok(new Notification("Kích hoạt tài khoản thành công"));
+        } else {
+            return ResponseEntity.ok(new Notification("Mã kích hoạt sai!"));
         }
     }
 }

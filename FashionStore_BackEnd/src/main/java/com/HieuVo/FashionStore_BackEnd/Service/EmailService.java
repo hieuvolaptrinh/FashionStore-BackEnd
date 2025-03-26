@@ -44,7 +44,7 @@ public class EmailService implements IEmailService {
         helper.setFrom(from);
         helper.setTo(to);
         helper.setSubject(subject != null ? subject : "No Subject");
-        helper.setText(htmlContent, true); // true indicates HTML content
+        helper.setText(htmlContent, true);
 
         this.emailSender.send(message);
         System.out.println("HTML email sent successfully!");
