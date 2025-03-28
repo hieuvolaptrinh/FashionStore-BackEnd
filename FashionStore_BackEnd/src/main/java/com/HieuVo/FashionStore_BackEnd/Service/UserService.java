@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService {
 
         user.setActivationCode(randomOTP());
         user.setActive(false);
-
+user.setListRoles(Collections.singletonList(this.roleRepository.findByRoleName("USER")));
 //        Role role = this.roleRepository.findByRoleName("USER");
 //        if (role == null) {
 //            throw new RuntimeException("Role 'USER' không tồn tại trong database!");

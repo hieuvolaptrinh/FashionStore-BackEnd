@@ -31,6 +31,7 @@ public class User {
 
     private boolean isActive;
 
+    @Column(unique = true)
     private String userName;
 
     // address default

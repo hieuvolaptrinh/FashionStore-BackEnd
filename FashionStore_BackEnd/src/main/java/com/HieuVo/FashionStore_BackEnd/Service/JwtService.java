@@ -1,8 +1,9 @@
-package com.HieuVo.FashionStore_BackEnd.Controller;
+package com.HieuVo.FashionStore_BackEnd.Service;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -14,8 +15,8 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
-    //khóa bí mật
-    public static final String SECRET_KEY = "HIEUVODZ9999";
+    //khóa
+    public static final String SECRET_KEY = "@ASSSSSSSSSSSSSS%%$$$$HIEUVODZ9999";
 
     //    tạo JWT từ username
     public String generateToken(String userName) {
@@ -37,8 +38,9 @@ public class JwtService {
 
     //    lấy serect key
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+        // Sử dụng phương thức secretKeyFor() để tạo khóa tự động có độ dài 256 bits
+        return Keys.secretKeyFor(SignatureAlgorithm.HS256); // Dùng HMAC-SHA256 (HS256)
+
     }
 
     //    trích xuất thông tin
@@ -58,26 +60,21 @@ public class JwtService {
     }
 //    kiểm tra thời gian hết hạn từ JWT
     public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        return extractClaim(token, Claims::getExpiration); //lấy ra thời gian hết hạn
     }
-//    private static Key getKey() {
-//        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-//    }
-//    public static String extractUsername(String token) {
-//        return Jwts.parserBuilder()
-//                .setSigningKey(getKey())
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody()
-//                .getSubject();
-//    }
-//
-//    public static boolean validateToken(String token) {
-//        try {
-//            Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
-//            return true;
-//        } catch (JwtException e) {
-//            return false;
-//        }
-//    }
+
+//    kiểm tra JWT đã hết hạn chưa ?
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String userName=extractUsername(token);
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    public boolean validateToken(String token, String username) {
+        return extractUsername(token).equals(username) && !isTokenExpired(token);
+    }
 }

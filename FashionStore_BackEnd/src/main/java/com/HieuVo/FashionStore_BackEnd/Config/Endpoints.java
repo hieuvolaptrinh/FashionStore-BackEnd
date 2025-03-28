@@ -14,7 +14,8 @@ public class Endpoints {
             "/api/v1/user/register",
             "/api/v1/users/login",
             "/api/v1/review-list/**",
-            "/api/v1/orders/**"};
+            "/api/v1/orders/**",
+            "/api/v1/auth/login"};
 
     public static final String[] ADMIN_POST_ENDPOINTS = {
     };
