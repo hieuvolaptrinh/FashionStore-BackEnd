@@ -4,7 +4,8 @@ import com.HieuVo.FashionStore_BackEnd.Model.Product;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +19,9 @@ public class ProductDTO {
     private int quantity;
     private Date manufactureDate;
     private float avgStars;
-
+    private List<Integer> listTypes;
+    public ProductDTO() {
+    }
     public ProductDTO(Product product) {
         this.productId = product.getProductId();
         this.productName = product.getProductName();

@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.authentication.AuthenticationServiceException;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,13 +42,16 @@ public class AuthController {
             );
             if (authentication.isAuthenticated()) {
                 // Lấy roles của người dùng từ Authentication
-                String roles = authentication.getAuthorities().stream()
+                List<String> roles = authentication.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.joining(","));
+                        .collect(Collectors.toList()); // Trả về List<String> thay vì String
 
 
-                final String jwt = jwtService.generateToken(authRequest.getUserName());
+                final String jwt = jwtService.generateToken(authRequest.getUserName(), roles);
                 AuthResponse authResponse = new AuthResponse(jwt, authRequest.getUserName(), roles);
+                System.out.println("JWT: " + jwt);
+                System.out.println("Username: " + authRequest.getUserName());
+                System.out.println("Roles: " + roles);
                 return ResponseEntity.ok(authResponse);
             }
         } catch (AuthenticationException e) {

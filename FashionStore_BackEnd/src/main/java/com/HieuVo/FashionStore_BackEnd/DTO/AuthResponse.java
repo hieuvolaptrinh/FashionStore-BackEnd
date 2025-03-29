@@ -3,13 +3,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 public class AuthResponse {
     private  String token;
     private String username; // Tên người dùng (optional)
-    private String roles; // Roles của người dùng (optional)
+    private List<String> roles; // Roles của người dùng (optional)
 
-    public AuthResponse(String token, String username, String roles) {
+    public AuthResponse(String token, String username, List<String> roles) {
         this.token = token;
         this.username = username;
         this.roles = roles;
@@ -31,12 +33,6 @@ public class AuthResponse {
         this.username = username;
     }
 
-    public String getRoles() {
-        return roles;
-    }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
 }
 

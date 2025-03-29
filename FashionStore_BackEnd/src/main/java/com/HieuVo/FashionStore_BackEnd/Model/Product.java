@@ -9,7 +9,6 @@ import java.util.List;
 @Table(name = "product")
 
 public class Product {
-
         @Id
         @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
         private int productId;
@@ -60,8 +59,6 @@ public class Product {
         @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
         private List<WishListDetail> listWishListDetails;
 
-
-
         public int getProductId() {
                 return productId;
         }
@@ -98,8 +95,8 @@ public class Product {
                 return productionInfor;
         }
 
-        public void getProductionInfor(String author) {
-                this.productionInfor = author;
+        public void setProductionInfor(String productionInfor) {
+                this.productionInfor = productionInfor;
         }
 
         public double getSalePrice() {

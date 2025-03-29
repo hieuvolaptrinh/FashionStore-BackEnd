@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
 
+import com.HieuVo.FashionStore_BackEnd.DTO.ProductDTO;
 import com.HieuVo.FashionStore_BackEnd.Model.Image;
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
 import com.HieuVo.FashionStore_BackEnd.Model.Type;
@@ -41,4 +42,23 @@ public class ProductService {
 
     public Product getProductById(int productId) {
         return productRepository.getOne(productId);}
+
+    public Product createProduct(ProductDTO dto) {
+        Product product = new Product();
+
+        product.setProductName(dto.getProductName());
+        product.setDescription(dto.getDescription());
+        product.setOriginalPrice(dto.getOriginalPrice());
+        product.setProductionInfor(dto.getProductionInfor());
+        product.setSalePrice(dto.getSalePrice());
+        product.setQuantity(dto.getQuantity());
+        product.setManufactureDate(dto.getManufactureDate());
+        product.setAvgStars(0); // Mặc định
+
+        // Gắn loại sản phẩm
+        List<Type> types = typeRepository.findAllById(dto.getListTypes());
+        product.setListTypes(types);
+
+        return productRepository.save(product);
+    }
 }

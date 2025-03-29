@@ -1,29 +1,34 @@
 package com.HieuVo.FashionStore_BackEnd.Config;
 
+import com.HieuVo.FashionStore_BackEnd.Filter.JwtAuthenticationFilter;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
 @Configuration
-@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+//    thêm lazy để tránh lỗi khi khởi tạo bean vì nó phụ thuộc vòng tròn mất
+    public SecurityConfiguration(@Lazy JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -53,6 +58,15 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu cần
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
+//                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+//                        .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
+                        .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of(url)); //chỉ cho phép các request từ url của frontend
@@ -61,17 +75,10 @@ public class SecurityConfiguration {
                     config.setAllowCredentials(true);//	cho phép gửi cookie, token (JWT) từ frontend
                     return config;
                 }))
-                .csrf(csrf -> csrf.disable()) // Nếu cần tắt CSRF
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
-//                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-//                        .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
-                        .anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults()) // Bật form login
-                .httpBasic(Customizer.withDefaults()); // Bật HTTP Basic Auth
-//
+                .formLogin(Customizer.withDefaults()) // cho phép login bằng form (chỉ dùng nếu dùng session hoặc dev đang test).
+                .httpBasic(Customizer.withDefaults()); //login bằng HTTP basic (có thể tắt nếu  chỉ dùng JWT)
+        http.sessionManagement((session)->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // không lưu session về sử dụng jwt
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); //filter jwt trước filter mặc định
 
         return http.build();
     }

@@ -6,6 +6,7 @@ import com.HieuVo.FashionStore_BackEnd.Model.Product;
 import com.HieuVo.FashionStore_BackEnd.Model.Type;
 import com.HieuVo.FashionStore_BackEnd.Service.ProductService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,5 +55,10 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductTypes());
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO dto) {
+        Product created = productService.createProduct(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(created));
+    }
 
 }
