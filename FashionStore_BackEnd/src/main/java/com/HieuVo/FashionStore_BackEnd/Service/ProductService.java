@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -45,7 +46,6 @@ public class ProductService {
 
     public Product createProduct(ProductDTO dto) {
         Product product = new Product();
-
         product.setProductName(dto.getProductName());
         product.setDescription(dto.getDescription());
         product.setOriginalPrice(dto.getOriginalPrice());
@@ -54,11 +54,22 @@ public class ProductService {
         product.setQuantity(dto.getQuantity());
         product.setManufactureDate(dto.getManufactureDate());
         product.setAvgStars(0); // Mặc định
+       Product saved= productRepository.save(product);
+//        gắn ảnh
+        List<Image> images=dto.getListImages().stream()
+                .map(base64 ->{
+                    byte[] data= Base64.getDecoder().decode(base64);
+                    Image image=new Image();
+                    image.setData(data);
+                    image.setProduct(saved);
+                    return image;
+                }).toList() ;
 
         // Gắn loại sản phẩm
+        imageRepository.saveAll(images);
         List<Type> types = typeRepository.findAllById(dto.getListTypes());
         product.setListTypes(types);
 
-        return productRepository.save(product);
+        return saved;
     }
 }

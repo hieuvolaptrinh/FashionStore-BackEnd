@@ -19,7 +19,9 @@ public class ProductDTO {
     private int quantity;
     private Date manufactureDate;
     private float avgStars;
+    private List<String> listImages; // base64 strings
     private List<Integer> listTypes;
+
     public ProductDTO() {
     }
     public ProductDTO(Product product) {

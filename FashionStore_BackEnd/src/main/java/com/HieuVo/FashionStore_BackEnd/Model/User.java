@@ -34,6 +34,16 @@ public class User {
     @Column(unique = true)
     private String userName;
 
+    @Lob
+    @Column(columnDefinition = "VARBINARY(MAX)")
+    private byte[] avatarData;
+//    byte[] decoded = Base64.getDecoder().decode(base64String);
+//user.setAvatarData(decoded);
+
+
+
+    private String avataUrl;
+
     // address default
     @ManyToOne(cascade = {
             jakarta.persistence.CascadeType.PERSIST,
@@ -49,7 +59,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> listReviews;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
             jakarta.persistence.CascadeType.PERSIST,
             jakarta.persistence.CascadeType.MERGE,
             jakarta.persistence.CascadeType.DETACH,
@@ -176,6 +186,17 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+
+
+    public String getAvataUrl() {
+        return avataUrl;
+    }
+
+    public void setAvataUrl(String avataUrl) {
+        this.avataUrl = avataUrl;
+    }
+
     @Override
     public String toString() {
         return "User{id=" + userId + ", username='" + userName + "'}"; // Don't include listRoles here

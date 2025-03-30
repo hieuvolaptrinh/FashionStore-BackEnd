@@ -37,6 +37,15 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public User fetchUserByUsername(String username) {
+        Optional<User> user = this.userRepository.findByUserName(username);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        return null;
+
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.findByUserName(username)
@@ -81,10 +90,15 @@ public class UserService implements UserDetailsService {
         user.setPhoneNumber(userDTO.getPhoneNumber());
 
         user.setEmail(userDTO.getEmail());
+        // Xử lý dữ liệu avatar
+        if (userDTO.getAvatarBase64() != null && !userDTO.getAvatarBase64().isEmpty()) {
+            // Chuyển đổi chuỗi base64 thành byte[] trước khi lưu
+            user.setAvatarData(Base64.getDecoder().decode(userDTO.getAvatarBase64()));
+        }
 
         user.setActivationCode(randomOTP());
         user.setActive(false);
-user.setListRoles(Collections.singletonList(this.roleRepository.findByRoleName("USER")));
+        user.setListRoles(Collections.singletonList(this.roleRepository.findByRoleName("USER")));
 //        Role role = this.roleRepository.findByRoleName("USER");
 //        if (role == null) {
 //            throw new RuntimeException("Role 'USER' không tồn tại trong database!");

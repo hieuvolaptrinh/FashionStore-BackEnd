@@ -11,6 +11,8 @@ public class UserDTO {
     private String password;
     private String userName;
     private String phoneNumber;
+    private byte[] avatarData; // Trường này vẫn giữ để tương thích với code cũ
+    private String avatarBase64; // Thêm trường này để nhận dữ liệu từ frontend
 
     public UserDTO(String firstName, String lastName, String email) {
         this.firstName = firstName;

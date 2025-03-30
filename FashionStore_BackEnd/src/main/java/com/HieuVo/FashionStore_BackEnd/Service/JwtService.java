@@ -1,5 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
+import com.HieuVo.FashionStore_BackEnd.Model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -19,11 +20,17 @@ public class JwtService {
     //khóa
     public static final String SECRET_KEY = "HIEUVODEPTRAI123456789MDHAUFGUYHJFGSDFvietchonodailenchukodudaithikhongcoduocdaunha";
 
+    private final UserService userService;
+
+    public JwtService(UserService userService) {
+        this.userService = userService;
+    }
+
     //    tạo JWT từ username
     public String generateToken(String userName, List<String> roles) {
         Map<String, Object> claims = new HashMap<>();
-//        claims.put("isAdmin",true);
-        return createToken(claims, userName,roles);
+        User user = this.userService.fetchUserByUsername(userName);
+        return createToken(claims, userName, roles);
     }
 
     private String createToken(Map<String, Object> claims, String userName, List<String> roles) {
@@ -51,6 +58,7 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
     //    trích xuất thông tin cho 1 claim
     public <T> T extractClaim(String token, Function<Claims, T> claimsTFunction) {
         final Claims claims = extractAllClaims(token);
@@ -63,17 +71,20 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration); //lấy ra thời gian hết hạn
     }
 
-//    kiểm tra JWT đã hết hạn chưa ?
+    //    kiểm tra JWT đã hết hạn chưa ?
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String userName=extractUsername(token);
+        final String userName = extractUsername(token);
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
     public boolean validateToken(String token, String username) {
         return extractUsername(token).equals(username) && !isTokenExpired(token);
     }
