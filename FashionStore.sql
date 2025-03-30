@@ -69,7 +69,7 @@ GO
 
 -- Insert vào bảng user_role
 INSERT INTO user_role (user_id, role_id) VALUES 
-(1, 1), (2, 2), (3, 2), (4, 2), (5, 3);
+(1, 1), (2, 2), (3, 2),(3, 1), (4, 2), (5, 3);
 GO
 
 INSERT INTO product (product_name, description, production_infor, original_price, sale_price, manufacture_date, quantity, avg_stars)
