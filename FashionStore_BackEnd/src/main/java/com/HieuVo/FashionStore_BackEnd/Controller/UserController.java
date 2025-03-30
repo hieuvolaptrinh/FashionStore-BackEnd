@@ -34,7 +34,7 @@ public class UserController {
     @GetMapping("/{username}/avatar")
     public ResponseEntity<String> getAvatar(@PathVariable String username) {
         User user = userService.fetchUserByUsername(username);
-        if (user==null) {
+        if (user==null || user.getAvatarData() == null) {
             return ResponseEntity.notFound().build();
         }
         byte[] avatarBytes = user.getAvatarData();

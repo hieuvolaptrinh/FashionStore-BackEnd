@@ -2,7 +2,7 @@ package com.HieuVo.FashionStore_BackEnd.Util;
 
 
 import com.HieuVo.FashionStore_BackEnd.DTO.ResDriver;
-import com.HieuVo.FashionStore_BackEnd.DTO.ResponseData;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.FileContent;
@@ -11,6 +11,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.Permission;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,33 +34,44 @@ public class GoogleDriveUploader {
         return filePath.toString();
     }
 
-    public  ResDriver uploadImageToDrive(File file) throws Exception {
+    public ResDriver uploadImageToDrive(File file) throws Exception {
         ResDriver res = new ResDriver();
-
-        try{
+        try {
             String folderId = "1gcZ357GSFH0pTPyXHBB6JV_BsrAKTpiK";
             Drive drive = createDriveService();
+
+            FileContent mediaContent = new FileContent("image/jpeg", file);
             com.google.api.services.drive.model.File fileMetaData = new com.google.api.services.drive.model.File();
             fileMetaData.setName(file.getName());
             fileMetaData.setParents(Collections.singletonList(folderId));
-            FileContent mediaContent = new FileContent("image/jpeg", file);
-            com.google.api.services.drive.model.File uploadedFile = drive.files().create(fileMetaData, mediaContent)
-                    .setFields("id").execute();
-            String imageUrl = "https://drive.google.com/uc?export=view&id="+uploadedFile.getId();
-            System.out.println("IMAGE URL: " + imageUrl);
+
+            com.google.api.services.drive.model.File uploadedFile = drive.files()
+                    .create(fileMetaData, mediaContent)
+                    .setFields("id")
+                    .execute();
+
+            // 👇 THÊM PHẦN NÀY
+            com.google.api.services.drive.model.Permission permission = new Permission();
+            permission.setType("anyone");
+            permission.setRole("reader");
+            drive.permissions()
+                    .create(uploadedFile.getId(), permission)
+                    .setFields("id")
+                    .execute();
+
+            String imageUrl = "https://drive.google.com/thumbnail?id=" + uploadedFile.getId();
             file.delete();
             res.setStatus(200);
-            res.setMessage("Image Successfully Uploaded To Drive");
             res.setUrl(imageUrl);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+            res.setMessage("Uploaded!");
+        } catch (Exception e) {
             res.setStatus(500);
             res.setMessage(e.getMessage());
         }
-//        listFilesInFolder(); // in ra danh sách file trong folder  đã tạo
-        return  res;
-
+        listFilesInFolder();
+        return res;
     }
+
 
     private Drive createDriveService() throws GeneralSecurityException, IOException {
 
