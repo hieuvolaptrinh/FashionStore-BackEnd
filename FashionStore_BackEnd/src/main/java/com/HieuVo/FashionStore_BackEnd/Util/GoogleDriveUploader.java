@@ -56,7 +56,7 @@ public class GoogleDriveUploader {
             res.setStatus(500);
             res.setMessage(e.getMessage());
         }
-        listFilesInFolder();
+//        listFilesInFolder(); // in ra danh sách file trong folder  đã tạo
         return  res;
 
     }
