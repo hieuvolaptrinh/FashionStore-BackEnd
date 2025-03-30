@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseData<T> {
-    private int code;
+    private int status;
     private String message;
     private T data;
 

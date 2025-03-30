@@ -19,7 +19,7 @@ public class ProductDTO {
     private int quantity;
     private Date manufactureDate;
     private float avgStars;
-    private List<String> listImages; // base64 strings
+    private List<String> listImages; // <-- Danh sách LINK ảnh (Google Drive)
     private List<Integer> listTypes;
 
     public ProductDTO() {

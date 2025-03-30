@@ -56,14 +56,12 @@ public class ProductService {
         product.setAvgStars(0); // Mặc định
        Product saved= productRepository.save(product);
 //        gắn ảnh
-        List<Image> images=dto.getListImages().stream()
-                .map(base64 ->{
-                    byte[] data= Base64.getDecoder().decode(base64);
-                    Image image=new Image();
-                    image.setData(data);
-                    image.setProduct(saved);
-                    return image;
-                }).toList() ;
+        List<Image> images = dto.getListImages().stream().map(link -> {
+            Image image = new Image();
+            image.setLink(link); // <-- lưu link ảnh vào DB
+            image.setProduct(saved);
+            return image;
+        }).toList();
 
         // Gắn loại sản phẩm
         imageRepository.saveAll(images);

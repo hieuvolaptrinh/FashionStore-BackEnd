@@ -18,6 +18,7 @@ public class Endpoints {
             "/api/v1/auth/login"};
 
     public static final String[] ADMIN_POST_ENDPOINTS = {
+            "/uploadToGoogleDrive/**",
             "/products/**",
             "/api/v1/products/**"
     };

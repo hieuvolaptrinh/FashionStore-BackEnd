@@ -6,6 +6,8 @@ import com.HieuVo.FashionStore_BackEnd.Model.Role;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Repository.RoleRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.UserRepository;
+
+import com.HieuVo.FashionStore_BackEnd.Util.SendEmailController;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +28,10 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
+    private final SendEmailController emailService;
     private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SendEmailController emailService, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
