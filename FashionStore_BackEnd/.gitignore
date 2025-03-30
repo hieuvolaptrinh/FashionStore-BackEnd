@@ -1,6 +1,6 @@
 # Chặn file môi trường
 .env
-
+.ServiceAccount.json
 
 HELP.md
 target/
