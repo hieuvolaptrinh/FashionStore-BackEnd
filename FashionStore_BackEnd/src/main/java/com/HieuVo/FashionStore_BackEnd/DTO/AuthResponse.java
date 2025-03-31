@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
+@Data
 public class AuthResponse {
     private  String token;
     private String username; // Tên người dùng (optional)
@@ -16,23 +16,9 @@ public class AuthResponse {
         this.username = username;
         this.roles = roles;
     }
+    public AuthResponse() {
 
-    public String getToken() {
-        return token;
     }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
 
 }
 

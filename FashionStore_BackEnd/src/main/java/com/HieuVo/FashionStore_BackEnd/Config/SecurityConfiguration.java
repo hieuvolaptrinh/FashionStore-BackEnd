@@ -60,12 +60,12 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu cần
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user/**").permitAll() // ← Cái này QUAN TRỌNG!
-                        .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
-//                        .requestMatchers("/**").permitAll() // Tạm thời thôi để test
+//                        .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/api/v1/user/**").permitAll() // ← Cái này QUAN TRỌNG!
+//                        .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
+                        .requestMatchers("/**").permitAll() // Tạm thời thôi để test
 //                        .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {

@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
+import com.HieuVo.FashionStore_BackEnd.Model.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import org.springframework.http.HttpHeaders;
@@ -25,8 +26,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registrerNewUser(@RequestBody UserDTO userDTO) {
-        ResponseEntity<?> response = this.userService.registerUser(userDTO);
+    public ResponseEntity<String> registrerNewUser(@RequestBody UserDTO userDTO) {
+        ResponseEntity<String> response = this.userService.registerUser(userDTO);
         return response;
     }
 
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/activateAccount")
-    public ResponseEntity<?> confirmNewUser(@RequestParam String email, @RequestParam String activationCode) {
+    public ResponseEntity<Notification> confirmNewUser(@RequestParam String email, @RequestParam String activationCode) {
         return this.userService.confirmEmail(email, activationCode);
     }
 }

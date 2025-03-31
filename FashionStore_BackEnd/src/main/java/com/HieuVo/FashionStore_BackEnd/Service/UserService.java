@@ -77,12 +77,12 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<?> registerUser(UserDTO userDTO) {
+    public ResponseEntity<String> registerUser(UserDTO userDTO) {
         if (this.userRepository.existsByUserName(userDTO.getUserName())) {
-            return ResponseEntity.badRequest().body(new Notification("Tài khoản đã tồn tại"));
+            return ResponseEntity.badRequest().body("Tài khoản đã tồn tại");
         }
         if (this.userRepository.existsByEmail(userDTO.getEmail())) {
-            return ResponseEntity.badRequest().body(new Notification("Email đã tồn tại"));
+            return ResponseEntity.badRequest().body("Email đã tồn tại");
         }
         User user = new User();
         user.setUserName(userDTO.getUserName());
