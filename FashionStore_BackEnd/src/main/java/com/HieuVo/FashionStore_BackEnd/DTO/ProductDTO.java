@@ -1,11 +1,13 @@
 package com.HieuVo.FashionStore_BackEnd.DTO;
 
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
 import java.util.List;
+
 
 @Getter
 @Setter

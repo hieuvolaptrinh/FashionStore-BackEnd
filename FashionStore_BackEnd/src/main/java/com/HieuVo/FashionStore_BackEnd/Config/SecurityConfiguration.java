@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
-//                        .requestMatchers("/**").permitAll() // Tạm thời thôi để test
+                        .requestMatchers("/**").permitAll() // Tạm thời thôi để test
 //                        .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {

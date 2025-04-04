@@ -1,7 +1,8 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.AuthRequest;
-import com.HieuVo.FashionStore_BackEnd.DTO.AuthResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.AuthRequest;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.AuthResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.JwtService;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
@@ -12,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.authentication.AuthenticationServiceException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,14 +44,12 @@ public class AuthController {
             if (authentication.isAuthenticated()) {
                 User user = this.userService.fetchUserByUsername(authRequest.getUserName());
                 if(user.isActive()==false){
-                    return ResponseEntity.badRequest().body("Tài khoản của bạn chưa được kích hoạt");
+                    return ResponseEntity.badRequest().body(new Notification("Tài khoản chưa được kích hoạt"));
                 }
                 // Lấy roles của người dùng từ Authentication
                 List<String> roles = authentication.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList()); // Trả về List<String> thay vì String
-
-
                 final String jwt = jwtService.generateToken(authRequest.getUserName(), roles);
                 AuthResponse authResponse = new AuthResponse(jwt, authRequest.getUserName(), roles);
                 System.out.println("JWT: " + jwt);
@@ -60,8 +58,8 @@ public class AuthController {
                 return ResponseEntity.ok(authResponse);
             }
         } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage()+" tên đăng nhập hoặc mật khẩu sai");
+            return ResponseEntity.badRequest().body(new Notification(" tên đăng nhập hoặc mật khẩu sai"));
         }
-        return ResponseEntity.badRequest().body("Đăng nhâp thất bại");
+        return ResponseEntity.badRequest().body(new Notification("Đăng nhập không thành công"));
     }
 }

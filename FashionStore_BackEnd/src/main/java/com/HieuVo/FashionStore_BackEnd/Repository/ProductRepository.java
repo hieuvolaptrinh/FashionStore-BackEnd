@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 //    enpoint products sẽ có thêm /search/findByProductNameContaining/.......
     Page<Product> findByProductNameContaining(
-                @RequestParam("productName") String productName,
+               String productName,
                     Pageable pageable);
 
     Page<Product> findByListTypes_TypeId(
-            @RequestParam("typeId") int typeId,
+       int typeId,
+       Pageable pageable);
+
+    Page<Product>findByProductNameContainingAndListTypes_TypeId( String productName,
+            int typeId,
             Pageable pageable);
 
-    Page<Product>findByProductNameContainingAndListTypes_TypeId(@RequestParam("productName") String productName,
-            @RequestParam("typeId") int typeId,
-            Pageable pageable);
-
-
+    Page<Product> findAll(Pageable pageable);
 }

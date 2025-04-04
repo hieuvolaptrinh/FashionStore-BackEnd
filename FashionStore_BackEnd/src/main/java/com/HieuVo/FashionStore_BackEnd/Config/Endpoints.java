@@ -7,6 +7,7 @@ public class Endpoints {
             "/types/**",
             "/review-list/**",
             "/api/v1/products/**",
+            "/api/v1/products",
             "/api/v1/user/**",
             "/api/v1/roles/**",
             "/api/v1/review-list/**"};

@@ -1,7 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Util;
 
 
-import com.HieuVo.FashionStore_BackEnd.DTO.ResDriver;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.ResDriver;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;

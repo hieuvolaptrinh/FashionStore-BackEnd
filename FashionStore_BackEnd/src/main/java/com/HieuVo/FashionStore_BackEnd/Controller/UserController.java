@@ -1,17 +1,13 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
-import com.HieuVo.FashionStore_BackEnd.Model.Notification;
+import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
-import java.util.Optional;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")

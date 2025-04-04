@@ -1,7 +1,5 @@
-package com.HieuVo.FashionStore_BackEnd.DTO;
-import lombok.AllArgsConstructor;
+package com.HieuVo.FashionStore_BackEnd.DTO.Response;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 

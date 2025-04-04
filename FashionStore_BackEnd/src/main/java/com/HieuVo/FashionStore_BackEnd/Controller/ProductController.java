@@ -6,6 +6,8 @@ import com.HieuVo.FashionStore_BackEnd.Model.Product;
 import com.HieuVo.FashionStore_BackEnd.Model.Type;
 import com.HieuVo.FashionStore_BackEnd.Service.ProductService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,33 +25,32 @@ public class ProductController {
         this.productService = productService;
     }
 
-//    @GetMapping("/{productId}")
-//    public ResponseEntity<ProductDTO> getProductById(@PathVariable int productId) {
-//        Product product = productService.getProductById(productId);
-//        return ResponseEntity.ok(new ProductDTO(product));
-//    }
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable int productId) {
+        Product product = productService.getProductById(productId);
+        return ResponseEntity.ok(new ProductDTO(product));
+    }
 
     @GetMapping("/{productId}/listImages")
-    public ResponseEntity<Page<Image>> getProductImages(
-            @PathVariable int productId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Page<Image> images = productService.getProductImages(productId, page, size);
+    public ResponseEntity<List<Image>> getProductImages(
+            @PathVariable int productId) {
+        List<Image> images = productService.getProductImages(productId);
         return ResponseEntity.ok(images);
     }
 
     @GetMapping()
-    public ResponseEntity<Page<ProductDTO>>getProducts(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-                                                     @RequestParam(name = "size", required = false, defaultValue = "5") int size
-                                                     ) {
-        Page<Product> products = productService.getProducts(page,size);
-        // Chuyển đổi Product -> ProductDTO (đã loại bỏ vòng lặp)
+    public ResponseEntity<Page<ProductDTO>> getProducts(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+                                                        @RequestParam(name = "size", required = false, defaultValue = "5") int size
+    ) {
+        Page<Product> products = productService.getProducts(page, size);
+
         Page<ProductDTO> productDTOs = products.map(ProductDTO::new);
-        // Trả về ResponseData có chứa thông tin phân tran
+
         return ResponseEntity.ok(
                 productDTOs
         );
     }
+
     @GetMapping("/types")
     public ResponseEntity<List<Type>> getProductTypes() {
         return ResponseEntity.ok(productService.getProductTypes());
@@ -60,5 +61,20 @@ public class ProductController {
         Product created = productService.createProduct(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(created));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductDTO>> searchProduct(
+            @RequestParam(name = "typeId", required = false) Integer typeId,
+            @RequestParam(name = "productName", required = false) String productName,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ProductDTO> products = productService.searchProduct(typeId, productName, pageable);
+
+        return ResponseEntity.ok(products);
+    }
+
 
 }

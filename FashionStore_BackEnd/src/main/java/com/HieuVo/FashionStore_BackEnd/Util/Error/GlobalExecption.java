@@ -1,7 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Util.Error;
 
 
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.RestResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.RestResponse;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

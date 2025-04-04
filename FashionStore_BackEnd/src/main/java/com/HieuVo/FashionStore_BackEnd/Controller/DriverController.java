@@ -1,16 +1,13 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.ResDriver;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.ResDriver;
 import com.HieuVo.FashionStore_BackEnd.Util.GoogleDriveUploader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 @RestController
 public class DriverController {

@@ -1,4 +1,4 @@
-package com.HieuVo.FashionStore_BackEnd.DTO.Response;
+package com.HieuVo.FashionStore_BackEnd.DTO;
 
 import lombok.Data;
 

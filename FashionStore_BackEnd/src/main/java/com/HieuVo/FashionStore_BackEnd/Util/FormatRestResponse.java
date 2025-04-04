@@ -1,7 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Util;
 
 
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.RestResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.RestResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -37,7 +37,8 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
         }
 //        case error
         if (status >= 400) {
-            restResponse.setError(body.toString());
+            if (body != null)
+                restResponse.setError(body.toString());
             restResponse.setMessage("Call api thất bại");
         } else {
             restResponse.setData(body);
