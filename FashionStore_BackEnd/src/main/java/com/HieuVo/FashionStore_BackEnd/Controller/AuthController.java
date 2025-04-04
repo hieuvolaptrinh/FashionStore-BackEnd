@@ -2,6 +2,7 @@ package com.HieuVo.FashionStore_BackEnd.Controller;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.AuthRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.AuthResponse;
+import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.JwtService;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,10 @@ public class AuthController {
                     )
             );
             if (authentication.isAuthenticated()) {
+                User user = this.userService.fetchUserByUsername(authRequest.getUserName());
+                if(user.isActive()==false){
+                    return ResponseEntity.badRequest().body("Tài khoản của bạn chưa được kích hoạt");
+                }
                 // Lấy roles của người dùng từ Authentication
                 List<String> roles = authentication.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)

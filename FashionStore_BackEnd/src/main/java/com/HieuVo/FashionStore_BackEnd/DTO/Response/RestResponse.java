@@ -1,6 +1,5 @@
-package com.HieuVo.FashionStore_BackEnd.DTO;
+package com.HieuVo.FashionStore_BackEnd.DTO.Response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
@@ -9,7 +8,6 @@ public class RestResponse<T> {
     private int status;
     private Object error;
     private Object message;
-
     private T data;
 
 }
