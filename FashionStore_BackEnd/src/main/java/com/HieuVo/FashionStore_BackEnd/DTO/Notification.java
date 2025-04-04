@@ -10,4 +10,8 @@ public class Notification {
         this.message = message;
     }
 
+    @Override
+    public String toString() {
+        return  message ;
+    }
 }

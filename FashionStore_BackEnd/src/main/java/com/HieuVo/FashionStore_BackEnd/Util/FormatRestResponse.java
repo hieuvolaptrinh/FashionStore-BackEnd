@@ -1,7 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Util;
 
 
-import com.HieuVo.FashionStore_BackEnd.DTO.RestResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.RestResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
