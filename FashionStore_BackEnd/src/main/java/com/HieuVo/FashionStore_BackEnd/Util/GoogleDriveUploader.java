@@ -1,8 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Util;
 
 
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.ResDriver;
-
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.FileContent;
@@ -34,8 +32,8 @@ public class GoogleDriveUploader {
         return filePath.toString();
     }
 
-    public ResDriver uploadImageToDrive(File file) throws Exception {
-        ResDriver res = new ResDriver();
+    public String uploadImageToDrive(File file) throws Exception {
+        String imageUrl="";
         try {
             String folderId = "1gcZ357GSFH0pTPyXHBB6JV_BsrAKTpiK";
             Drive drive = createDriveService();
@@ -59,17 +57,16 @@ public class GoogleDriveUploader {
                     .setFields("id")
                     .execute();
 
-            String imageUrl = "https://drive.google.com/thumbnail?id=" + uploadedFile.getId();
+             imageUrl = "https://drive.google.com/thumbnail?id=" + uploadedFile.getId();
             file.delete();
-            res.setStatus(200);
-            res.setUrl(imageUrl);
-            res.setMessage("Uploaded!");
+
+
+
         } catch (Exception e) {
-            res.setStatus(500);
-            res.setMessage(e.getMessage());
+
         }
         listFilesInFolder();
-        return res;
+        return imageUrl;
     }
 
 

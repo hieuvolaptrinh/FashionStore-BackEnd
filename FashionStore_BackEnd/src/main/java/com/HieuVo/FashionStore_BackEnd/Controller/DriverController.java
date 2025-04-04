@@ -1,6 +1,5 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.ResDriver;
 import com.HieuVo.FashionStore_BackEnd.Util.GoogleDriveUploader;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +24,7 @@ public DriverController(GoogleDriveUploader googleDriveUploader) {
         }
         File tempFile = File.createTempFile("temp", null);
         file.transferTo(tempFile);
-        ResDriver res = this.googleDriveUploader.uploadImageToDrive(tempFile);
+        String res = this.googleDriveUploader.uploadImageToDrive(tempFile);
         System.out.println(res);
 
 

@@ -1,6 +1,6 @@
 
 .env
-.ServiceAccount.json
+ServiceAccount.json
 .env.*
 *.env
 
