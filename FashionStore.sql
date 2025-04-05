@@ -108,15 +108,19 @@ INSERT INTO product_type (type_id, product_id) VALUES
 GO
 
 
--- Insert vào bảng cart
-INSERT INTO cart (user_id, create_at, update_at, total_prices) VALUES 
-(1, '2024-03-01', '2024-03-02', 380000),
-(2, '2024-03-05', '2024-03-06', 220000),
-(3, '2024-03-07', '2024-03-08', 170000),
-(4, '2024-03-10', '2024-03-11', 210000),
-(5, '2024-03-12', '2024-03-13', 150000);
-GO
 
+-- Insert vào bảng cart
+/*
+INSERT INTO cart ( create_at, update_at, total_prices) VALUES 
+('2024-03-01', '2024-03-02', 380000),
+( '2024-03-05', '2024-03-06', 220000),
+( '2024-03-07', '2024-03-08', 170000),
+( '2024-03-10', '2024-03-11', 210000),
+('2024-03-12', '2024-03-13', 150000);
+GO
+*/
+
+/*
 -- Insert vào bảng cart_detail
 INSERT INTO cart_detail (cart_id, product_id, quantity, price) VALUES 
 (1, 1, 2, 360000), (1, 2, 1, 220000),
@@ -124,8 +128,9 @@ INSERT INTO cart_detail (cart_id, product_id, quantity, price) VALUES
 (3, 5, 1, 170000), (4, 1, 1, 180000),
 (5, 2, 1, 220000);
 GO
-
+*/
 -- Insert vào bảng orders
+/*
 INSERT INTO orders (user_id, create_at, delivery_date, total_price, payment_type_id, shipping_method_id, shipping_address_id, status) 
 VALUES (1, '2024-02-20', '2024-02-25', 380000, 1, 1, 1, N'Đã giao'),
        (2, '2024-02-22', '2024-02-27', 220000, 2, 2, 2, N'Chờ xử lý'),
@@ -141,7 +146,7 @@ INSERT INTO order_detail (order_id, product_id, quantity, price) VALUES
 (3, 5, 1, 170000), (4, 1, 1, 180000),
 (5, 2, 1, 220000);
 GO
-
+*/
 -- Insert vào bảng review
 INSERT INTO review (user_id, product_id, stars, content) VALUES 
 (1, 1, 5, N'Sách rất hay!'),

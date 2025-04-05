@@ -51,8 +51,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User không tồn tại")); // vì bên kia mình sử dụng Optinal nên ở đây mình sử dụng orElseThrow
-
+                .orElseThrow(() -> new UsernameNotFoundException("User không tồn tại"));
         System.out.println("User found: " + user.getUserName());
         System.out.println("User roles: " + user.getListRoles());
         return new org.springframework.security.core.userdetails.User(

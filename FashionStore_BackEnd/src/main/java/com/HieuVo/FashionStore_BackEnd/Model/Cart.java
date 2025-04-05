@@ -23,10 +23,10 @@ public class Cart {
     @PositiveOrZero(message = "Total price must be greater than or equal to 0")
     private double totalPrices;
 
-    @NotNull(message = "User cannot be null")
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    // @NotNull(message = "User cannot be null")
+    // @OneToOne
+    // @JoinColumn(name = "user_id")
+    // private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartDetail> listCartDetails;
