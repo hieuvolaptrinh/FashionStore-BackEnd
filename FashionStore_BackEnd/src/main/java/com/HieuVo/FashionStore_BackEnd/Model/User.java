@@ -31,16 +31,18 @@ public class User {
 
     private boolean isActive;
 
+    @OneToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+
     @Column(unique = true)
     private String userName;
 
     @Lob
     @Column(columnDefinition = "VARBINARY(MAX)")
     private byte[] avatarData;
-//    byte[] decoded = Base64.getDecoder().decode(base64String);
-//user.setAvatarData(decoded);
-
-
+    // byte[] decoded = Base64.getDecoder().decode(base64String);
+    // user.setAvatarData(decoded);
 
     private String avataUrl;
 
@@ -186,8 +188,6 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
-
 
     public String getAvataUrl() {
         return avataUrl;

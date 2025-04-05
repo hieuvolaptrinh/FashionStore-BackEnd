@@ -34,7 +34,7 @@ public class JwtService {
     }
 
     private String createToken(Map<String, Object> claims, String userName, List<String> roles) {
-        // Thêm roles (dưới dạng mảng) vào claims
+
         claims.put("roles", roles);
         return Jwts.builder()
                 .setClaims(claims)

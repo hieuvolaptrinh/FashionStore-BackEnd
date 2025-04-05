@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 @Entity
-
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

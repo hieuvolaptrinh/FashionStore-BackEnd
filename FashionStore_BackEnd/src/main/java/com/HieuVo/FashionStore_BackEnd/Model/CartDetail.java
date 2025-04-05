@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 @Entity
-
 public class CartDetail {
         @Id
         @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)

@@ -25,12 +25,14 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-//    thêm lazy để tránh lỗi khi khởi tạo bean vì nó phụ thuộc vòng tròn mất
+    // thêm lazy để tránh lỗi khi khởi tạo bean vì nó phụ thuộc vòng tròn mất
     public SecurityConfiguration(@Lazy JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -41,8 +43,7 @@ public class SecurityConfiguration {
 
     Dotenv dotenv = Dotenv.load();
     private String url = dotenv.get("URL");
-//    private String url = "http://localhost:5173";
-
+    // private String url = "http://localhost:5173";
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService) {
@@ -52,8 +53,7 @@ public class SecurityConfiguration {
         return daoAuthenticationProvider;
     }
 
-
-// Bỏ phương thức userDetailsService() đi
+    // Bỏ phương thức userDetailsService() đi
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -65,24 +65,30 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
-                        .requestMatchers("/**").permitAll() // Tạm thời thôi để test
-//                        .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
+                        .requestMatchers(Endpoints.USER_ENDPOINTS).hasAnyAuthority("USER", "ADMIN")
+                        // .requestMatchers("/**").permitAll() // Tạm thời thôi để test
+                        // .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(url)); //chỉ cho phép các request từ url của frontend
+                    config.setAllowedOrigins(List.of(url)); // chỉ cho phép các request từ url của frontend
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowedHeaders(List.of("*")); //	chấp nhận tất cả các header từ request
-                    config.setAllowCredentials(true);//	cho phép gửi cookie, token (JWT) từ frontend
+                    config.setAllowedHeaders(List.of("*")); // chấp nhận tất cả các header từ request
+                    config.setAllowCredentials(true);// cho phép gửi cookie, token (JWT) từ frontend
                     return config;
                 }))
-                .formLogin(Customizer.withDefaults()) // cho phép login bằng form (chỉ dùng nếu dùng session hoặc dev đang test).
-                .httpBasic(Customizer.withDefaults()); //login bằng HTTP basic (có thể tắt nếu  chỉ dùng JWT)
-        http.sessionManagement((session)->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // không lưu session về sử dụng jwt
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); //filter jwt trước filter mặc định
+                .formLogin(Customizer.withDefaults()) // cho phép login bằng form (chỉ dùng nếu dùng session hoặc dev
+                                                      // đang test).
+                .httpBasic(Customizer.withDefaults()); // login bằng HTTP basic (có thể tắt nếu chỉ dùng JWT)
+        http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // không lưu
+                                                                                                            // session
+                                                                                                            // về sử
+                                                                                                            // dụng jwt
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // filter jwt
+                                                                                                       // trước filter
+                                                                                                       // mặc định
 
         return http.build();
     }
-
 
 }

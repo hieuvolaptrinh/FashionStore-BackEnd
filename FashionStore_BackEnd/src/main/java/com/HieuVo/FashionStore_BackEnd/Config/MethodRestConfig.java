@@ -18,19 +18,17 @@ public class MethodRestConfig implements RepositoryRestConfigurer {
         this.entityManager = entityManager;
     }
 
-
-//    config với api RepositoryRest nếu xài security rồi thì này không càn nữa
+    // config với api RepositoryRest nếu xài security rồi thì này không càn nữa
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         // Lấy tất cả các entity và expose ID
         config.exposeIdsFor(entityManager.getMetamodel().getEntities().stream()
                 .map(entityType -> entityType.getJavaType())
                 .toArray(Class[]::new));
-        //CORS configuration
+        // CORS configuration
         cors.addMapping("/**")
                 .allowedOrigins(url)
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
-
 
         HttpMethod[] blockMethods = {
                 HttpMethod.POST,
@@ -40,7 +38,7 @@ public class MethodRestConfig implements RepositoryRestConfigurer {
         // disableHttpMethods(Type.class, config, blockMethods);
 
     }
-    
+
     // tùy chọn chặn các phương thức HTTP
     private void disableHttpMethods(Class c, RepositoryRestConfiguration config, HttpMethod[] methods) {
 
