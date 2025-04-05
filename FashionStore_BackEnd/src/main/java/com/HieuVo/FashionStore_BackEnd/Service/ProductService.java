@@ -55,12 +55,12 @@ public class ProductService {
         product.setSalePrice(dto.getSalePrice());
         product.setQuantity(dto.getQuantity());
         product.setManufactureDate(dto.getManufactureDate());
-        product.setAvgStars(0); // Mặc định
+        product.setAvgStars(0);
         Product saved = productRepository.save(product);
-//        gắn ảnh
+
         List<Image> images = dto.getListImages().stream().map(link -> {
             Image image = new Image();
-            image.setLink(link); // <-- lưu link ảnh vào DB
+            image.setLink(link);
             image.setProduct(saved);
             return image;
         }).toList();
@@ -73,7 +73,6 @@ public class ProductService {
         return saved;
     }
 
-    //    search
     public Page<ProductDTO> searchProduct(Integer typeId, String productName, Pageable pageable) {
         Page<Product> productPage;
 

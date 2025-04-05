@@ -1,5 +1,8 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
+import com.HieuVo.FashionStore_BackEnd.DTO.CartDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.CartDetailDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.ProductCartDTO;
 import com.HieuVo.FashionStore_BackEnd.Model.Cart;
 import com.HieuVo.FashionStore_BackEnd.Model.CartDetail;
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
@@ -19,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,7 +44,54 @@ public class CartService {
         this.userRepository = userRepository;
     }
 
-    public CartDetail addToCart(UserDetails userDetails, int productId, int quantity) {
+    // Cart => CartDTO
+    private CartDTO convertToCartDTO(Cart cart) {
+        if (cart == null)
+            return null;
+
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setCartId(cart.getCartId());
+        cartDTO.setCreateAt(cart.getCreateAt());
+        cartDTO.setUpdateAt(cart.getUpdateAt());
+        cartDTO.setTotalPrices(cart.getTotalPrices());
+
+        List<CartDetailDTO> cartDetailDTOs = cart.getListCartDetails().stream()
+                .map(this::convertToCartDetailDTO)
+                .collect(Collectors.toList());
+        cartDTO.setCartDetails(cartDetailDTOs);
+
+        return cartDTO;
+    }
+
+    // CartDetail => CartDetailDTO
+    private CartDetailDTO convertToCartDetailDTO(CartDetail cartDetail) {
+        CartDetailDTO dto = new CartDetailDTO();
+        dto.setCartDetailId(cartDetail.getCartDetailId());
+        dto.setQuantity(cartDetail.getQuantity());
+        dto.setPrice(cartDetail.getPrice());
+        dto.setProduct(convertToProductCartDTO(cartDetail.getProduct()));
+        return dto;
+    }
+
+    // Product => ProductCartDTO
+    private ProductCartDTO convertToProductCartDTO(Product product) {
+        ProductCartDTO dto = new ProductCartDTO();
+        dto.setProductId(product.getProductId());
+        dto.setProductName(product.getProductName());
+        dto.setDescription(product.getDescription());
+        dto.setOriginalPrice(product.getOriginalPrice());
+        dto.setSalePrice(product.getSalePrice());
+        dto.setProductionInfor(product.getProductionInfor());
+
+        if (product.getListImages() != null && !product.getListImages().isEmpty()) {
+            dto.setMainImage(product.getListImages().get(0).getLink());
+        }
+
+        return dto;
+    }
+
+    // Lấy giỏ hàng của user
+    public CartDTO getCart(UserDetails userDetails) {
         if (userDetails == null) {
             throw new RuntimeException("User not authenticated");
         }
@@ -48,17 +99,24 @@ public class CartService {
         User user = userRepository.findByUserName(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Tìm hoặc tạo giỏ hàng cho user
+        return convertToCartDTO(user.getCart());
+    }
+
+    public void addToCart(UserDetails userDetails, int productId, int quantity) {
+        if (userDetails == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+        User user = userRepository.findByUserName(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         Cart cart = user.getCart();
         if (cart == null) {
             cart = new Cart();
-            // cart.setUser(user);
             cart.setCreateAt(new Date(System.currentTimeMillis()));
             cart.setUpdateAt(new Date(System.currentTimeMillis()));
             cart.setTotalPrices(0.0);
             cart.setListCartDetails(new ArrayList<>());
-
             cart = cartRepository.save(cart);
+            user.setCart(cart);
         }
         System.out.println("cart: " + cart.toString());
 
@@ -71,66 +129,40 @@ public class CartService {
             throw new RuntimeException("Not enough product in stock");
         }
 
-        // Tìm cartDetail nếu sản phẩm đã có trong giỏ
-        Optional<CartDetail> existingCartDetail = cart.getListCartDetails().stream()
-                .filter(cd -> cd.getProduct().getProductId() == productId)
-                .findFirst();
+        Optional<CartDetail> existingCartDetail = cartDetailRepository.findByCartAndProduct(cart, product);
 
         CartDetail cartDetail;
         if (existingCartDetail.isPresent()) {
-            // Cập nhật số lượng nếu sản phẩm đã có trong giỏ
             cartDetail = existingCartDetail.get();
             cartDetail.setQuantity(cartDetail.getQuantity() + quantity);
         } else {
-            // Tạo mới cartDetail nếu sản phẩm chưa có trong giỏ
             cartDetail = new CartDetail();
             cartDetail.setCart(cart);
             cartDetail.setProduct(product);
             cartDetail.setQuantity(quantity);
+            // Thêm cartDetail vào danh sách trong bộ nhớ
+            cart.getListCartDetails().add(cartDetail);
         }
-
-        // Cập nhật giá
         cartDetail.setPrice(product.getSalePrice() > 0 ? product.getSalePrice() : product.getOriginalPrice());
-
-        // Lưu cartDetail
-        cartDetail = cartDetailRepository.save(cartDetail);
-
-        // Cập nhật tổng giá và thời gian của giỏ hàng
+        this.cartDetailRepository.save(cartDetail);
         updateCartTotalPrice(cart);
 
-        return cartDetail;
     }
 
-    // Lấy giỏ hàng của user
-    public Cart getCart(UserDetails userDetails) {
-        if (userDetails == null) {
-            throw new RuntimeException("User not authenticated");
-        }
-
-        User user = userRepository.findByUserName(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        return user.getCart();
-    }
-
-    // Cập nhật số lượng sản phẩm trong giỏ
+    // update quantity
     public CartDetail updateCartItemQuantity(UserDetails userDetails, int cartDetailId, int quantity) {
         if (userDetails == null) {
             throw new RuntimeException("User not authenticated");
         }
-
         User user = userRepository.findByUserName(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
                 .orElseThrow(() -> new RuntimeException("Cart item not found"));
-
-        // Kiểm tra quyền truy cập
         // if (cartDetail.getCart().getUser().getUserId() != user.getUserId()) {
         // throw new RuntimeException("Unauthorized access to cart item");
         // }
 
-        // Kiểm tra số lượng tồn kho
         if (cartDetail.getProduct().getQuantity() < quantity) {
             throw new RuntimeException("Not enough product in stock");
         }
@@ -138,13 +170,11 @@ public class CartService {
         cartDetail.setQuantity(quantity);
         cartDetail = cartDetailRepository.save(cartDetail);
 
-        // Cập nhật tổng giá của giỏ hàng
         updateCartTotalPrice(cartDetail.getCart());
 
         return cartDetail;
     }
 
-    // Xóa sản phẩm khỏi giỏ
     public void removeFromCart(UserDetails userDetails, int cartDetailId) {
         if (userDetails == null) {
             throw new RuntimeException("User not authenticated");
@@ -159,7 +189,6 @@ public class CartService {
         Cart cart = cartDetail.getCart();
         cartDetailRepository.delete(cartDetail);
 
-        // Cập nhật tổng giá của giỏ hàng
         updateCartTotalPrice(cart);
     }
 
@@ -183,9 +212,12 @@ public class CartService {
 
     // Helper method để cập nhật tổng giá của giỏ hàng
     private void updateCartTotalPrice(Cart cart) {
-        double totalPrice = cart.getListCartDetails().stream()
+        List<CartDetail> updatedCartDetails = cartDetailRepository.findByCart(cart);
+
+        double totalPrice = updatedCartDetails.stream()
                 .mapToDouble(cd -> cd.getPrice() * cd.getQuantity())
                 .sum();
+
         cart.setTotalPrices(totalPrice);
         cart.setUpdateAt(new Date(System.currentTimeMillis()));
         cartRepository.save(cart);

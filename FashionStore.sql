@@ -196,3 +196,73 @@ VALUES
 
 --select users.password, users.user_name, user_role.role_id , role.role_name
 --from users, user_role, role
+
+
+-- nếu lười code backend thì xài thằng này luôn
+-- Trigger khi thêm CartDetail (INSERT)
+
+/*
+go
+CREATE TRIGGER trg_after_insert_cart_detail
+ON cart_detail
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @cart_id INT;
+    DECLARE @price DECIMAL(10, 2);
+    DECLARE @quantity INT;
+
+    -- Lấy cart_id, price và quantity của sản phẩm vừa được thêm
+    SELECT @cart_id = cart_id, @price = price, @quantity = quantity FROM inserted;
+
+    -- Cập nhật lại tổng giá trong bảng cart
+    UPDATE cart
+    SET total_prices = (SELECT SUM(price * quantity) FROM cart_detail WHERE cart_id = @cart_id)
+    WHERE cart_id = @cart_id;
+END;
+GO
+
+-- Trigger khi cập nhật CartDetail (UPDATE)
+CREATE TRIGGER trg_after_update_cart_detail
+ON cart_detail
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @cart_id INT;
+    DECLARE @old_price DECIMAL(10, 2);
+    DECLARE @new_price DECIMAL(10, 2);
+    DECLARE @old_quantity INT;
+    DECLARE @new_quantity INT;
+
+    -- Lấy thông tin cũ và mới của cart_detail
+    SELECT @cart_id = cart_id, @old_price = price, @old_quantity = quantity FROM deleted;
+    SELECT @new_price = price, @new_quantity = quantity FROM inserted;
+
+    -- Nếu giá hoặc số lượng thay đổi, cập nhật lại tổng giá
+    IF (@old_price <> @new_price OR @old_quantity <> @new_quantity)
+    BEGIN
+        UPDATE cart
+        SET total_prices = (SELECT SUM(price * quantity) FROM cart_detail WHERE cart_id = @cart_id)
+        WHERE cart_id = @cart_id;
+    END
+END;
+GO
+
+-- Trigger khi xóa CartDetail (DELETE)
+CREATE TRIGGER trg_after_delete_cart_detail
+ON cart_detail
+AFTER DELETE
+AS
+BEGIN
+    DECLARE @cart_id INT;
+
+    -- Lấy cart_id của sản phẩm bị xóa
+    SELECT @cart_id = cart_id FROM deleted;
+
+    -- Cập nhật lại tổng giá trong bảng cart
+    UPDATE cart
+    SET total_prices = (SELECT SUM(price * quantity) FROM cart_detail WHERE cart_id = @cart_id)
+    WHERE cart_id = @cart_id;
+END;
+GO
+*/

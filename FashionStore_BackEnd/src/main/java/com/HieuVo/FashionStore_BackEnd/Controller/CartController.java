@@ -1,5 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
+import com.HieuVo.FashionStore_BackEnd.DTO.CartDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.Cart;
 import com.HieuVo.FashionStore_BackEnd.Model.CartDetail;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
@@ -21,43 +23,47 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addToCart(
+    public ResponseEntity<Notification> addToCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam int productId,
             @RequestParam int quantity) {
         if (userDetails == null) {
-            return ResponseEntity.status(401).body("User not authenticated");
+            return ResponseEntity.status(401).body(new Notification("Bạn chưa đăng nhập"));
         }
-        CartDetail cartDetail = cartService.addToCart(userDetails, productId, quantity);
-        return ResponseEntity.ok(cartDetail);
+        this.cartService.addToCart(userDetails, productId, quantity);
+        return ResponseEntity.ok(new Notification("Tạo giỏ hàng mới và thêm vào giỏ hàng thành công"));
     }
 
     @GetMapping
-    public ResponseEntity<Cart> getCart(@AuthenticationPrincipal UserDetails userDetails) {
-        Cart cart = cartService.getCart(userDetails);
-        return ResponseEntity.ok(cart);
+    public ResponseEntity<CartDTO> getCart(@AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            CartDTO cartDTO = cartService.getCart(userDetails);
+            return ResponseEntity.ok(cartDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/update/{cartDetailId}")
-    public ResponseEntity<CartDetail> updateCartItem(
+    public ResponseEntity<Notification> updateCartItem(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable int cartDetailId,
             @RequestParam int quantity) {
         CartDetail cartDetail = cartService.updateCartItemQuantity(userDetails, cartDetailId, quantity);
-        return ResponseEntity.ok(cartDetail);
+        return ResponseEntity.ok(new Notification("Cập nhật số lượng sản phẩm thành công"));
     }
 
     @DeleteMapping("/remove/{cartDetailId}")
-    public ResponseEntity<Void> removeFromCart(
+    public ResponseEntity<Notification> removeFromCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable int cartDetailId) {
         cartService.removeFromCart(userDetails, cartDetailId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new Notification("Xóa sản phẩm khỏi giỏ hàng thành công"));
     }
 
     @DeleteMapping("/clear")
-    public ResponseEntity<Void> clearCart(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Notification> clearCart(@AuthenticationPrincipal UserDetails userDetails) {
         cartService.clearCart(userDetails);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new Notification("Xóa tất cả sản phẩm khỏi giỏ hàng thành công"));
     }
 }
