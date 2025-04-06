@@ -10,5 +10,5 @@ public class CartDTO {
     private Date createAt;
     private Date updateAt;
     private double totalPrices;
-    private List<CartDetailDTO> cartDetails;
+
 }

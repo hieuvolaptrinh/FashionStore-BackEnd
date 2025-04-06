@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.CartDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.CartDetailDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.Cart;
 import com.HieuVo.FashionStore_BackEnd.Model.CartDetail;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -42,6 +45,17 @@ public class CartController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/cart-detail")
+    public ResponseEntity<List<CartDetailDTO>> getCartDetail(@AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            List<CartDetailDTO> cartDetailDTOs = cartService.getAllCartDetail(userDetails);
+            return ResponseEntity.ok(cartDetailDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
     @PutMapping("/update/{cartDetailId}")

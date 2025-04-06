@@ -55,13 +55,27 @@ public class CartService {
         cartDTO.setUpdateAt(cart.getUpdateAt());
         cartDTO.setTotalPrices(cart.getTotalPrices());
 
-        List<CartDetailDTO> cartDetailDTOs = cart.getListCartDetails().stream()
-                .map(this::convertToCartDetailDTO)
-                .collect(Collectors.toList());
-        cartDTO.setCartDetails(cartDetailDTOs);
 
         return cartDTO;
     }
+public List<CartDetailDTO> getAllCartDetail(UserDetails userDetails) {
+    if (userDetails == null) {
+        throw new RuntimeException("User not authenticated");
+    }
+
+    User user = userRepository.findByUserName(userDetails.getUsername())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    Cart cart = user.getCart();
+    if (cart == null) {
+        return new ArrayList<>();
+    }
+
+    List<CartDetail> cartDetails = cartDetailRepository.findByCart(cart);
+    return cartDetails.stream()
+            .map(this::convertToCartDetailDTO)
+            .collect(Collectors.toList());
+}
 
     // CartDetail => CartDetailDTO
     private CartDetailDTO convertToCartDetailDTO(CartDetail cartDetail) {
