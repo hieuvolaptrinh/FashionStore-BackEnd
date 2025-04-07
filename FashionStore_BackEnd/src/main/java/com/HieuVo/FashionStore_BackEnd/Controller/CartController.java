@@ -58,10 +58,10 @@ public class CartController {
 
     }
 
-    @PutMapping("/update/{cartDetailId}")
+    @PutMapping("/update")
     public ResponseEntity<Notification> updateCartItem(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable int cartDetailId,
+            @RequestParam int cartDetailId,
             @RequestParam int quantity) {
         CartDetail cartDetail = cartService.updateCartItemQuantity(userDetails, cartDetailId, quantity);
         return ResponseEntity.ok(new Notification("Cập nhật số lượng sản phẩm thành công"));

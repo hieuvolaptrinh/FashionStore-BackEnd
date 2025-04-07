@@ -173,9 +173,7 @@ public List<CartDetailDTO> getAllCartDetail(UserDetails userDetails) {
 
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
                 .orElseThrow(() -> new RuntimeException("Cart item not found"));
-        // if (cartDetail.getCart().getUser().getUserId() != user.getUserId()) {
-        // throw new RuntimeException("Unauthorized access to cart item");
-        // }
+
 
         if (cartDetail.getProduct().getQuantity() < quantity) {
             throw new RuntimeException("Not enough product in stock");

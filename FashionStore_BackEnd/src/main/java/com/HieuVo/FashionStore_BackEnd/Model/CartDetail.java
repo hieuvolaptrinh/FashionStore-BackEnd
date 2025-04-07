@@ -32,4 +32,17 @@ public class CartDetail {
         @JoinColumn(name = "cart_id")
         private Cart cart;
 
+
+        @Override
+        public String toString() {
+                return "CartDetail{" +
+                        "cartDetailId=" + cartDetailId +
+                        ", quantity=" + quantity +
+                        ", price=" + price +
+                        // trnhs lặp vô hạn
+                        ", cartId=" + (cart != null ? cart.getCartId() : null) +
+
+                        ", productId=" + (product != null ? product.getProductId() : null) +
+                        '}';
+        }
 }

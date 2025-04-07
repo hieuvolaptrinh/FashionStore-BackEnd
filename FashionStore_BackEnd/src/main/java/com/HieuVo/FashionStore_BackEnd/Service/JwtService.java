@@ -29,7 +29,7 @@ public class JwtService {
     //    tạo JWT từ username
     public String generateToken(String userName, List<String> roles) {
         Map<String, Object> claims = new HashMap<>();
-        User user = this.userService.fetchUserByUsername(userName);
+//        User user = this.userService.fetchUserByUsername(userName);
         return createToken(claims, userName, roles);
     }
 
@@ -40,8 +40,8 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis())) //thời gian ban hành
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) //thời hạn 30 phút
-                .signWith(getSignKey(), SignatureAlgorithm.HS256) // Sử dụng secret key cố định
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //thời hạn 1 day
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 

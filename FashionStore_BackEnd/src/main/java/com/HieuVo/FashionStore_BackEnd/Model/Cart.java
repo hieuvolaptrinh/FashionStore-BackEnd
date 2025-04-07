@@ -30,4 +30,18 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartDetail> listCartDetails;
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "cartId=" + cartId +
+                ", createAt=" + createAt +
+                ", updateAt=" + updateAt +
+                ", totalPrices=" + totalPrices +
+                // Thay vì in toàn bộ listCartDetails, chỉ in số lượng
+                ", cartDetailsCount=" + (listCartDetails != null ? listCartDetails.size() : 0) +
+                '}';
+    }
+
+
 }
