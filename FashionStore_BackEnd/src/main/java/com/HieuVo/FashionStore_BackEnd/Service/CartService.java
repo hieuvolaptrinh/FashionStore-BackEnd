@@ -1,6 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartDTOResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.CartDetailDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.ProductCartDTO;
 import com.HieuVo.FashionStore_BackEnd.Model.Cart;
@@ -54,7 +54,7 @@ public class CartService {
                 .collect(Collectors.toList());
     }
     // Lấy giỏ hàng của user
-    public CartDTOResponse getCart(UserDetails userDetails) {
+    public CartResponse getCart(UserDetails userDetails) {
         if (userDetails == null) {
             throw new RuntimeException("User not authenticated");
         }
@@ -185,10 +185,10 @@ public class CartService {
     }
 
     // Cart => CartDTO
-    private CartDTOResponse convertToCartDTO(Cart cart) {
+    private CartResponse convertToCartDTO(Cart cart) {
         if (cart == null)
             return null;
-        CartDTOResponse cartDTO = new CartDTOResponse();
+        CartResponse cartDTO = new CartResponse();
         cartDTO.setCartId(cart.getCartId());
         cartDTO.setCreateAt(cart.getCreateAt());
         cartDTO.setUpdateAt(cart.getUpdateAt());

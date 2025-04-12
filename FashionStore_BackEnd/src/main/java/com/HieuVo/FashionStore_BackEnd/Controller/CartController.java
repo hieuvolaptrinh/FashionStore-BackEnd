@@ -1,6 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartDTOResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.CartDetailDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
 import com.HieuVo.FashionStore_BackEnd.Service.CartService;
@@ -37,9 +37,9 @@ public class CartController {
 
     @GetMapping
     @ApiMessage("Lấy giỏ hàng thành công")
-    public ResponseEntity<CartDTOResponse> getCart(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CartResponse> getCart(@AuthenticationPrincipal UserDetails userDetails) {
         try {
-            CartDTOResponse cartDTO = cartService.getCart(userDetails);
+            CartResponse cartDTO = cartService.getCart(userDetails);
             return ResponseEntity.ok(cartDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

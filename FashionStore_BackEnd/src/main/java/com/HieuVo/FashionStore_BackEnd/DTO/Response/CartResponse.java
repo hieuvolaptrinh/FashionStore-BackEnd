@@ -4,7 +4,7 @@ import lombok.Data;
 import java.sql.Date;
 
 @Data
-public class CartDTOResponse {
+public class CartResponse {
     private int cartId;
     private Date createAt;
     private Date updateAt;

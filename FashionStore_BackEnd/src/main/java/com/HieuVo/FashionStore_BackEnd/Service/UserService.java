@@ -66,7 +66,6 @@ public class UserService implements UserDetailsService {
 //    vì chỗ này trả về GrantedAuthority nên bên security phải sử dụng hasAuthority("ADMIN") thay vì hasRole("ADMIN")
     private Collection<? extends GrantedAuthority> rolesToAuthorites(Collection<Role> roles) {
 
-
         if (roles == null || roles.isEmpty()) {
 //            return List.of(new SimpleGrantedAuthority("USER")); // Gán quyền mặc định nếu user chưa có quyền
             return List.of(); // Trả về danh sách trống thay vì null]
@@ -194,4 +193,6 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.ok(new Notification("Mã kích hoạt sai!"));
         }
     }
+
+
 }

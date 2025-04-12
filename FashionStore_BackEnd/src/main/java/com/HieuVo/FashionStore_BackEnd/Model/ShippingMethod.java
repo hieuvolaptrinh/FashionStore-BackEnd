@@ -7,11 +7,10 @@ import lombok.Data;
 
 @Data
 @Entity
-
 public class ShippingMethod {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private int shippingMethodID;
+    private int shippingMethodId;
 
     private String shippingMethodName;
 

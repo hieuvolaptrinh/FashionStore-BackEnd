@@ -1,8 +1,12 @@
 package com.HieuVo.FashionStore_BackEnd.DTO;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CartDetailDTO {
     private int cartDetailId;
     private int quantity;
