@@ -1,11 +1,10 @@
-package com.HieuVo.FashionStore_BackEnd.DTO;
+package com.HieuVo.FashionStore_BackEnd.DTO.Response;
 
 import lombok.Data;
 import java.sql.Date;
-import java.util.List;
 
 @Data
-public class CartDTO {
+public class CartDTOResponse {
     private int cartId;
     private Date createAt;
     private Date updateAt;

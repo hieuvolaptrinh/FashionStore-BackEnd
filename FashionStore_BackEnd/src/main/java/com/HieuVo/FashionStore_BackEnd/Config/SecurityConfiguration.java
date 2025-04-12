@@ -53,7 +53,6 @@ public class SecurityConfiguration {
         return daoAuthenticationProvider;
     }
 
-    // Bỏ phương thức userDetailsService() đi
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -69,9 +68,11 @@ public class SecurityConfiguration {
 //                         .requestMatchers("/**").permitAll() // Tạm thời thôi để test
                         // .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
                         .anyRequest().authenticated())
+
+//                cors
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(url)); // chỉ cho phép các request từ url của frontend
+                    config.setAllowedOrigins(List.of(url));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*")); // chấp nhận tất cả các header từ request
                     config.setAllowCredentials(true);// cho phép gửi cookie, token (JWT) từ frontend

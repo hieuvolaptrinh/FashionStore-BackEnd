@@ -1,13 +1,11 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.CartDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartDTOResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.CartDetailDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
-import com.HieuVo.FashionStore_BackEnd.Model.Cart;
-import com.HieuVo.FashionStore_BackEnd.Model.CartDetail;
-import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.CartService;
 
+import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,9 +36,10 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<CartDTO> getCart(@AuthenticationPrincipal UserDetails userDetails) {
+    @ApiMessage("Lấy giỏ hàng thành công")
+    public ResponseEntity<CartDTOResponse> getCart(@AuthenticationPrincipal UserDetails userDetails) {
         try {
-            CartDTO cartDTO = cartService.getCart(userDetails);
+            CartDTOResponse cartDTO = cartService.getCart(userDetails);
             return ResponseEntity.ok(cartDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -48,6 +47,7 @@ public class CartController {
     }
 
     @GetMapping("/cart-detail")
+    @ApiMessage("Lấy chi tiết giỏ hàng thành công")
     public ResponseEntity<List<CartDetailDTO>> getCartDetail(@AuthenticationPrincipal UserDetails userDetails) {
         try {
             List<CartDetailDTO> cartDetailDTOs = cartService.getAllCartDetail(userDetails);
@@ -63,7 +63,7 @@ public class CartController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam int cartDetailId,
             @RequestParam int quantity) {
-        CartDetail cartDetail = cartService.updateCartItemQuantity(userDetails, cartDetailId, quantity);
+        this.cartService.updateCartItemQuantity(userDetails, cartDetailId, quantity);
         return ResponseEntity.ok(new Notification("Cập nhật số lượng sản phẩm thành công"));
     }
 

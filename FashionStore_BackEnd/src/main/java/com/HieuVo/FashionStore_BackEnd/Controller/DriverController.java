@@ -1,5 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
+import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import com.HieuVo.FashionStore_BackEnd.Util.GoogleDriveUploader;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ public DriverController(GoogleDriveUploader googleDriveUploader) {
         this.googleDriveUploader = googleDriveUploader;
 }
     @PostMapping("/uploadToGoogleDrive")
+    @ApiMessage("Upload file to Google Drive successfully")
     public Object handleFileUpload(@RequestParam("image") MultipartFile file) throws Exception {
         if (file.isEmpty()) {
             return "FIle is empty";

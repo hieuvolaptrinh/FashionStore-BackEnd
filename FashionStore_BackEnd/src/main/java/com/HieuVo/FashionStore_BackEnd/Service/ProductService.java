@@ -2,6 +2,7 @@ package com.HieuVo.FashionStore_BackEnd.Service;
 
 
 import com.HieuVo.FashionStore_BackEnd.DTO.ProductDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.PageResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.Image;
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
 import com.HieuVo.FashionStore_BackEnd.Model.Type;
@@ -33,9 +34,33 @@ public class ProductService {
         return imageRepository.findByProduct_productId(productId);
     }
 
-    public Page<Product> getProducts(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return productRepository.findAll(pageable);
+    public PageResponse<ProductDTO> getProducts(Pageable pageable ) {
+
+        Page<Product> productPage=this.productRepository.findAll(pageable);
+
+        Page<ProductDTO> productDTOs = productPage.map(product -> {
+            // Tạo ProductDTO từ Product
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setProductId(product.getProductId());
+            productDTO.setProductName(product.getProductName());
+            productDTO.setDescription(product.getDescription());
+            productDTO.setOriginalPrice(product.getOriginalPrice());
+            productDTO.setProductionInfor(product.getProductionInfor());
+            productDTO.setSalePrice(product.getSalePrice());
+            productDTO.setQuantity(product.getQuantity());
+            productDTO.setManufactureDate(product.getManufactureDate());
+            productDTO.setAvgStars(product.getAvgStars());
+
+            // Lấy danh sách hình ảnh của sản phẩm từ imageRepository
+            List<Image> images = imageRepository.findByProduct_productId(product.getProductId());
+            List<String> listImages = images.stream().map(Image::getLink).collect(Collectors.toList());
+            productDTO.setListImages(listImages);  // Đừng quên dấu chấm phẩy ở đây!
+
+            return productDTO;
+        });
+
+        return new PageResponse<>(productDTOs);
+
     }
 
     public List<Type> getProductTypes() {
@@ -73,7 +98,7 @@ public class ProductService {
         return saved;
     }
 
-    public Page<ProductDTO> searchProduct(Integer typeId, String productName, Pageable pageable) {
+    public PageResponse<ProductDTO> searchProduct(Integer typeId, String productName, Pageable pageable) {
         Page<Product> productPage;
 
         if (typeId != null && productName != null && !productName.isEmpty()) {
@@ -91,7 +116,8 @@ public class ProductService {
         }
 
         // Chuyển đổi từ Page<Product> sang Page<ProductDTO>
-        return productPage.map(product -> {
+        Page<ProductDTO> productDTOs = productPage.map(product -> {
+            // Tạo ProductDTO từ Product
             ProductDTO productDTO = new ProductDTO();
             productDTO.setProductId(product.getProductId());
             productDTO.setProductName(product.getProductName());
@@ -102,11 +128,17 @@ public class ProductService {
             productDTO.setQuantity(product.getQuantity());
             productDTO.setManufactureDate(product.getManufactureDate());
             productDTO.setAvgStars(product.getAvgStars());
+
+            // Lấy danh sách hình ảnh của sản phẩm từ imageRepository
             List<Image> images = imageRepository.findByProduct_productId(product.getProductId());
             List<String> listImages = images.stream().map(Image::getLink).collect(Collectors.toList());
-            productDTO.setListImages(listImages);
+            productDTO.setListImages(listImages);  // Đừng quên dấu chấm phẩy ở đây!
+
             return productDTO;
         });
+
+
+        return new PageResponse<>(productDTOs);
     }
 
 }

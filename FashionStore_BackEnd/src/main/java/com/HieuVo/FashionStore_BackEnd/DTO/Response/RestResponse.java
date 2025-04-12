@@ -1,9 +1,12 @@
 package com.HieuVo.FashionStore_BackEnd.DTO.Response;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
-@Data
-//@JsonInclude(JsonInclude.Include.NON_NULL)  // Đảm bảo không bao gồm các trường null trong JSON
+@Getter
+@Setter
 public class RestResponse<T> {
     private int status;
     private Object error;

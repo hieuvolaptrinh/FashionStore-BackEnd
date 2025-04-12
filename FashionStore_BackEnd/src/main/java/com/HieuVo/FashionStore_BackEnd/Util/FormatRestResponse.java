@@ -1,7 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Util;
 
-
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.RestResponse;
+import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -18,15 +18,14 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
-//        return false; // tạm thời tắt vi ben front end chưa chỉnh lại gọi api
     }
 
     @Override
     public Object beforeBodyWrite(Object body,
-                                  MethodParameter returnType,
-                                  MediaType selectedContentType,
-                                  Class<? extends HttpMessageConverter<?>> selectedConverterType,
-                                  ServerHttpRequest request, ServerHttpResponse response) {
+            MethodParameter returnType,
+            MediaType selectedContentType,
+            Class<? extends HttpMessageConverter<?>> selectedConverterType,
+            ServerHttpRequest request, ServerHttpResponse response) {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
 
@@ -35,14 +34,14 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
         if (body instanceof String) {
             return body;
         }
-//        case error
+
+        // case error
         if (status >= 400) {
-            if (body != null)
-                restResponse.setError(body.toString());
-            restResponse.setMessage("Call api thất bại");
+            return body;
         } else {
             restResponse.setData(body);
-            restResponse.setMessage("Call api thành công");
+            ApiMessage message = returnType.getMethodAnnotation(ApiMessage.class); // get nnotation
+            restResponse.setMessage(message != null ? message.value() : "Call api successfully") ;
 
         }
         return restResponse;

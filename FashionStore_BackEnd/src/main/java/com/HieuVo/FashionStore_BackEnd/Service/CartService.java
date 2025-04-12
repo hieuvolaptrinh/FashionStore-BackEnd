@@ -1,6 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.CartDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartDTOResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.CartDetailDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.ProductCartDTO;
 import com.HieuVo.FashionStore_BackEnd.Model.Cart;
@@ -12,13 +12,11 @@ import com.HieuVo.FashionStore_BackEnd.Repository.CartRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.ProductRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,11 +43,11 @@ public class CartService {
     }
 
     // Cart => CartDTO
-    private CartDTO convertToCartDTO(Cart cart) {
+    private CartDTOResponse convertToCartDTO(Cart cart) {
         if (cart == null)
             return null;
 
-        CartDTO cartDTO = new CartDTO();
+        CartDTOResponse cartDTO = new CartDTOResponse();
         cartDTO.setCartId(cart.getCartId());
         cartDTO.setCreateAt(cart.getCreateAt());
         cartDTO.setUpdateAt(cart.getUpdateAt());
@@ -105,7 +103,7 @@ public List<CartDetailDTO> getAllCartDetail(UserDetails userDetails) {
     }
 
     // Lấy giỏ hàng của user
-    public CartDTO getCart(UserDetails userDetails) {
+    public CartDTOResponse getCart(UserDetails userDetails) {
         if (userDetails == null) {
             throw new RuntimeException("User not authenticated");
         }

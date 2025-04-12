@@ -6,6 +6,7 @@ import com.HieuVo.FashionStore_BackEnd.DTO.Response.AuthResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.JwtService;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
+import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin("*")  // cho phép gọi từ các domain khác để test đã
 public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager; // cần phải vết bên security
@@ -33,6 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @ApiMessage("Login successfully")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
