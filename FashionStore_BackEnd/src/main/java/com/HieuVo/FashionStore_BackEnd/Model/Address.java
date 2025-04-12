@@ -26,8 +26,9 @@ public class Address {
     private String wardName;
 
 
-    @OneToMany(mappedBy = "address")
-    private List<User> listUsers;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "shippingAddress")
     private List<Order> listOrders;

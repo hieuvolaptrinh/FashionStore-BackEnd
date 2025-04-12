@@ -41,22 +41,12 @@ public class User {
     @Lob
     @Column(columnDefinition = "VARBINARY(MAX)")
     private byte[] avatarData;
-    // byte[] decoded = Base64.getDecoder().decode(base64String);
-    // user.setAvatarData(decoded);
 
     private String avataUrl;
 
-    // address default
-    @ManyToOne(cascade = {
-            jakarta.persistence.CascadeType.PERSIST,
-            jakarta.persistence.CascadeType.MERGE,
-            jakarta.persistence.CascadeType.DETACH,
-            jakarta.persistence.CascadeType.REFRESH
-    })
-    @JoinColumn(name = "address_id")
-    private Address address;
-    //
-    // private Ward sellingWard;
+
+    @OneToMany(mappedBy = "user")
+    private List<Address> listAddress;
 
     @OneToMany(mappedBy = "user")
     private List<Review> listReviews;
@@ -73,13 +63,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> listOrders;
 
-    public Address getAddress() {
-        return address;
-    }
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 
     public String getEmail() {
         return email;

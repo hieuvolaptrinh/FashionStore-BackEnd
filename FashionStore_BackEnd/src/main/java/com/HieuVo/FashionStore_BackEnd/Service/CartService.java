@@ -35,73 +35,24 @@ public class CartService {
     private final UserRepository userRepository;
 
     public CartService(CartRepository cartRepository, CartDetailRepository cartDetailRepository,
-            ProductRepository productRepository, UserRepository userRepository) {
+                       ProductRepository productRepository, UserRepository userRepository) {
         this.cartRepository = cartRepository;
         this.cartDetailRepository = cartDetailRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
     }
 
-    // Cart => CartDTO
-    private CartDTOResponse convertToCartDTO(Cart cart) {
-        if (cart == null)
-            return null;
 
-        CartDTOResponse cartDTO = new CartDTOResponse();
-        cartDTO.setCartId(cart.getCartId());
-        cartDTO.setCreateAt(cart.getCreateAt());
-        cartDTO.setUpdateAt(cart.getUpdateAt());
-        cartDTO.setTotalPrices(cart.getTotalPrices());
+//    lấy các sản phẩm đã selected
+    public List<CartDetailDTO> getSelectedCartItems(UserDetails userDetails, List<Integer> listId) {
 
 
-        return cartDTO;
+        List<CartDetail> cartDetails = cartDetailRepository.findByCartDetailIdIn(listId);
+        // Chuyển đổi sang CartDetailDTO
+        return cartDetails.stream()
+                .map(cartDetail -> this.convertToCartDetailDTO(cartDetail))
+                .collect(Collectors.toList());
     }
-public List<CartDetailDTO> getAllCartDetail(UserDetails userDetails) {
-    if (userDetails == null) {
-        throw new RuntimeException("User not authenticated");
-    }
-
-    User user = userRepository.findByUserName(userDetails.getUsername())
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-    Cart cart = user.getCart();
-    if (cart == null) {
-        return new ArrayList<>();
-    }
-
-    List<CartDetail> cartDetails = cartDetailRepository.findByCart(cart);
-    return cartDetails.stream()
-            .map(this::convertToCartDetailDTO)
-            .collect(Collectors.toList());
-}
-
-    // CartDetail => CartDetailDTO
-    private CartDetailDTO convertToCartDetailDTO(CartDetail cartDetail) {
-        CartDetailDTO dto = new CartDetailDTO();
-        dto.setCartDetailId(cartDetail.getCartDetailId());
-        dto.setQuantity(cartDetail.getQuantity());
-        dto.setPrice(cartDetail.getPrice());
-        dto.setProduct(convertToProductCartDTO(cartDetail.getProduct()));
-        return dto;
-    }
-
-    // Product => ProductCartDTO
-    private ProductCartDTO convertToProductCartDTO(Product product) {
-        ProductCartDTO dto = new ProductCartDTO();
-        dto.setProductId(product.getProductId());
-        dto.setProductName(product.getProductName());
-        dto.setDescription(product.getDescription());
-        dto.setOriginalPrice(product.getOriginalPrice());
-        dto.setSalePrice(product.getSalePrice());
-        dto.setProductionInfor(product.getProductionInfor());
-
-        if (product.getListImages() != null && !product.getListImages().isEmpty()) {
-            dto.setMainImage(product.getListImages().get(0).getLink());
-        }
-
-        return dto;
-    }
-
     // Lấy giỏ hàng của user
     public CartDTOResponse getCart(UserDetails userDetails) {
         if (userDetails == null) {
@@ -231,5 +182,60 @@ public List<CartDetailDTO> getAllCartDetail(UserDetails userDetails) {
         cart.setTotalPrices(totalPrice);
         cart.setUpdateAt(new Date(System.currentTimeMillis()));
         cartRepository.save(cart);
+    }
+
+    // Cart => CartDTO
+    private CartDTOResponse convertToCartDTO(Cart cart) {
+        if (cart == null)
+            return null;
+        CartDTOResponse cartDTO = new CartDTOResponse();
+        cartDTO.setCartId(cart.getCartId());
+        cartDTO.setCreateAt(cart.getCreateAt());
+        cartDTO.setUpdateAt(cart.getUpdateAt());
+        cartDTO.setTotalPrices(cart.getTotalPrices());
+        return cartDTO;
+    }
+
+    public List<CartDetailDTO> getAllCartDetail(UserDetails userDetails) {
+        if (userDetails == null)
+            throw new RuntimeException("User not authenticated");
+
+        User user = userRepository.findByUserName(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Cart cart = user.getCart();
+        if (cart == null) {
+            return new ArrayList<>();
+        }
+        List<CartDetail> cartDetails = cartDetailRepository.findByCart(cart);
+        return cartDetails.stream()
+                .map(this::convertToCartDetailDTO)
+                .collect(Collectors.toList());
+    }
+
+    // CartDetail => CartDetailDTO
+    private CartDetailDTO convertToCartDetailDTO(CartDetail cartDetail) {
+        CartDetailDTO dto = new CartDetailDTO();
+        dto.setCartDetailId(cartDetail.getCartDetailId());
+        dto.setQuantity(cartDetail.getQuantity());
+        dto.setPrice(cartDetail.getPrice());
+        dto.setProduct(convertToProductCartDTO(cartDetail.getProduct()));
+        return dto;
+    }
+
+    // Product => ProductCartDTO
+    private ProductCartDTO convertToProductCartDTO(Product product) {
+        ProductCartDTO dto = new ProductCartDTO();
+        dto.setProductId(product.getProductId());
+        dto.setProductName(product.getProductName());
+        dto.setDescription(product.getDescription());
+        dto.setOriginalPrice(product.getOriginalPrice());
+        dto.setSalePrice(product.getSalePrice());
+        dto.setProductionInfor(product.getProductionInfor());
+
+        if (product.getListImages() != null && !product.getListImages().isEmpty()) {
+            dto.setMainImage(product.getListImages().get(0).getLink());
+        }
+
+        return dto;
     }
 }

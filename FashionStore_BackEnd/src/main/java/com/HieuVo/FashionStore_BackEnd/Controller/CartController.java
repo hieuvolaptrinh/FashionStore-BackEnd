@@ -80,4 +80,13 @@ public class CartController {
         cartService.clearCart(userDetails);
         return ResponseEntity.ok(new Notification("Xóa tất cả sản phẩm khỏi giỏ hàng thành công"));
     }
+
+    //    get cartItems was select
+    @GetMapping("/selected")
+    public ResponseEntity<List<CartDetailDTO>> getSelectedCartItems(@RequestParam("ids") List<Integer> listId,
+                                                                    @AuthenticationPrincipal UserDetails userDetails) {
+        List<CartDetailDTO> selectedCartItems = this.cartService.getSelectedCartItems(userDetails,listId);
+        return ResponseEntity.ok(selectedCartItems);
+    }
+
 }

@@ -35,19 +35,27 @@ INSERT INTO payment_type (payment_type_name, description, fee) VALUES
 (N'PayPal', N'Thanh toán quốc tế qua PayPal', 15000);
 GO
 
+-- Insert vào bảng users
+INSERT INTO users (user_name, first_name, last_name, email, password, phone_number, sex,is_active) 
+VALUES (N'admin', N'Hiếu Đại Ka', N'A', N'admin@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0987654321', N'Nam',1),
+       (N'user', N'User', N'B', N'user@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0976543210', N'Nữ',1),
+       (N'lequocd', N'Lê Quốc', N'D', N'quocd@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0912345678', N'Nam',1),
+       (N'phamthie', N'Phạm Thị', N'E', N'thie@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0934567890', N'Nữ',1),
+       (N'hoangminh', N'Hoàng', N'Minh', N'minh@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0967891234', N'Nam',1);
+GO
 
-INSERT INTO Address (street_name, city_name, district_name, ward_name)
+INSERT INTO Address (street_name, city_name, district_name, ward_name,user_id)
 VALUES 
-(N'123 Đường Lê Lợi', N'Hà Nội', N'Ba Đình', N'Phúc Xá'),
-(N'456 Đường Trần Hưng Đạo', N'TP. Hồ Chí Minh', N'Quận 1', N'Bến Nghé'),
-(N'789 Đường Nguyễn Trãi', N'Đà Nẵng', N'Hải Châu', N'Hòa Thuận Tây'),
-(N'321 Đường Phạm Văn Đồng', N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng'),
-(N'654 Đường Nguyễn Văn Linh', N'Hải Phòng', N'Lê Chân', N'Vĩnh Niệm'),
-(N'987 Đường Võ Văn Kiệt', N'TP. Hồ Chí Minh', N'Quận 5', N'Phường 10'),
-(N'741 Đường Điện Biên Phủ', N'Cần Thơ', N'Ninh Kiều', N'An Hòa'),
-(N'852 Đường Lý Thường Kiệt', N'Bình Dương', N'Thủ Dầu Một', N'Phú Cường'),
-(N'159 Đường Quang Trung', N'Đà Lạt', N'Trạm Hành', N'Xuân Trường'),
-(N'357 Đường Trường Chinh', N'Nha Trang', N'Vĩnh Hải', N'Vĩnh Phước');
+(N'123 Đường Lê Lợi', N'Hà Nội', N'Ba Đình', N'Phúc Xá',1),
+(N'456 Đường Trần Hưng Đạo', N'TP. Hồ Chí Minh', N'Quận 1', N'Bến Nghé',2),
+(N'789 Đường Nguyễn Trãi', N'Đà Nẵng', N'Hải Châu', N'Hòa Thuận Tây',3),
+(N'321 Đường Phạm Văn Đồng', N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng',4),
+(N'654 Đường Nguyễn Văn Linh', N'Hải Phòng', N'Lê Chân', N'Vĩnh Niệm',5),
+(N'987 Đường Võ Văn Kiệt', N'TP. Hồ Chí Minh', N'Quận 5', N'Phường 10',4),
+(N'741 Đường Điện Biên Phủ', N'Cần Thơ', N'Ninh Kiều', N'An Hòa',2),
+(N'852 Đường Lý Thường Kiệt', N'Bình Dương', N'Thủ Dầu Một', N'Phú Cường',1),
+(N'159 Đường Quang Trung', N'Đà Lạt', N'Trạm Hành', N'Xuân Trường',1),
+(N'357 Đường Trường Chinh', N'Nha Trang', N'Vĩnh Hải', N'Vĩnh Phước',2);
 
 -- Insert vào bảng role
 INSERT INTO role (role_name, description) VALUES 
@@ -55,18 +63,6 @@ INSERT INTO role (role_name, description) VALUES
 (N'USER', N'Người mua hàng'), 
 (N'STAFF', N'Nhân viên cửa hàng');
 GO
--- Insert vào bảng users
-INSERT INTO users (user_name, first_name, last_name, email, password, phone_number, sex, address_id,is_active) 
-VALUES (N'admin', N'Hiếu Đại Ka', N'A', N'admin@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0987654321', N'Nam', 1,1),
-       (N'user', N'User', N'B', N'user@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0976543210', N'Nữ', 2,1),
-       (N'lequocd', N'Lê Quốc', N'D', N'quocd@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0912345678', N'Nam', 3,1),
-       (N'phamthie', N'Phạm Thị', N'E', N'thie@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0934567890', N'Nữ', 4,1),
-       (N'hoangminh', N'Hoàng', N'Minh', N'minh@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0967891234', N'Nam', 5,1);
-GO
-
-
-
-
 -- Insert vào bảng user_role
 INSERT INTO user_role (user_id, role_id) VALUES 
 (1, 1), (2, 2), (3, 2),(3, 1), (4, 2), (5, 3);
@@ -161,37 +157,38 @@ GO
 
 INSERT INTO [image](link, icon, image_name, product_id)
 VALUES
-('https://drive.google.com/thumbnail?id=1gXcUNaaT0YqujrYBBNiS7XVffNcfhG47',1,N'Ảnh 1.1',7),
-('https://drive.google.com/thumbnail?id=1XYvjjgtQaJHqaEStlWdd2T2EujyAIaNY',0,N'Ảnh 2',2),
-('https://drive.google.com/thumbnail?id=1T7pR6Cy3tokHSo6WEwnQHqlX_HQEXzRq',0,N'Ảnh 2',9),
-('https://drive.google.com/thumbnail?id=1MMikX09-CmbPvnsg8L1dkg8LjROg7H8g',0,N'Ảnh 2',4),
-('https://drive.google.com/thumbnail?id=1Oavms_4rsvJ6XU7sp5s_33LzJal28D3K',1,N'Ảnh 2',10),
-('https://drive.google.com/thumbnail?id=1qDURTe6DaqwRQOii-d_oOArvO4JuTyMB',1,N'Ảnh 1.1',3),
-('https://drive.google.com/thumbnail?id=1WeXIuNS0ETM3yU71HL8jsskAFNU789wx',1,N'Ảnh 1.1',8),
-('https://drive.google.com/thumbnail?id=1WeXIuNS0ETM3yU71HL8jsskAFNU789wx',1,N'Ảnh 1.1',4),
-('https://drive.google.com/thumbnail?id=1mScTwqSFQAPtjh4W-iUXrc4-C_fKG88y',1,N'Ảnh 1.1',5),
-('https://drive.google.com/thumbnail?id=1Oavms_4rsvJ6XU7sp5s_33LzJal28D3K',1,N'Ảnh 1.1',9),
-('https://drive.google.com/thumbnail?id=1MMikX09-CmbPvnsg8L1dkg8LjROg7H8g',1,N'Ảnh 1.1',1),
-('https://drive.google.com/thumbnail?id=1XYvjjgtQaJHqaEStlWdd2T2EujyAIaNY',1,N'Ảnh 1.1',10),
-('https://drive.google.com/thumbnail?id=1qDURTe6DaqwRQOii-d_oOArvO4JuTyMB',1,N'Ảnh 1.1',8),
-('https://drive.google.com/thumbnail?id=1WeXIuNS0ETM3yU71HL8jsskAFNU789wx',1,N'Ảnh 1.1',6),
-('https://drive.google.com/thumbnail?id=1WeXIuNS0ETM3yU71HL8jsskAFNU789wx',1,N'Ảnh 1.1',1),
-('https://drive.google.com/thumbnail?id=1mScTwqSFQAPtjh4W-iUXrc4-C_fKG88y',1,N'Ảnh 1.1',4),
-('https://drive.google.com/thumbnail?id=1Q1lvEfB-276ThWaDbZKEBjYt6aGsSF8K',1,N'Ảnh 1.1',6),
-('https://drive.google.com/thumbnail?id=1MMikX09-CmbPvnsg8L1dkg8LjROg7H8g',1,N'Ảnh 1.1',3),
-('https://drive.google.com/thumbnail?id=1XYvjjgtQaJHqaEStlWdd2T2EujyAIaNY',1,N'Ảnh 1.1',10),
-('https://drive.google.com/thumbnail?id=1mScTwqSFQAPtjh4W-iUXrc4-C_fKG88y',1,N'Ảnh 1.1',1),
-('https://drive.google.com/thumbnail?id=1Oavms_4rsvJ6XU7sp5s_33LzJal28D3K',1,N'Ảnh 1.1',2),
-('https://drive.google.com/thumbnail?id=1MMikX09-CmbPvnsg8L1dkg8LjROg7H8g',1,N'Ảnh 1.1',6),
-('https://drive.google.com/thumbnail?id=1XYvjjgtQaJHqaEStlWdd2T2EujyAIaNY',1,N'Ảnh 1.1',2),
-('https://drive.google.com/thumbnail?id=1qDURTe6DaqwRQOii-d_oOArvO4JuTyMB',1,N'Ảnh 1.1',3),
-('https://drive.google.com/thumbnail?id=1WeXIuNS0ETM3yU71HL8jsskAFNU789wx',1,N'Ảnh 1.1',4),
-('https://drive.google.com/thumbnail?id=1WeXIuNS0ETM3yU71HL8jsskAFNU789wx',1,N'Ảnh 1.1',5),
-('https://drive.google.com/thumbnail?id=1mScTwqSFQAPtjh4W-iUXrc4-C_fKG88y',1,N'Ảnh 1.1',6),
-('https://drive.google.com/thumbnail?id=1XOP6HkAAcGjxPVL4tHnR5qmsAzH5bckK',1,N'Ảnh 1.1',7),
-('https://drive.google.com/thumbnail?id=1MMikX09-CmbPvnsg8L1dkg8LjROg7H8g',1,N'Ảnh 1.1',9),
-('https://drive.google.com/thumbnail?id=1XYvjjgtQaJHqaEStlWdd2T2EujyAIaNY',1,N'Ảnh 1.1',10),
-('https://drive.google.com/thumbnail?id=1gXcUNaaT0YqujrYBBNiS7XVffNcfhG47',1,N'Ảnh 1.1',1);
+('https://drive.google.com/thumbnail?id=1mw5eullXeislchPhVusoFktaw52B6F9d', 1, N'Ảnh 1', 7),
+('https://drive.google.com/thumbnail?id=1jUClkB0tUo4H5javEoUJ5ioA12CmrdZi', 0, N'Ảnh 2', 2),
+('https://drive.google.com/thumbnail?id=14I1XkVcBSX3oFdBsO67DmItDgQxSsD9U', 0, N'Ảnh 2', 9),
+('https://drive.google.com/thumbnail?id=1I6Mkp-HH7PhqpRO-CmBrxDpQjUtimjYt', 0, N'Ảnh 2', 4),
+('https://drive.google.com/thumbnail?id=1I9BljbtMfgP6zMwF31wAdkXg2zvacgup', 1, N'Ảnh 2', 10),
+('https://drive.google.com/thumbnail?id=1hLFaEnfKNkN4jJ_o-uzePbLdeMAbo6O-', 1, N'Ảnh 1', 3),
+('https://drive.google.com/thumbnail?id=1gAN_nAEdLaaL_DsZqOPVZhBo9qaaWskt', 1, N'Ảnh 1', 8),
+('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 4),
+('https://drive.google.com/thumbnail?id=1ln8Ph8bcyiwK6FMUmy1u7-NBCsaJWZ6K', 1, N'Ảnh 1', 5),
+('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 9),
+('https://drive.google.com/thumbnail?id=1I6Mkp-HH7PhqpRO-CmBrxDpQjUtimjYt', 1, N'Ảnh 1', 1),
+('https://drive.google.com/thumbnail?id=1jUClkB0tUo4H5javEoUJ5ioA12CmrdZi', 1, N'Ảnh 1', 10),
+('https://drive.google.com/thumbnail?id=1hLFaEnfKNkN4jJ_o-uzePbLdeMAbo6O-', 1, N'Ảnh 1', 8),
+('https://drive.google.com/thumbnail?id=1gAN_nAEdLaaL_DsZqOPVZhBo9qaaWskt', 1, N'Ảnh 1', 6),
+('https://drive.google.com/thumbnail?id=1gAN_nAEdLaaL_DsZqOPVZhBo9qaaWskt', 1, N'Ảnh 1', 1),
+('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 4),
+('https://drive.google.com/thumbnail?id=1Q1lvEfB-276ThWaDbZKEBjYt6aGsSF8K', 1, N'Ảnh 1', 6),
+('https://drive.google.com/thumbnail?id=1I6Mkp-HH7PhqpRO-CmBrxDpQjUtimjYt', 1, N'Ảnh 1', 3),
+('https://drive.google.com/thumbnail?id=1jUClkB0tUo4H5javEoUJ5ioA12CmrdZi', 1, N'Ảnh 1', 10),
+('https://drive.google.com/thumbnail?id=1gAN_nAEdLaaL_DsZqOPVZhBo9qaaWskt', 1, N'Ảnh 1', 1),
+('https://drive.google.com/thumbnail?id=1I9BljbtMfgP6zMwF31wAdkXg2zvacgup', 1, N'Ảnh 1', 2),
+('https://drive.google.com/thumbnail?id=1I6Mkp-HH7PhqpRO-CmBrxDpQjUtimjYt', 1, N'Ảnh 1', 6),
+('https://drive.google.com/thumbnail?id=1jUClkB0tUo4H5javEoUJ5ioA12CmrdZi', 1, N'Ảnh 1', 2),
+('https://drive.google.com/thumbnail?id=14I1XkVcBSX3oFdBsO67DmItDgQxSsD9U', 1, N'Ảnh 1', 3),
+('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 4),
+('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 5),
+('https://drive.google.com/thumbnail?id=1mScTwqSFQAPtjh4W-iUXrc4-C_fKG88y', 1, N'Ảnh 1', 6),
+('https://drive.google.com/thumbnail?id=1XOP6HkAAcGjxPVL4tHnR5qmsAzH5bckK', 1, N'Ảnh 1', 7),
+('https://drive.google.com/thumbnail?id=1MMikX09-CmbPvnsg8L1dkg8LjROg7H8g', 1, N'Ảnh 1', 9),
+('https://drive.google.com/thumbnail?id=1XYvjjgtQaJHqaEStlWdd2T2EujyAIaNY', 1, N'Ảnh 1', 10),
+('https://drive.google.com/thumbnail?id=1gXcUNaaT0YqujrYBBNiS7XVffNcfhG47', 1, N'Ảnh 1', 1);
+
 
 
 --select users.password, users.user_name, user_role.role_id , role.role_name

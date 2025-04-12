@@ -42,7 +42,7 @@ public class Order {
         @JoinColumn(name = "shipping_address_id", nullable = false)
         private Address shippingAddress;
 
-        @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+        @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
         private List<OrderDetail> orderDetails;
 
         @ManyToOne(cascade = {
