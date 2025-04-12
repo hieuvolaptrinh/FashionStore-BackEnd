@@ -3,6 +3,7 @@ package com.HieuVo.FashionStore_BackEnd.Controller;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.AddressDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
+import com.HieuVo.FashionStore_BackEnd.DTO.OrderDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PaymentTypeResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.ShippingMethodResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.Address;
@@ -59,5 +60,13 @@ public class OrderController {
     @GetMapping("/shipping-methods")
     public ResponseEntity<List<ShippingMethodResponse>> getShippingMethods() {
         return ResponseEntity.status(HttpStatus.OK).body(this.orderService.findAllShippingMethod());
+    }
+
+    @PostMapping
+    @ApiMessage("Create order successfully")
+    public ResponseEntity<Void> createOrder(@AuthenticationPrincipal UserDetails userDetails,
+                                            @RequestBody OrderDTO orderDTO) {
+        orderService.createOrder(userDetails, orderDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

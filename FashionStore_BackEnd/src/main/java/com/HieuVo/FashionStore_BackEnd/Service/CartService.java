@@ -108,7 +108,7 @@ public class CartService {
         }
         cartDetail.setPrice(product.getSalePrice() > 0 ? product.getSalePrice() : product.getOriginalPrice());
         this.cartDetailRepository.save(cartDetail);
-        updateCartTotalPrice(cart);
+//        updateCartTotalPrice(cart);
 
     }
 
@@ -131,7 +131,7 @@ public class CartService {
         cartDetail.setQuantity(quantity);
         cartDetail = cartDetailRepository.save(cartDetail);
 
-        updateCartTotalPrice(cartDetail.getCart());
+//        updateCartTotalPrice(cartDetail.getCart());
 
         return cartDetail;
     }
@@ -141,16 +141,16 @@ public class CartService {
             throw new RuntimeException("User not authenticated");
         }
 
-        User user = userRepository.findByUserName(userDetails.getUsername())
+        this.userRepository.findByUserName(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
+        CartDetail cartDetail = this.cartDetailRepository.findById(cartDetailId)
                 .orElseThrow(() -> new RuntimeException("Cart item not found"));
 
         Cart cart = cartDetail.getCart();
-        cartDetailRepository.delete(cartDetail);
+        this.cartDetailRepository.delete(cartDetail);
 
-        updateCartTotalPrice(cart);
+//        updateCartTotalPrice(cart); // lỗi vì đã sử dụng trigger
     }
 
     // Xóa toàn bộ giỏ hàng
@@ -171,7 +171,7 @@ public class CartService {
         }
     }
 
-    // Helper method để cập nhật tổng giá của giỏ hàng
+    // cập nhật tổng giá của giỏ hàng (viết SQL triggers cũng đc)
     private void updateCartTotalPrice(Cart cart) {
         List<CartDetail> updatedCartDetails = cartDetailRepository.findByCart(cart);
 

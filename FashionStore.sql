@@ -196,9 +196,8 @@ VALUES
 
 
 -- nếu lười code backend thì xài thằng này luôn
--- Trigger khi thêm CartDetail (INSERT)
 
-/*
+-- Trigger khi thêm CartDetail (INSERT)
 go
 CREATE TRIGGER trg_after_insert_cart_detail
 ON cart_detail
@@ -246,7 +245,7 @@ END;
 GO
 
 -- Trigger khi xóa CartDetail (DELETE)
-CREATE TRIGGER trg_after_delete_cart_detail
+CREATE OR ALTER TRIGGER trg_after_delete_cart_detail
 ON cart_detail
 AFTER DELETE
 AS
@@ -256,10 +255,111 @@ BEGIN
     -- Lấy cart_id của sản phẩm bị xóa
     SELECT @cart_id = cart_id FROM deleted;
 
-    -- Cập nhật lại tổng giá trong bảng cart
+    -- Cập nhật lại tổng giá trong bảng cart, gán 0 nếu không còn cart_detail
     UPDATE cart
-    SET total_prices = (SELECT SUM(price * quantity) FROM cart_detail WHERE cart_id = @cart_id)
+    SET total_prices = ISNULL((
+        SELECT SUM(price * quantity) 
+        FROM cart_detail 
+        WHERE cart_id = @cart_id
+    ), 0)
     WHERE cart_id = @cart_id;
 END;
 GO
-*/
+-- Trigger khi thêm OrderDetail (INSERT)
+CREATE TRIGGER trg_after_insert_order_detail
+ON order_detail
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @order_id INT;
+    DECLARE @price DECIMAL(10, 2);
+    DECLARE @quantity INT;
+    DECLARE @product_id INT;
+
+    -- Lấy order_id, price, quantity và product_id của order_detail vừa được thêm
+    SELECT @order_id = order_id, @price = price, @quantity = quantity, @product_id = product_id 
+    FROM inserted;
+
+    -- Cập nhật tổng giá trong bảng orders
+    UPDATE orders
+    SET total_price = (
+        SELECT SUM(price * quantity) 
+        FROM order_detail 
+        WHERE order_id = @order_id
+    )
+    WHERE order_id = @order_id;
+
+    -- Cập nhật số lượng sản phẩm trong kho
+    UPDATE product
+    SET quantity = quantity - @quantity
+    WHERE product_id = @product_id;
+END;
+GO
+
+-- Trigger khi cập nhật OrderDetail (UPDATE)
+CREATE TRIGGER trg_after_update_order_detail
+ON order_detail
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @order_id INT;
+    DECLARE @old_price DECIMAL(10, 2);
+    DECLARE @new_price DECIMAL(10, 2);
+    DECLARE @old_quantity INT;
+    DECLARE @new_quantity INT;
+    DECLARE @product_id INT;
+
+    -- Lấy thông tin cũ và mới của order_detail
+    SELECT @order_id = order_id, @old_price = price, @old_quantity = quantity, @product_id = product_id 
+    FROM deleted;
+    SELECT @new_price = price, @new_quantity = quantity 
+    FROM inserted;
+
+    -- Nếu giá hoặc số lượng thay đổi, cập nhật lại tổng giá
+    IF (@old_price <> @new_price OR @old_quantity <> @new_quantity)
+    BEGIN
+        UPDATE orders
+        SET total_price = (
+            SELECT SUM(price * quantity) 
+            FROM order_detail 
+            WHERE order_id = @order_id
+        )
+        WHERE order_id = @order_id;
+
+        -- Cập nhật số lượng sản phẩm trong kho
+        UPDATE product
+        SET quantity = quantity - (@new_quantity - @old_quantity)
+        WHERE product_id = @product_id;
+    END
+END;
+GO
+
+-- Trigger khi xóa OrderDetail (DELETE)
+CREATE TRIGGER trg_after_delete_order_detail
+ON order_detail
+AFTER DELETE
+AS
+BEGIN
+    DECLARE @order_id INT;
+    DECLARE @product_id INT;
+    DECLARE @quantity INT;
+
+    -- Lấy order_id, product_id và quantity của order_detail bị xóa
+    SELECT @order_id = order_id, @product_id = product_id, @quantity = quantity 
+    FROM deleted;
+
+    -- Cập nhật tổng giá trong bảng orders
+    UPDATE orders
+    SET total_price = (
+        SELECT ISNULL(SUM(price * quantity), 0) 
+        FROM order_detail 
+        WHERE order_id = @order_id
+    )
+    WHERE order_id = @order_id;
+
+    -- Cập nhật số lượng sản phẩm trong kho (hoàn lại số lượng)
+    UPDATE product
+    SET quantity = quantity + @quantity
+    WHERE product_id = @product_id;
+END;
+GO
