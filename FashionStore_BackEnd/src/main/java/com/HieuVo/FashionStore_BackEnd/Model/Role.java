@@ -4,10 +4,12 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 @Entity
-
+@Getter
+@Setter
 public class Role {
         @Id
         @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -29,47 +31,8 @@ public class Role {
         public Role() {
         }
 
-        public Role(int roleId, String roleName, String description, List<User> listUsers) {
-                this.roleId = roleId;
-                this.roleName = roleName;
-                this.description = description;
-                this.listUsers = listUsers;
-        }
-
-        public int getRoleId() {
-                return roleId;
-        }
-
-        public void setRoleId(int roleId) {
-                this.roleId = roleId;
-        }
-
-        public String getRoleName() {
-                return roleName;
-        }
-
-        public void setRoleName(String roleName) {
-                this.roleName = roleName;
-        }
-
-        public String getDescription() {
-                return description;
-        }
-
-        public void setDescription(String description) {
-                this.description = description;
-        }
-
-        public List<User> getListUsers() {
-                return listUsers;
-        }
-
-        public void setListUsers(List<User> listUsers) {
-                this.listUsers = listUsers;
-        }
 
         @Override
         public String toString() {
-                return "Role{id=" + roleId + ", name='" + roleName + "'}"; // Don't include listUsers here
-        }
+                return  roleName;        }
 }

@@ -2,10 +2,13 @@ package com.HieuVo.FashionStore_BackEnd.Model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -65,121 +68,7 @@ public class User {
 
 
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public List<Order> getListOrders() {
-        return listOrders;
-    }
-
-    public void setListOrders(List<Order> listOrders) {
-        this.listOrders = listOrders;
-    }
-
-    public List<Review> getListReviews() {
-        return listReviews;
-    }
-
-    public void setListReviews(List<Review> listReviews) {
-        this.listReviews = listReviews;
-    }
-
-    public List<Role> getListRoles() {
-        return listRoles;
-    }
-
-    public void setListRoles(List<Role> listRoles) {
-        this.listRoles = listRoles;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhoneNumber(String phoneNumber) {
-        return this.phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getActivationCode() {
-        return activationCode;
-    }
-
-    public void setActivationCode(String activationCode) {
-        this.activationCode = activationCode;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getAvataUrl() {
-        return avataUrl;
-    }
-
-    public void setAvataUrl(String avataUrl) {
-        this.avataUrl = avataUrl;
-    }
 
     @Override
     public String toString() {

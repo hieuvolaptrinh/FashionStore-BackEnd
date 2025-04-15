@@ -12,4 +12,6 @@ public interface AdderssRepository extends JpaRepository<Address, Integer> {
 
     List<Address> findAddressByUser_UserName(String userUserName);
     List<Address> findByUser(User user);
+
+    List<Address> findAllByUser(User user);
 }

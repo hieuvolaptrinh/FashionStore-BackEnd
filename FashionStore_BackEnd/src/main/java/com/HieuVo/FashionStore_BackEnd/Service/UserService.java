@@ -2,8 +2,10 @@ package com.HieuVo.FashionStore_BackEnd.Service;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
+import com.HieuVo.FashionStore_BackEnd.Model.Address;
 import com.HieuVo.FashionStore_BackEnd.Model.Role;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
+import com.HieuVo.FashionStore_BackEnd.Repository.AdderssRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.RoleRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.UserRepository;
 
@@ -30,12 +32,16 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final SendEmailController emailService;
     private final RoleRepository roleRepository;
+    private final AdderssRepository addressRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SendEmailController emailService, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       SendEmailController emailService, RoleRepository roleRepository,
+                       AdderssRepository addressRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.roleRepository = roleRepository;
+        this.addressRepository = addressRepository;
 
     }
 
@@ -98,7 +104,12 @@ public class UserService implements UserDetailsService {
 
         user.setActivationCode(randomOTP());
         user.setActive(false);
-        user.setListRoles(Collections.singletonList(this.roleRepository.findByRoleName("USER")));
+        if (userDTO.getRoles() != null) {
+            List<Role> roles = this.roleRepository.findAllByRoleNameIn(userDTO.getRoles());
+        } else {
+            user.setListRoles(Collections.singletonList(this.roleRepository.findByRoleName("USER")));
+
+        }
 //        Role role = this.roleRepository.findByRoleName("USER");
 //        if (role == null) {
 //            throw new RuntimeException("Role 'USER' không tồn tại trong database!");
@@ -195,4 +206,59 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public List<UserDTO> getAllUsers() {
+        List<User> users = this.userRepository.findAll();
+        List<UserDTO> userDTOs = users.stream().map(user -> {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserId(user.getUserId());
+            userDTO.setUserName(user.getUserName());
+            userDTO.setFirstName(user.getFirstName());
+            userDTO.setLastName(user.getLastName());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setActive(user.isActive());
+            userDTO.setRoles(user.getListRoles().stream()
+                    .map(Role::getRoleName)
+                    .collect(Collectors.toList()));
+
+            userDTO.setPhoneNumber(user.getPhoneNumber());
+            if (user.getAvatarData() != null) {
+                userDTO.setAvatarBase64(Base64.getEncoder().encodeToString(user.getAvatarData()));
+            }
+            return userDTO;
+
+        }).collect(Collectors.toList());
+        return userDTOs;
+    }
+
+    //
+    public String updateUser(Integer userId, UserDTO userDTO) {
+        User user = this.userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return "Không tìm thấy người dùng với ID: " + userId;
+        }
+
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setActive(userDTO.getActive());
+
+//        Không update password và username
+        List<Role> roles = this.roleRepository.findAllByRoleNameIn(userDTO.getRoles());
+        user.setListRoles(roles);
+        if (userDTO.getAvatarBase64() != null && !userDTO.getAvatarBase64().isEmpty()) {
+            // Chuyển đổi chuỗi base64 thành byte[] trước khi lưu
+            user.setAvatarData(Base64.getDecoder().decode(userDTO.getAvatarBase64()));
+        }
+        this.userRepository.save(user);
+        return "Cập nhật thành công";
+    }
+
+    public String lockAccount(Integer userId) {
+
+        User user = this.userRepository.findById(userId).orElse(null);
+        user.setActive(false);
+        this.userRepository.save(user);
+        return "Khóa người dùng thành công";
+    }
 }

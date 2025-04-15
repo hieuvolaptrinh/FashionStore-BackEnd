@@ -4,10 +4,12 @@ import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
+import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
+import java.util.List;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
@@ -43,5 +45,25 @@ public class UserController {
     @GetMapping("/activateAccount")
     public ResponseEntity<Notification> confirmNewUser(@RequestParam String email, @RequestParam String activationCode) {
         return this.userService.confirmEmail(email, activationCode);
+    }
+
+//    CRUD admin
+    @GetMapping()
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/{userId}")
+    @ApiMessage("Cập nhật người dùng thành công")
+    public ResponseEntity<Notification> updateUser(@PathVariable Integer userId, @RequestBody UserDTO userDTO) {
+        System.out.println("Received userDTO: " + userDTO);
+        return ResponseEntity.ok(new Notification(this.userService.updateUser(userId, userDTO)) );
+    }
+
+    @PutMapping("/lock/{userId}")
+    @ApiMessage("Khóa tài khoản thành công")
+    public ResponseEntity<Notification> deleteUser(@PathVariable Integer userId) {
+        return ResponseEntity.ok(new Notification(this.userService.lockAccount(userId)));
     }
 }
