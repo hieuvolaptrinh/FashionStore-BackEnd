@@ -2,16 +2,20 @@ package com.HieuVo.FashionStore_BackEnd.Service;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.OrderRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PaymentTypeResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.ResponseOrder;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.ShippingMethodResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.*;
 import com.HieuVo.FashionStore_BackEnd.Repository.*;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,7 +86,8 @@ public class OrderService {
         ShippingMethod shippingMethod = shippingMethodRepository.findById(orderRequest.getShippingMethodId())
                 .orElseThrow(() -> new RuntimeException("Shipping method not found"));
 
-        List<CartDetail> cartDetails = cartDetailRepository.findByCartDetailIdIn(orderRequest.getSelectedIds());
+        Optional<List<CartDetail>> optinalCartDetails = cartDetailRepository.findByCartDetailIdIn(orderRequest.getSelectedIds());
+        List<CartDetail> cartDetails = optinalCartDetails.orElseThrow(() -> new RuntimeException("No cart items found"));
         if (cartDetails.isEmpty()) {
             throw new RuntimeException("No cart details found");
         }
@@ -92,8 +97,9 @@ public class OrderService {
         order.setShippingAddress(address);
         order.setPaymentType(paymentType);
         order.setShippingMethod(shippingMethod);
-        order.setCreateAt(Date.valueOf(LocalDate.now()));
-        order.setStatus(" chờ đại ka hiếu Xử lý/ trừ trước luôn số lượng sản phẩm ở code hoặc code trigger cx đc");
+//        order.setCreateAt(Date.valueOf(LocalDate.now()));
+//        order.setStatus(" chờ đại ka hiếu Xử lý/ trừ trước luôn số lượng sản phẩm ở code hoặc code trigger cx đc");
+        order.setStatus("Chưa xử lý");
 
         double totalPrice = cartDetails.stream()
                 .mapToDouble(cd -> cd.getPrice() * cd.getQuantity())
@@ -123,5 +129,51 @@ public class OrderService {
         cartDetailRepository.deleteAll(cartDetails);
     }
 
+
+    public List<ResponseOrder> getAllOrdersByUser(UserDetails userDetails) {
+        User user = userRepository.findByUserName(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        List<Order> orders = orderRepository.findByUser(user)
+                .orElse(Collections.emptyList());
+
+        return orders.stream()
+                .map(this::convertToResponseOrder)
+                .collect(Collectors.toList());
+    }
+
+    public List<ResponseOrder> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream()
+                .map(this::convertToResponseOrder)
+                .collect(Collectors.toList());
+    }
+
+    private ResponseOrder convertToResponseOrder(Order order) {
+        ResponseOrder responseOrder = new ResponseOrder();
+        responseOrder.setOrderId(order.getOrderId());
+        responseOrder.setStatus(order.getStatus());
+        responseOrder.setTotalPrice(order.getTotalPrice());
+        responseOrder.setCreateAt(order.getCreateAt());
+
+        List<ResponseOrder.OrderDetailDTO> orderDetails = order.getOrderDetails()
+                .stream()
+                .map(detail -> new ResponseOrder.OrderDetailDTO(
+                        detail.getProduct().getProductId(),
+                        detail.getQuantity(),
+                        detail.getPrice()
+                ))
+                .collect(Collectors.toList());
+
+        responseOrder.setOrderDetails(orderDetails);
+        return responseOrder;
+    }
+
+    public void updateOrderStatus(int orderId, String status) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setStatus(status);
+        orderRepository.save(order);
+    }
 }
 

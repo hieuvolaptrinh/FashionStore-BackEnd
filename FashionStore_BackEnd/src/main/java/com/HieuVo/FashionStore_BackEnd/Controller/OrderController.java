@@ -5,6 +5,7 @@ import com.HieuVo.FashionStore_BackEnd.DTO.AddressDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.OrderRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PaymentTypeResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.ResponseOrder;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.ShippingMethodResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.Address;
 import com.HieuVo.FashionStore_BackEnd.Service.AddressService;
@@ -64,5 +65,28 @@ public class OrderController {
                                             @RequestBody OrderRequest orderRequest) {
         orderService.createOrder(userDetails, orderRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    //
+    @GetMapping("/admin")
+    @ApiMessage("Get all orders successfully")
+    public ResponseEntity<List<ResponseOrder>> getAllOrders() {
+        List<ResponseOrder> responseOrders = orderService.getAllOrders();
+        return ResponseEntity.status(HttpStatus.OK).body(responseOrders);
+    }
+
+    @GetMapping("/user")
+    @ApiMessage("Get all orders successfully")
+    public ResponseEntity<List<ResponseOrder>> getAllOrdersByUser(@AuthenticationPrincipal UserDetails userDetails) {
+        List<ResponseOrder> responseOrders = orderService.getAllOrdersByUser(userDetails);
+        return ResponseEntity.status(HttpStatus.OK).body(responseOrders);
+    }
+//    admin update trạng thái đơn hàng
+    @PostMapping("/admin/update")
+    @ApiMessage("Update order status successfully")
+    public ResponseEntity<Void> updateOrderStatus(@RequestParam(name = "orderId") int orderId,
+                                            @RequestParam(name = "status") String status) {
+        orderService.updateOrderStatus(orderId, status);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

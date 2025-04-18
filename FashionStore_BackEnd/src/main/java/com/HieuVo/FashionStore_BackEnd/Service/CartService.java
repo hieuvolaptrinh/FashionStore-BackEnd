@@ -47,7 +47,11 @@ public class CartService {
     public List<CartDetailDTO> getSelectedCartItems(UserDetails userDetails, List<Integer> listId) {
 
 
-        List<CartDetail> cartDetails = cartDetailRepository.findByCartDetailIdIn(listId);
+        Optional<List<CartDetail>> cartDetailsOptional = cartDetailRepository.findByCartDetailIdIn(listId);
+        if (cartDetailsOptional.isEmpty()) {
+            throw new RuntimeException("No cart items found");
+        }
+        List<CartDetail> cartDetails = cartDetailsOptional.get();
         // Chuyển đổi sang CartDetailDTO
         return cartDetails.stream()
                 .map(cartDetail -> this.convertToCartDetailDTO(cartDetail))

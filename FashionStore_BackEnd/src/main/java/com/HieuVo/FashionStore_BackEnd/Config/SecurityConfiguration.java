@@ -22,7 +22,8 @@ import java.util.List;
 
 @Configuration
 public class SecurityConfiguration {
-
+    Dotenv dotenv = Dotenv.load();
+    private String url = dotenv.get("URL");
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     // thêm lazy để tránh lỗi khi khởi tạo bean vì nó phụ thuộc vòng tròn mất
@@ -41,9 +42,8 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    Dotenv dotenv = Dotenv.load();
-    private String url = dotenv.get("URL");
-    // private String url = "http://localhost:5173";
+
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService) {
@@ -70,7 +70,7 @@ public class SecurityConfiguration {
 //                cors
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(url));
+                    config.setAllowedOrigins(List.of(url,"http://192.168.1.6:5173"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*")); // chấp nhận tất cả các header từ request
                     config.setAllowCredentials(true);// cho phép gửi cookie, token (JWT) từ frontend
