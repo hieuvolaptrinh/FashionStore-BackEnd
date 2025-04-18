@@ -13,9 +13,10 @@ import java.io.File;
 public class DriverController {
     private final GoogleDriveUploader googleDriveUploader;
 
-public DriverController(GoogleDriveUploader googleDriveUploader) {
+    public DriverController(GoogleDriveUploader googleDriveUploader) {
         this.googleDriveUploader = googleDriveUploader;
-}
+    }
+
     @PostMapping("/uploadToGoogleDrive")
     @ApiMessage("Upload file to Google Drive successfully")
     public Object handleFileUpload(@RequestParam("image") MultipartFile file) throws Exception {

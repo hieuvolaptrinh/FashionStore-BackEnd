@@ -1,6 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.AuthRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.AuthResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.User;

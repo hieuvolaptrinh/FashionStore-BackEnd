@@ -1,4 +1,4 @@
-package com.HieuVo.FashionStore_BackEnd.DTO;
+package com.HieuVo.FashionStore_BackEnd.DTO.Response;
 
 import lombok.*;
 
@@ -11,5 +11,5 @@ public class CartDetailDTO {
     private int cartDetailId;
     private int quantity;
     private double price;
-    private ProductCartDTO product;
+    private ProductCartResponse product;
 }

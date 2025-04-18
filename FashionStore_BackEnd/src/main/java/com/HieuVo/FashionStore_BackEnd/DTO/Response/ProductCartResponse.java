@@ -1,9 +1,9 @@
-package com.HieuVo.FashionStore_BackEnd.DTO;
+package com.HieuVo.FashionStore_BackEnd.DTO.Response;
 
 import lombok.Data;
 
 @Data
-public class ProductCartDTO {
+public class ProductCartResponse {
     private int productId;
     private String productName;
     private String description;

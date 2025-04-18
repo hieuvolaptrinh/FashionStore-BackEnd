@@ -1,6 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.OrderDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.OrderRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PaymentTypeResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.ShippingMethodResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.*;
@@ -65,7 +65,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void createOrder(UserDetails userDetails, OrderDTO orderDTO) {
+    public void createOrder(UserDetails userDetails, OrderRequest orderRequest) {
         if (userDetails == null) {
             throw new RuntimeException("User not authenticated");
         }
@@ -73,16 +73,16 @@ public class OrderService {
         User user = userRepository.findByUserName(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Address address = addressRepository.findById(orderDTO.getAddressId())
+        Address address = addressRepository.findById(orderRequest.getAddressId())
                 .orElseThrow(() -> new RuntimeException("Address not found"));
 
-        PaymentType paymentType = paymentTypeRepository.findById(orderDTO.getPaymentTypeId())
+        PaymentType paymentType = paymentTypeRepository.findById(orderRequest.getPaymentTypeId())
                 .orElseThrow(() -> new RuntimeException("Payment type not found"));
 
-        ShippingMethod shippingMethod = shippingMethodRepository.findById(orderDTO.getShippingMethodId())
+        ShippingMethod shippingMethod = shippingMethodRepository.findById(orderRequest.getShippingMethodId())
                 .orElseThrow(() -> new RuntimeException("Shipping method not found"));
 
-        List<CartDetail> cartDetails = cartDetailRepository.findByCartDetailIdIn(orderDTO.getSelectedIds());
+        List<CartDetail> cartDetails = cartDetailRepository.findByCartDetailIdIn(orderRequest.getSelectedIds());
         if (cartDetails.isEmpty()) {
             throw new RuntimeException("No cart details found");
         }
@@ -119,7 +119,6 @@ public class OrderService {
 
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
-
         // Xóa cart details
         cartDetailRepository.deleteAll(cartDetails);
     }

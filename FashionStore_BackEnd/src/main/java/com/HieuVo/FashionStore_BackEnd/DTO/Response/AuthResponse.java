@@ -8,8 +8,8 @@ import java.util.List;
 @Data
 public class AuthResponse {
     private String token;
-    private String username; // Tên người dùng (optional)
-    private List<String> roles; // Roles của người dùng (optional)
+    private String username;
+    private List<String> roles;
 
     public AuthResponse(String token, String username, List<String> roles) {
         this.token = token;

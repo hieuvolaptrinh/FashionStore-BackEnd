@@ -1,8 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
-import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
-import com.HieuVo.FashionStore_BackEnd.Model.Address;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.Role;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Repository.AdderssRepository;

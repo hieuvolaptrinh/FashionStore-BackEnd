@@ -2,19 +2,15 @@ package com.HieuVo.FashionStore_BackEnd.Controller;
 
 
 import com.HieuVo.FashionStore_BackEnd.DTO.AddressDTO;
-import com.HieuVo.FashionStore_BackEnd.DTO.Notification;
-import com.HieuVo.FashionStore_BackEnd.DTO.OrderDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.OrderRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PaymentTypeResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.ShippingMethodResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.Address;
-import com.HieuVo.FashionStore_BackEnd.Model.PaymentType;
-import com.HieuVo.FashionStore_BackEnd.Repository.PaymentTypeRepository;
 import com.HieuVo.FashionStore_BackEnd.Service.AddressService;
 import com.HieuVo.FashionStore_BackEnd.Service.OrderService;
 import com.HieuVo.FashionStore_BackEnd.Service.ProductService;
-import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -65,8 +61,8 @@ public class OrderController {
     @PostMapping
     @ApiMessage("Create order successfully")
     public ResponseEntity<Void> createOrder(@AuthenticationPrincipal UserDetails userDetails,
-                                            @RequestBody OrderDTO orderDTO) {
-        orderService.createOrder(userDetails, orderDTO);
+                                            @RequestBody OrderRequest orderRequest) {
+        orderService.createOrder(userDetails, orderRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
