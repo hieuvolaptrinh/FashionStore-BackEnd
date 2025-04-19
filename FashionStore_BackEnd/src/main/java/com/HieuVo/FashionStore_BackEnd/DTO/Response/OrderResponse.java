@@ -1,6 +1,5 @@
 package com.HieuVo.FashionStore_BackEnd.DTO.Response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +12,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseOrder {
+public class OrderResponse {
     private int orderId;
     private String status;
     private double totalPrice;
-
     private Date createAt;
 
     private List<OrderDetailDTO> orderDetails;
@@ -28,8 +26,12 @@ public class ResponseOrder {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class OrderDetailDTO {
-        private Integer productId;
-        private Integer quantity;
-        private Double price;
+        private int orderDetailId;
+        private int quantity;
+        private double price;
+        private String mainImage;
+        private String productName;
+        private String description;
+
     }
 }

@@ -11,7 +11,8 @@ import java.util.List;
 
 
 @RepositoryRestResource
-public interface ImageRepository  extends JpaRepository<Image, Integer> {
-//    findByProduct_Id(...) nghĩa là tìm các Image có product.id = productId.
-List<Image> findByProduct_productId(int productId);
+public interface ImageRepository extends JpaRepository<Image, Integer> {
+    //    findByProduct_Id(...) nghĩa là tìm các Image có product.id = productId.
+    List<Image> findByProduct_productId(int productId);
+
 }

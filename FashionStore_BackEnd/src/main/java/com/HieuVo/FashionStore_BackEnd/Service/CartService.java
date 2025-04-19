@@ -2,7 +2,7 @@ package com.HieuVo.FashionStore_BackEnd.Service;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartDetailDTO;
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.ProductCartResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.Product_DetailResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.Cart;
 import com.HieuVo.FashionStore_BackEnd.Model.CartDetail;
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
@@ -227,8 +227,8 @@ public class CartService {
     }
 
     // Product => ProductCartDTO
-    private ProductCartResponse convertToProductCartDTO(Product product) {
-        ProductCartResponse dto = new ProductCartResponse();
+    private Product_DetailResponse convertToProductCartDTO(Product product) {
+        Product_DetailResponse dto = new Product_DetailResponse();
         dto.setProductId(product.getProductId());
         dto.setProductName(product.getProductName());
         dto.setDescription(product.getDescription());

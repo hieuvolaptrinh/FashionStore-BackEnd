@@ -3,7 +3,7 @@ package com.HieuVo.FashionStore_BackEnd.DTO.Response;
 import lombok.Data;
 
 @Data
-public class ProductCartResponse {
+public class Product_DetailResponse {
     private int productId;
     private String productName;
     private String description;

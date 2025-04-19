@@ -11,5 +11,5 @@ public class CartDetailDTO {
     private int cartDetailId;
     private int quantity;
     private double price;
-    private ProductCartResponse product;
+    private Product_DetailResponse product;
 }

@@ -2,7 +2,7 @@ package com.HieuVo.FashionStore_BackEnd.Service;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.OrderRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PaymentTypeResponse;
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.ResponseOrder;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.OrderResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.ShippingMethodResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.*;
 import com.HieuVo.FashionStore_BackEnd.Repository.*;
@@ -11,8 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,13 +26,16 @@ public class OrderService {
     private final AdderssRepository addressRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final ImageRepository imageRepository;
+
 
     public OrderService(OrderRepository orderRepository, PaymentTypeRepository paymentTypeRepository,
                         ShippingMethodRepository shippingMethodRepository,
                         CartDetailRepository cartDetailRepository,
                         AdderssRepository addressRepository,
                         UserRepository userRepository,
-                        ProductRepository productRepository) {
+                        ProductRepository productRepository,
+                        ImageRepository imageRepository) {
         this.orderRepository = orderRepository;
         this.paymentTypeRepository = paymentTypeRepository;
         this.shippingMethodRepository = shippingMethodRepository;
@@ -41,7 +43,9 @@ public class OrderService {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.imageRepository = imageRepository;
     }
+
 
     public List<PaymentTypeResponse> findAllPaymentType() {
         List<PaymentType> paymentTypes = paymentTypeRepository.findAll();
@@ -130,7 +134,7 @@ public class OrderService {
     }
 
 
-    public List<ResponseOrder> getAllOrdersByUser(UserDetails userDetails) {
+    public List<OrderResponse> getAllOrdersByUser(UserDetails userDetails) {
         User user = userRepository.findByUserName(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -142,28 +146,44 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<ResponseOrder> getAllOrders() {
+    public List<OrderResponse> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream()
                 .map(this::convertToResponseOrder)
                 .collect(Collectors.toList());
     }
 
-    private ResponseOrder convertToResponseOrder(Order order) {
-        ResponseOrder responseOrder = new ResponseOrder();
+    private OrderResponse convertToResponseOrder(Order order) {
+        OrderResponse responseOrder = new OrderResponse();
         responseOrder.setOrderId(order.getOrderId());
         responseOrder.setStatus(order.getStatus());
         responseOrder.setTotalPrice(order.getTotalPrice());
         responseOrder.setCreateAt(order.getCreateAt());
+        List<OrderResponse.OrderDetailDTO> orderDetails = new ArrayList<>();
 
-        List<ResponseOrder.OrderDetailDTO> orderDetails = order.getOrderDetails()
-                .stream()
-                .map(detail -> new ResponseOrder.OrderDetailDTO(
-                        detail.getProduct().getProductId(),
-                        detail.getQuantity(),
-                        detail.getPrice()
-                ))
-                .collect(Collectors.toList());
+        for(OrderDetail detail : order.getOrderDetails()) {
+            OrderResponse.OrderDetailDTO orderDetailDTO = new OrderResponse.OrderDetailDTO();
+            orderDetailDTO.setOrderDetailId(detail.getOrderDetailId());
+            orderDetailDTO.setQuantity(detail.getQuantity());
+            orderDetailDTO.setPrice(detail.getPrice());
+            orderDetailDTO.setProductName(detail.getProduct().getProductName());
+            orderDetailDTO.setDescription(detail.getProduct().getDescription());
+
+
+
+            List<Image> images = this.imageRepository.findByProduct_productId(detail.getOrderDetailId());
+            for(Image image : images) {
+                if(image.isIcon()==true) {
+                    orderDetailDTO.setMainImage(image.getLink());
+                }
+            }
+            if(orderDetailDTO.getMainImage()==null) {
+                orderDetailDTO.setMainImage(images.get(0).getLink());
+            }
+            orderDetails.add(orderDetailDTO);
+
+        }
+
 
         responseOrder.setOrderDetails(orderDetails);
         return responseOrder;
