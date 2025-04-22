@@ -13,7 +13,7 @@ public class ReviewDTO {
     private int reviewId;
     private int productId;
     private String content;
-    private float stars;
+    private byte stars;
     private String name;
     private String avatar;
 }

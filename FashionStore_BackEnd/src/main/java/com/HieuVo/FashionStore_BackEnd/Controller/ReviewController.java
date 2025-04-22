@@ -4,12 +4,13 @@ import com.HieuVo.FashionStore_BackEnd.DTO.ReviewDTO;
 import com.HieuVo.FashionStore_BackEnd.Model.Review;
 import com.HieuVo.FashionStore_BackEnd.Repository.ReviewRepository;
 import com.HieuVo.FashionStore_BackEnd.Service.ReviewService;
+import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -33,4 +34,13 @@ public class ReviewController {
         List<ReviewDTO> reviews = reviewService .getReviewsWithUser(productId);
         return ResponseEntity.ok(reviews);
     }
+
+//    comment
+    @PostMapping()
+    @ApiMessage("thêm đánh giá thành công")
+    public ResponseEntity<Void> createReview(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ReviewDTO review, Principal principal) {
+        reviewService.comment(userDetails,review);
+        return ResponseEntity.ok().build();
+    }
+
 }

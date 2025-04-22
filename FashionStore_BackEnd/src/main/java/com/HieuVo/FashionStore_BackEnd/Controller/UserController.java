@@ -33,12 +33,11 @@ public class UserController {
     @GetMapping("/{username}/avatar")
     public ResponseEntity<String> getAvatar(@PathVariable String username) {
         User user = userService.fetchUserByUsername(username);
-        if (user==null || user.getAvatarData() == null) {
-            return ResponseEntity.notFound().build();
+        if (user == null || user.getAvatarData() == null) {
+            return ResponseEntity.ok(null);
         }
         byte[] avatarBytes = user.getAvatarData();
         String base64Image = Base64.getEncoder().encodeToString(avatarBytes);
-
         return ResponseEntity.ok(base64Image);
     }
 
