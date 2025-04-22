@@ -10,7 +10,7 @@ public class Endpoints {
             "/api/v1/products",
 //            "/api/v1/user/**",
            "/api/v1/user/activateAccount",
-
+            "/api/v1/review-list/**",
             "/api/v1/roles/**",
             "/api/v1/user/*/avatar",
 

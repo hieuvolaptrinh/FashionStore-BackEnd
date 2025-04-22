@@ -12,4 +12,6 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query("SELECT r FROM Review r JOIN FETCH r.user WHERE r.product.productId = :productId")
     List<Review> findReviewsByProductId(@Param("productId") Integer productId);
+//    @Query("SELECT r FROM Review r JOIN FETCH r.user WHERE r.productId = :productId")
+//    List<Review> findReviewsByProductId(@Param("productId") int productId);
 }
