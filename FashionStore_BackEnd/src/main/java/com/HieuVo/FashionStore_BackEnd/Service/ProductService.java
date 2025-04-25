@@ -83,18 +83,21 @@ public class ProductService {
         product.setAvgStars(0);
         Product saved = productRepository.save(product);
 
-        List<Image> images = dto.getListImages().stream().map(link -> {
-            Image image = new Image();
-            image.setLink(link);
-            image.setProduct(saved);
-            return image;
-        }).toList();
+        if(dto.getListImages() != null) {
+            List<Image> images = dto.getListImages().stream().map(link -> {
+                Image image = new Image();
+                image.setLink(link);
+                image.setProduct(saved);
+                return image;
+            }).toList();
 
-        // Gắn loại sản phẩm
-        imageRepository.saveAll(images);
-        List<Type> types = typeRepository.findAllById(dto.getListTypes());
-        product.setListTypes(types);
-
+            // Gắn loại sản phẩm
+            imageRepository.saveAll(images);
+        }
+        if(dto.getListTypes()!=null) {
+            List<Type> types = typeRepository.findAllById(dto.getListTypes());
+            product.setListTypes(types);
+        }
         return saved;
     }
 

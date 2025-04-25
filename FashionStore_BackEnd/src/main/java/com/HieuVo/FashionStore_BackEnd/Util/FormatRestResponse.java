@@ -10,7 +10,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @ControllerAdvice
@@ -29,21 +28,30 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
 
-        RestResponse<Object> restResponse = new RestResponse<Object>();
+        // Nếu body đã là RestResponse, trả về nguyên bản
+        if (body instanceof RestResponse) {
+            return body;
+        }
+
+        RestResponse<Object> restResponse = new RestResponse<>();
         restResponse.setStatus(status);
-        if (body instanceof String) {
-            return body;
-        }
 
-        // case error
+        // Xử lý lỗi
         if (status >= 400) {
-            return body;
-        } else {
-            restResponse.setData(body);
-            ApiMessage message = returnType.getMethodAnnotation(ApiMessage.class); // get nnotation
-            restResponse.setMessage(message != null ? message.value() : "Call api successfully") ;
-
+            if (body instanceof String) {
+                restResponse.setError((String) body);
+            } else {
+                restResponse.setError(body);
+            }
+            restResponse.setMessage("Error occurred");
+            return restResponse;
         }
+
+        // Xử lý thành công
+        restResponse.setData(body);
+        ApiMessage message = returnType.getMethodAnnotation(ApiMessage.class);
+        restResponse.setMessage(message != null ? message.value() : "Call API successfully");
+
         return restResponse;
     }
 }

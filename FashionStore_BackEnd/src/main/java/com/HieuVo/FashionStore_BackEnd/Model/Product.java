@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 import java.sql.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ public class Product {
 
         private double salePrice;
 
+        @Min(value = 1, message = "số lượng phải lớn hơn 0")
         private int quantity;
 
         // ngày sản xuất

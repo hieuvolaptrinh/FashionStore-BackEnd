@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.DTO;
 
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
+import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,8 @@ public class ProductDTO {
     private double originalPrice;
     private String productionInfor;
     private double salePrice;
+
+    @Min(value = 0, message = "số lượng phải lớn hơn 0")
     private int quantity;
     private Date manufactureDate;
     private float avgStars;

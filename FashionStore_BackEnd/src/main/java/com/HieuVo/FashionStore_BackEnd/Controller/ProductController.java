@@ -7,6 +7,9 @@ import com.HieuVo.FashionStore_BackEnd.Model.Product;
 import com.HieuVo.FashionStore_BackEnd.Model.Type;
 import com.HieuVo.FashionStore_BackEnd.Service.ProductService;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
+import com.HieuVo.FashionStore_BackEnd.Util.Error.GlobalExecption;
+import com.HieuVo.FashionStore_BackEnd.Util.Error.MainException;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -61,7 +64,10 @@ public class ProductController {
 
     @PostMapping("")
     @ApiMessage("Tạo mới sản phẩm thành công")
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> createProduct(@Valid  @RequestBody ProductDTO dto) {
+//      if(1==1){
+//          throw new MainException("test lỗi");
+//      }
         Product created = productService.createProduct(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(created));
     }

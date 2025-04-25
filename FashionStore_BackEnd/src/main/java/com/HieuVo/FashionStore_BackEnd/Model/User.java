@@ -47,6 +47,7 @@ public class User {
 
     private String avataUrl;
 
+    private Long money;
 
     @OneToMany(mappedBy = "user")
     private List<Address> listAddress;

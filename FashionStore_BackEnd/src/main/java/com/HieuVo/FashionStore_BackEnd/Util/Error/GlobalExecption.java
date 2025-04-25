@@ -1,7 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Util.Error;
 
-
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.RestResponse;
+import jakarta.validation.ConstraintViolationException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,18 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @RestControllerAdvice
 public class GlobalExecption {
-    @ExceptionHandler(value = {MainException.class,
-            MainException.class,
-            BadRequestException.class,
-    })
-    public ResponseEntity<RestResponse<Object>> handleIdInvalidException(MainException idException) {
-        RestResponse<Object> restResponse = new RestResponse<Object>();
+    @ExceptionHandler(value = { MainException.class,
+            BadRequestException.class })
+
+    public ResponseEntity<RestResponse<Object>> handleMainException(MainException exception) {
+        RestResponse<Object> restResponse = new RestResponse<>();
         restResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        restResponse.setError(idException.getMessage());
-        restResponse.setMessage("id invalidexeception");
+        restResponse.setError(exception.getMessage());
+        restResponse.setMessage("Error occurred");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponse);
     }
 
@@ -33,19 +31,32 @@ public class GlobalExecption {
         BindingResult result = ex.getBindingResult();
         final List<FieldError> fieldErrors = result.getFieldErrors();
 
-
-        RestResponse<Object> res = new RestResponse<Object>();
+        RestResponse<Object> res = new RestResponse<>();
         res.setStatus(HttpStatus.BAD_REQUEST.value());
-        res.setError(ex.getBody().getDetail());
 
         // Lọc lỗi và lấy thông tin lỗi
         List<String> errors = fieldErrors.stream()
-                .map(f -> f.getDefaultMessage())
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.toList());
 
-//        res.setMessage(errors.size() > 1 ? errors : errors.get(0)); // nếu có một lỗi thì String
+        res.setError(errors);
+        res.setMessage("Validation error");
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<RestResponse<Object>> handleConstraintViolationException(ConstraintViolationException ex) {
+        RestResponse<Object> res = new RestResponse<>();
+        res.setStatus(HttpStatus.BAD_REQUEST.value());
 
+        // Lọc lỗi và lấy thông tin lỗi
+        List<String> errors = ex.getConstraintViolations().stream()
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .collect(Collectors.toList());
+
+        res.setMessage(errors.size() > 1 ? errors : errors.get(0)); // nếu có một lỗi thì String
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
 }
