@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExecption {
-    @ExceptionHandler(value = {IdInvalidException.class,
-            IdInvalidException.class,
+    @ExceptionHandler(value = {MainException.class,
+            MainException.class,
             BadRequestException.class,
     })
-    public ResponseEntity<RestResponse<Object>> handleIdInvalidException(IdInvalidException idException) {
+    public ResponseEntity<RestResponse<Object>> handleIdInvalidException(MainException idException) {
         RestResponse<Object> restResponse = new RestResponse<Object>();
         restResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         restResponse.setError(idException.getMessage());
@@ -46,4 +46,6 @@ public class GlobalExecption {
 //        res.setMessage(errors.size() > 1 ? errors : errors.get(0)); // nếu có một lỗi thì String
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
+
+
 }

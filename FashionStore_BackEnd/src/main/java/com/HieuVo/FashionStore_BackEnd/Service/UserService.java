@@ -109,11 +109,7 @@ public class UserService implements UserDetailsService {
             user.setListRoles(Collections.singletonList(this.roleRepository.findByRoleName("USER")));
 
         }
-//        Role role = this.roleRepository.findByRoleName("USER");
-//        if (role == null) {
-//            throw new RuntimeException("Role 'USER' không tồn tại trong database!");
-//        }
-//        user.setListRoles(new ArrayList<>(List.of(role)));
+
 
         User newUser = this.userRepository.save(user);
         //        send email
@@ -254,7 +250,6 @@ public class UserService implements UserDetailsService {
     }
 
     public String lockAccount(Integer userId) {
-
         User user = this.userRepository.findById(userId).orElse(null);
         user.setActive(false);
         this.userRepository.save(user);

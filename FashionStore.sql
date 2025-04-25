@@ -126,7 +126,7 @@ INSERT INTO cart_detail (cart_id, product_id, quantity, price) VALUES
 GO
 */
 -- Insert vào bảng orders
-/*
+go
 INSERT INTO orders (user_id, create_at, delivery_date, total_price, payment_type_id, shipping_method_id, shipping_address_id, status) 
 VALUES (1, '2024-02-20', '2024-02-25', 380000, 1, 1, 1, N'Đã giao'),
        (2, '2024-02-22', '2024-02-27', 220000, 2, 2, 2, N'Chờ xử lý'),
@@ -142,14 +142,14 @@ INSERT INTO order_detail (order_id, product_id, quantity, price) VALUES
 (3, 5, 1, 170000), (4, 1, 1, 180000),
 (5, 2, 1, 220000);
 GO
-*/
+
 -- Insert vào bảng review
 INSERT INTO review (user_id, product_id, stars, content) VALUES 
-(1, 1, 5, N'Sách rất hay!'),
-(2, 2, 4, N'Hướng dẫn chi tiết, dễ hiểu'),
-(3, 3, 5, N'Tư duy thuật toán tuyệt vời'),
-(4, 4, 4, N'Sách về SQL đầy đủ thông tin'),
-(5, 5, 5, N'Những thuật toán rất hữu ích cho lập trình viên');
+(1, 1, 5, N'Áo đẹp'),
+(2, 2, 4, N'Chất liệu ok'),
+(3, 3, 5, N'Áo đẹp'),
+(4, 4, 4, N'QUần đẹp'),
+(5, 5, 5, N'Hiếu đz ');
 GO
 
 

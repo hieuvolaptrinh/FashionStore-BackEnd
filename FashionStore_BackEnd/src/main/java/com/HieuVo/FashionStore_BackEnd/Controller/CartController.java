@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
+import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.CartDetailDTO;
 
@@ -40,6 +41,7 @@ public class CartController {
     @ApiMessage("Lấy giỏ hàng thành công")
     public ResponseEntity<CartResponse> getCart(@AuthenticationPrincipal UserDetails userDetails) {
         try {
+
             CartResponse cartDTO = cartService.getCart(userDetails);
             return ResponseEntity.ok(cartDTO);
         } catch (Exception e) {
