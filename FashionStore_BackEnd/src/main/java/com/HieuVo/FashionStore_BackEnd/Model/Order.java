@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -22,6 +23,9 @@ public class Order {
     private String status;
 
     private double totalPrice;
+
+
+    private boolean isPay = false;
 
     @ManyToOne(cascade = {
             jakarta.persistence.CascadeType.PERSIST,

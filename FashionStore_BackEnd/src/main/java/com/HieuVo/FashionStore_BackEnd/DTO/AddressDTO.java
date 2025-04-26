@@ -1,6 +1,5 @@
 package com.HieuVo.FashionStore_BackEnd.DTO;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
