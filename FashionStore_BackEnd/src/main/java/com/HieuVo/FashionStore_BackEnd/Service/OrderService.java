@@ -170,17 +170,21 @@ public class OrderService {
             orderDetailDTO.setProductName(detail.getProduct().getProductName());
             orderDetailDTO.setDescription(detail.getProduct().getDescription());
 
-            List<Image> images = this.imageRepository.findByProduct_productId(detail.getOrderDetailId());
-            for (Image image : images) {
-                if (image.isIcon() == true) {
-                    orderDetailDTO.setMainImage(image.getLink());
+            List<Image> images = this.imageRepository.findByProduct_productId(detail.getProduct().getProductId());
+            if (images != null && !images.isEmpty()) {
+                // Tìm ảnh icon
+                for (Image image : images) {
+                    if (image.isIcon()) {
+                        orderDetailDTO.setMainImage(image.getLink());
+                        break;
+                    }
+                }
+                // Nếu không có ảnh icon, lấy ảnh đầu tiên
+                if (orderDetailDTO.getMainImage() == null) {
+                    orderDetailDTO.setMainImage(images.get(0).getLink());
                 }
             }
-            if (orderDetailDTO.getMainImage() == null) {
-                orderDetailDTO.setMainImage(images.get(0).getLink());
-            }
             orderDetails.add(orderDetailDTO);
-
         }
 
         responseOrder.setOrderDetails(orderDetails);

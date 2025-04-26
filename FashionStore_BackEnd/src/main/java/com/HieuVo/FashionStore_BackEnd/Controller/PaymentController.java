@@ -97,7 +97,7 @@ public class PaymentController {
             if ("00".equals(responseCode)) {
                 // Xử lý IPN thành công
                 String orderId = (String) result.get("orderId");
-//                 Cập nhật trạng thái thanh toán của đơn hàng
+                // Cập nhật trạng thái thanh toán của đơn hàng
                 orderService.updatePaymentStatus(Integer.parseInt(orderId), true);
 
                 result.put("message", "IPN processed successfully");
