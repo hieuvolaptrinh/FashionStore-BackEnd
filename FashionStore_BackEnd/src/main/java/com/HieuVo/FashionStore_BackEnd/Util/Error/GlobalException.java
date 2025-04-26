@@ -19,8 +19,7 @@ public class GlobalException {
     @ExceptionHandler(value = { MainException.class,
             Exception.class,
             BadRequestException.class })
-
-    public ResponseEntity<RestResponse<Object>> handleMainException(MainException exception) {
+    public ResponseEntity<RestResponse<Object>> handleMainException(Exception exception) {
         RestResponse<Object> restResponse = new RestResponse<>();
         restResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         restResponse.setError(exception.getMessage());
@@ -61,5 +60,6 @@ public class GlobalException {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
+
 
 }

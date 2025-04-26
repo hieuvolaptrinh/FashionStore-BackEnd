@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -99,7 +100,7 @@ public class VNPayService {
         return hexString.toString().toLowerCase();
     }
 
-    public Map<String, Object> verifyPayment(Map<String, String> vnp_Params) {
+    public Map<String, Object> verifyPayment(Map<String, String> vnp_Params) throws UnsupportedEncodingException {
         Map<String, Object> result = new HashMap<>();
         String vnp_SecureHash = vnp_Params.get("vnp_SecureHash");
         vnp_Params.remove("vnp_SecureHash");
@@ -109,12 +110,17 @@ public class VNPayService {
         Collections.sort(fieldNames);
 
         StringBuilder hashData = new StringBuilder();
-        for (String fieldName : fieldNames) {
+        Iterator<String> itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = itr.next();
             String fieldValue = vnp_Params.get(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+            if (fieldValue != null && !fieldValue.isEmpty()) {
                 hashData.append(fieldName);
                 hashData.append('=');
-                hashData.append(fieldValue);
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                if (itr.hasNext()) {
+                    hashData.append('&');
+                }
             }
         }
 

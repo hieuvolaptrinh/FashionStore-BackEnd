@@ -28,11 +28,8 @@ GO
 
 -- Insert vào bảng payment_type
 INSERT INTO payment_type (payment_type_name, description, fee) VALUES
-(N'Thanh toán khi nhận hàng', N'Thanh toán tiền mặt khi nhận hàng', 0),
-(N'Thẻ tín dụng', N'Thanh toán qua thẻ Visa/MasterCard', 10000),
-(N'Chuyển khoản ngân hàng', N'Chuyển khoản qua ngân hàng nội địa', 5000),
-(N'Ví điện tử', N'Thanh toán qua Momo, ZaloPay, ShopeePay', 5000),
-(N'PayPal', N'Thanh toán quốc tế qua PayPal', 15000);
+(N'Chuyển khoảng', N'Thanh Toán Online', 0),
+(N'Thanh toán khi nhận hàng', N'Thanh toán tiền mặt khi nhận hàng', 10000);
 GO
 
 -- Insert vào bảng users

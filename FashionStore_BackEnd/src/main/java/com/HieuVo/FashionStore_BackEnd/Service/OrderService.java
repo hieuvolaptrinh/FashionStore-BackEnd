@@ -28,14 +28,13 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
 
-
     public OrderService(OrderRepository orderRepository, PaymentTypeRepository paymentTypeRepository,
-                        ShippingMethodRepository shippingMethodRepository,
-                        CartDetailRepository cartDetailRepository,
-                        AdderssRepository addressRepository,
-                        UserRepository userRepository,
-                        ProductRepository productRepository,
-                        ImageRepository imageRepository) {
+            ShippingMethodRepository shippingMethodRepository,
+            CartDetailRepository cartDetailRepository,
+            AdderssRepository addressRepository,
+            UserRepository userRepository,
+            ProductRepository productRepository,
+            ImageRepository imageRepository) {
         this.orderRepository = orderRepository;
         this.paymentTypeRepository = paymentTypeRepository;
         this.shippingMethodRepository = shippingMethodRepository;
@@ -45,7 +44,6 @@ public class OrderService {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
     }
-
 
     public List<PaymentTypeResponse> findAllPaymentType() {
         List<PaymentType> paymentTypes = paymentTypeRepository.findAll();
@@ -73,7 +71,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void createOrder(UserDetails userDetails, OrderRequest orderRequest) {
+    public int createOrder(UserDetails userDetails, OrderRequest orderRequest) {
         if (userDetails == null) {
             throw new RuntimeException("User not authenticated");
         }
@@ -90,8 +88,10 @@ public class OrderService {
         ShippingMethod shippingMethod = shippingMethodRepository.findById(orderRequest.getShippingMethodId())
                 .orElseThrow(() -> new RuntimeException("Shipping method not found"));
 
-        Optional<List<CartDetail>> optinalCartDetails = cartDetailRepository.findByCartDetailIdIn(orderRequest.getSelectedIds());
-        List<CartDetail> cartDetails = optinalCartDetails.orElseThrow(() -> new RuntimeException("No cart items found"));
+        Optional<List<CartDetail>> optinalCartDetails = cartDetailRepository
+                .findByCartDetailIdIn(orderRequest.getSelectedIds());
+        List<CartDetail> cartDetails = optinalCartDetails
+                .orElseThrow(() -> new RuntimeException("No cart items found"));
         if (cartDetails.isEmpty()) {
             throw new RuntimeException("No cart details found");
         }
@@ -101,8 +101,9 @@ public class OrderService {
         order.setShippingAddress(address);
         order.setPaymentType(paymentType);
         order.setShippingMethod(shippingMethod);
-//        order.setCreateAt(Date.valueOf(LocalDate.now()));
-//        order.setStatus(" chờ đại ka hiếu Xử lý/ trừ trước luôn số lượng sản phẩm ở code hoặc code trigger cx đc");
+        // order.setCreateAt(Date.valueOf(LocalDate.now()));
+        // order.setStatus(" chờ đại ka hiếu Xử lý/ trừ trước luôn số lượng sản phẩm ở
+        // code hoặc code trigger cx đc");
         order.setStatus("Chưa xử lý");
 
         double totalPrice = cartDetails.stream()
@@ -119,20 +120,20 @@ public class OrderService {
             od.setPrice(cd.getPrice());
             return od;
         }).collect(Collectors.toList());
-//        giảm số lượng sản phẩm trong kho
-//        for (OrderDetail orderDetail : orderDetails) {
-//            Product product = orderDetail.getProduct();
-//            product.setQuantity(product.getQuantity() - orderDetail.getQuantity());
-//            this.productRepository.save(product);
-//        }
-
+        // giảm số lượng sản phẩm trong kho
+        // for (OrderDetail orderDetail : orderDetails) {
+        // Product product = orderDetail.getProduct();
+        // product.setQuantity(product.getQuantity() - orderDetail.getQuantity());
+        // this.productRepository.save(product);
+        // }
 
         order.setOrderDetails(orderDetails);
-        orderRepository.save(order);
+        Order orderNew = orderRepository.save(order);
         // Xóa cart details
         cartDetailRepository.deleteAll(cartDetails);
-    }
 
+        return orderNew.getOrderId();
+    }
 
     public List<OrderResponse> getAllOrdersByUser(UserDetails userDetails) {
         User user = userRepository.findByUserName(userDetails.getUsername())
@@ -161,7 +162,7 @@ public class OrderService {
         responseOrder.setCreateAt(order.getCreateAt());
         List<OrderResponse.OrderDetailDTO> orderDetails = new ArrayList<>();
 
-        for(OrderDetail detail : order.getOrderDetails()) {
+        for (OrderDetail detail : order.getOrderDetails()) {
             OrderResponse.OrderDetailDTO orderDetailDTO = new OrderResponse.OrderDetailDTO();
             orderDetailDTO.setOrderDetailId(detail.getOrderDetailId());
             orderDetailDTO.setQuantity(detail.getQuantity());
@@ -169,21 +170,18 @@ public class OrderService {
             orderDetailDTO.setProductName(detail.getProduct().getProductName());
             orderDetailDTO.setDescription(detail.getProduct().getDescription());
 
-
-
             List<Image> images = this.imageRepository.findByProduct_productId(detail.getOrderDetailId());
-            for(Image image : images) {
-                if(image.isIcon()==true) {
+            for (Image image : images) {
+                if (image.isIcon() == true) {
                     orderDetailDTO.setMainImage(image.getLink());
                 }
             }
-            if(orderDetailDTO.getMainImage()==null) {
+            if (orderDetailDTO.getMainImage() == null) {
                 orderDetailDTO.setMainImage(images.get(0).getLink());
             }
             orderDetails.add(orderDetailDTO);
 
         }
-
 
         responseOrder.setOrderDetails(orderDetails);
         return responseOrder;
@@ -195,5 +193,14 @@ public class OrderService {
         order.setStatus(status);
         orderRepository.save(order);
     }
-}
 
+    public void updatePaymentStatus(int orderId, boolean isPaid) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+        order.setPay(true);
+
+        orderRepository.save(order);
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>> thanh toans thanhf cong");
+    }
+}

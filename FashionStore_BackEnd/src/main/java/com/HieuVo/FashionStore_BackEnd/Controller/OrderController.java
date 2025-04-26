@@ -61,10 +61,10 @@ public class OrderController {
 
     @PostMapping
     @ApiMessage("Create order successfully")
-    public ResponseEntity<Void> createOrder(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseEntity<Integer> createOrder(@AuthenticationPrincipal UserDetails userDetails,
                                             @RequestBody OrderRequest orderRequest) {
-        orderService.createOrder(userDetails, orderRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+      int ressult =  orderService.createOrder(userDetails, orderRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ressult);
     }
 
     //

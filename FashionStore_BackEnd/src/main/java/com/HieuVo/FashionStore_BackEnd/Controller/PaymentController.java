@@ -2,10 +2,12 @@ package com.HieuVo.FashionStore_BackEnd.Controller;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.PaymentDTO;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
+import com.HieuVo.FashionStore_BackEnd.Service.OrderService;
 import com.HieuVo.FashionStore_BackEnd.Service.VNPayService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 @RestController
@@ -13,9 +15,11 @@ import java.util.Map;
 public class PaymentController {
 
     private final VNPayService vnPayService;
+    private final OrderService orderService;
 
-    public PaymentController(VNPayService vnPayService) {
+    public PaymentController(VNPayService vnPayService, OrderService orderService) {
         this.vnPayService = vnPayService;
+        this.orderService = orderService;
     }
 
     @PostMapping("/create-payment")
@@ -38,18 +42,19 @@ public class PaymentController {
     // }
     //
 
-    // SResponse
-    // {
-    // "paymentUrl": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?..."
-    // }
     @GetMapping("/vnpay-return")
-    public ResponseEntity<Map<String, Object>> vnpayReturn(@RequestParam Map<String, String> allParams) {
+    public ResponseEntity<Map<String, Object>> vnpayReturn(@RequestParam Map<String, String> allParams)
+            throws UnsupportedEncodingException {
         Map<String, Object> result = vnPayService.verifyPayment(allParams);
 
         if ((Boolean) result.get("isValid")) {
             String responseCode = (String) result.get("responseCode");
             if ("00".equals(responseCode)) {
                 // Thanh toán thành công
+                String orderId = (String) result.get("orderId");
+                // Cập nhật trạng thái thanh toán của đơn hàng
+                orderService.updatePaymentStatus(Integer.parseInt(orderId), true);
+
                 result.put("message", "Thanh toán thành công");
                 result.put("isPay", true);
                 return ResponseEntity.ok(result);
@@ -83,13 +88,18 @@ public class PaymentController {
     // }
 
     @PostMapping("/vnpay-ipn")
-    public ResponseEntity<Map<String, Object>> vnpayIpn(@RequestParam Map<String, String> allParams) {
+    public ResponseEntity<Map<String, Object>> vnpayIpn(@RequestParam Map<String, String> allParams)
+            throws UnsupportedEncodingException {
         Map<String, Object> result = vnPayService.verifyPayment(allParams);
 
         if ((Boolean) result.get("isValid")) {
             String responseCode = (String) result.get("responseCode");
             if ("00".equals(responseCode)) {
                 // Xử lý IPN thành công
+                String orderId = (String) result.get("orderId");
+//                 Cập nhật trạng thái thanh toán của đơn hàng
+                orderService.updatePaymentStatus(Integer.parseInt(orderId), true);
+
                 result.put("message", "IPN processed successfully");
                 result.put("isPay", true);
                 return ResponseEntity.ok(result);
@@ -106,4 +116,5 @@ public class PaymentController {
             return ResponseEntity.ok(result);
         }
     }
+
 }

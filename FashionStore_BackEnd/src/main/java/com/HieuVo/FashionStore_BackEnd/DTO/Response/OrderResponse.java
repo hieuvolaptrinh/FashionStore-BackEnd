@@ -17,6 +17,7 @@ public class OrderResponse {
     private String status;
     private double totalPrice;
     private Date createAt;
+    private boolean isPay;
 
     private List<OrderDetailDTO> orderDetails;
 

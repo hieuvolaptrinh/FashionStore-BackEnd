@@ -61,9 +61,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
+                        .requestMatchers("/api/payment/vnpay-return").permitAll()
                         .requestMatchers( Endpoints.ADMIN_ENDPOINTS).hasAuthority("ADMIN")
                         .requestMatchers(Endpoints.USER_ENDPOINTS).hasAnyAuthority("USER", "ADMIN")
-//                         .requestMatchers("/**").permitAll() // Tạm thời thôi để test
+//                         .requestMatchers("/**").permitAll() )// Tạm thời thôi để test
                         // .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
                         .anyRequest().authenticated())
 
