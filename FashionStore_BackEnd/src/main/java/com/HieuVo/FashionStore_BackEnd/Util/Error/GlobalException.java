@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Util.Error;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.RestResponse;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
@@ -14,8 +15,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class GlobalExecption {
+public class GlobalException {
     @ExceptionHandler(value = { MainException.class,
+            Exception.class,
             BadRequestException.class })
 
     public ResponseEntity<RestResponse<Object>> handleMainException(MainException exception) {
@@ -59,4 +61,5 @@ public class GlobalExecption {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
+
 }

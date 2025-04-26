@@ -29,5 +29,6 @@ public class Endpoints {
             "/uploadToGoogleDrive/**",
             "/api/v1/products/**",
             "/api/v1/user/**",
+            "/api/v1/orders/admin/**"
     };
 }
