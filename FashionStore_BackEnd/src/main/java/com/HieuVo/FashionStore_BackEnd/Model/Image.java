@@ -2,6 +2,9 @@ package com.HieuVo.FashionStore_BackEnd.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,9 +17,11 @@ public class Image {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int imageId;
 
+
     private String imageName;
 
     private boolean icon;
+
 
     private String link;
     // cái này là optional

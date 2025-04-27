@@ -9,6 +9,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -18,12 +21,14 @@ public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer supplierId;
+
+
     @Column(nullable = false)
     private String supplierName;
 
+    @Pattern(regexp = "^0[0-9]{9}$", message = "Số điện thoại không hợp lệ")
     @Column(name = "phoneNumber", unique = true, length = 10)
     private String phoneNumber;
-
 
     @OneToMany(mappedBy = "supplier")
     private List<PurchaseOrder> purchaseOrder;
@@ -32,8 +37,6 @@ public class Supplier {
     @JoinColumn(name = "address_address_id")
     private Address address;
 
-
     public Supplier() {
     }
-
 }

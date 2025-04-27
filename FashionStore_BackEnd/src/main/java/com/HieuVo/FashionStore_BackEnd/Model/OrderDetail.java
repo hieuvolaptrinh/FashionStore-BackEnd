@@ -2,22 +2,22 @@ package com.HieuVo.FashionStore_BackEnd.Model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 @Entity
-
 public class OrderDetail {
-
         @Id
         @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
         private int orderDetailId;
 
+        @NotNull(message = "Số lượng không được để trống")
         @Min(value = 1, message = "Số lượng phải lớn hơn 0")
         private int quantity;
 
-        @Min(value = 1, message = "giá thấp nhất là 1")
+        @NotNull(message = "Giá không được để trống")
+        @Min(value = 1, message = "Giá phải lớn hơn 0")
         private double price;
 
         @ManyToOne(cascade = {

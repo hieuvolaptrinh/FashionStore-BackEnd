@@ -5,6 +5,7 @@ import com.HieuVo.FashionStore_BackEnd.Model.Review;
 import com.HieuVo.FashionStore_BackEnd.Repository.ReviewRepository;
 import com.HieuVo.FashionStore_BackEnd.Service.ReviewService;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +39,7 @@ public class ReviewController {
 //    comment
     @PostMapping()
     @ApiMessage("thêm đánh giá thành công")
-    public ResponseEntity<Void> createReview(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ReviewDTO review, Principal principal) {
+    public ResponseEntity<Void> createReview(@Valid @AuthenticationPrincipal UserDetails userDetails, @RequestBody ReviewDTO review, Principal principal) {
         reviewService.comment(userDetails,review);
         return ResponseEntity.ok().build();
     }

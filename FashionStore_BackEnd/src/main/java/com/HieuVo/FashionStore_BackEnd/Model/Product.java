@@ -2,6 +2,9 @@ package com.HieuVo.FashionStore_BackEnd.Model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.sql.Date;
 import java.util.List;
@@ -14,32 +17,40 @@ public class Product {
         @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
         private int productId;
 
+        @NotBlank(message = "Tên sản phẩm không được để trống")
+        @Size(min = 2, max = 256, message = "Tên sản phẩm phải có độ dài từ 2 đến 256 ký tự")
         @Column(columnDefinition = "NVARCHAR(256)")
         private String productName;
 
+        @Size(min = 10, max = 1000, message = "Mô tả phải có độ dài từ 10 đến 1000 ký tự")
         @Column(length = 256, columnDefinition = "NVARCHAR(256)")
         private String description;
 
-        @Min(value = 1, message = "giá thấp nhất là 1")
+        @NotNull(message = "Giá gốc không được để trống")
+        @Min(value = 1, message = "Giá gốc phải lớn hơn 0")
         private double originalPrice;
 
+        @NotBlank(message = "Thông tin sản xuất không được để trống")
         @Column(columnDefinition = "NVARCHAR(MAX)")
         private String productionInfor;
 
-        @Min(value = 1, message = "giá thấp nhất là 1")
+        @NotNull(message = "Giá bán không được để trống")
+        @Min(value = 1, message = "Giá bán phải lớn hơn 0")
         private double salePrice;
 
-        @Min(value = 1, message = "số lượng phải lớn hơn 0")
+        @NotNull(message = "Số lượng không được để trống")
+        @Min(value = 0, message = "Số lượng phải lớn hơn hoặc bằng 0")
         private int quantity;
 
         // ngày sản xuất
+        @NotNull(message = "Ngày sản xuất không được để trống")
         private Date manufactureDate;
 
         // sao trung bình
-        @Min(value = 0, message = "sao trung bình phải lớn hơn 0")
+        @Min(value = 0, message = "Đánh giá sao phải lớn hơn hoặc bằng 0")
         private float avgStars;
 
-//        @JsonIgnore
+        // @JsonIgnore
         @ManyToMany(fetch = FetchType.LAZY, cascade = {
                         CascadeType.PERSIST,
                         CascadeType.MERGE,

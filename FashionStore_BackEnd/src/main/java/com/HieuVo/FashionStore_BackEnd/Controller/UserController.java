@@ -5,6 +5,7 @@ import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registrerNewUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> registrerNewUser ( @Valid  @RequestBody UserDTO userDTO) {
         ResponseEntity<String> response = this.userService.registerUser(userDTO);
         return ResponseEntity.ok(response.getBody());
     }

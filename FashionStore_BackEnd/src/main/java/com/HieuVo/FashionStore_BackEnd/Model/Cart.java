@@ -14,13 +14,12 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cartId;
 
-    @NotNull(message = "Create date cannot be null")
     private Date createAt;
 
-    @NotNull(message = "Update date cannot be null")
+
     private Date updateAt;
 
-    @PositiveOrZero(message = "Total price must be greater than or equal to 0")
+
     private double totalPrices;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
@@ -37,6 +36,5 @@ public class Cart {
                 ", cartDetailsCount=" + (listCartDetails != null ? listCartDetails.size() : 0) +
                 '}';
     }
-
 
 }

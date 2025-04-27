@@ -24,6 +24,7 @@ public class User {
 
     private String activationCode;
 
+
     private String phoneNumber;
 
     @Column(columnDefinition = "NVARCHAR(256)")
@@ -40,7 +41,6 @@ public class User {
     @OneToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
 
     @NotBlank(message = "Tên đăng nhập không được để trống")
     @Column(unique = true)
@@ -71,10 +71,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> listOrders;
-
-
-
-
 
     @Override
     public String toString() {
