@@ -90,7 +90,6 @@ public class ProductService {
                 image.setProduct(saved);
                 return image;
             }).toList();
-
             // Gắn loại sản phẩm
             imageRepository.saveAll(images);
         }

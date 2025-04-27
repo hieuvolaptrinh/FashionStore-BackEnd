@@ -126,7 +126,7 @@ GO
 go
 INSERT INTO orders (user_id, create_at, delivery_date, total_price, payment_type_id, shipping_method_id, shipping_address_id, status,is_pay) 
 VALUES (3, '2024-02-20', '2024-02-25', 380000, 1, 1, 1, N'Đã giao',0),
-       (2, '2024-02-22', '2024-02-27', 220000, 2, 2, 2, N'Chờ xử lý',1),
+       (2, '2024-02-22', '2024-02-27', 220000, 2, 2, 2, N'Chưa xử lý',1),
        (3, '2024-02-23', '2024-02-28', 170000, 1, 3, 3, N'Đã giao',0),
        (4, '2024-02-25', '2024-03-01', 210000, 2, 1, 4, N'Đang vận chuyển',0),
        (5, '2024-02-28', '2024-03-04', 150000, 1, 2, 5, N'Đã giao',0);

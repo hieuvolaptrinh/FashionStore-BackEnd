@@ -1,6 +1,8 @@
 package com.HieuVo.FashionStore_BackEnd.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -12,8 +14,10 @@ public class OrderDetail {
         @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
         private int orderDetailId;
 
+        @Min(value = 1, message = "Số lượng phải lớn hơn 0")
         private int quantity;
 
+        @Min(value = 1, message = "giá thấp nhất là 1")
         private double price;
 
         @ManyToOne(cascade = {

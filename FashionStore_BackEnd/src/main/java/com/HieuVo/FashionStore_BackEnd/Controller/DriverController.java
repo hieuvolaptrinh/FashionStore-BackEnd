@@ -27,8 +27,6 @@ public class DriverController {
         file.transferTo(tempFile);
         String res = this.googleDriveUploader.uploadImageToDrive(tempFile);
         System.out.println(res);
-
-
         return res;
     }
 

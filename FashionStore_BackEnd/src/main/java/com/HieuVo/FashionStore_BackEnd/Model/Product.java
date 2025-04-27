@@ -20,11 +20,13 @@ public class Product {
         @Column(length = 256, columnDefinition = "NVARCHAR(256)")
         private String description;
 
+        @Min(value = 1, message = "giá thấp nhất là 1")
         private double originalPrice;
 
         @Column(columnDefinition = "NVARCHAR(MAX)")
         private String productionInfor;
 
+        @Min(value = 1, message = "giá thấp nhất là 1")
         private double salePrice;
 
         @Min(value = 1, message = "số lượng phải lớn hơn 0")
@@ -34,6 +36,7 @@ public class Product {
         private Date manufactureDate;
 
         // sao trung bình
+        @Min(value = 0, message = "sao trung bình phải lớn hơn 0")
         private float avgStars;
 
 //        @JsonIgnore

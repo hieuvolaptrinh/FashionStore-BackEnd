@@ -49,7 +49,6 @@ public class ProductController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         PageResponse<ProductDTO>  pageResponse =this.productService.getProducts(pageable);
-
         return ResponseEntity.ok(pageResponse);
     }
 
@@ -61,7 +60,7 @@ public class ProductController {
 
     @PostMapping("")
     @ApiMessage("Tạo mới sản phẩm thành công")
-    public ResponseEntity<ProductDTO> createProduct(@Valid  @RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO dto) {
 //      if(1==1){
 //          throw new MainException("test lỗi");
 //      }

@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class User {
 
     private String sex;
 
+    @NotBlank(message = "Email không được để trống")
     private String email;
 
     private String activationCode;
@@ -30,6 +32,7 @@ public class User {
     @Column(columnDefinition = "NVARCHAR(256)")
     private String lastName;
 
+    @NotBlank(message = "Mật khẩu không được để trống")
     private String password;
 
     private boolean isActive;
@@ -38,6 +41,8 @@ public class User {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
+
+    @NotBlank(message = "Tên đăng nhập không được để trống")
     @Column(unique = true)
     private String userName;
 

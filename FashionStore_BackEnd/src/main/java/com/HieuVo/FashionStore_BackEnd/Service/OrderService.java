@@ -160,6 +160,7 @@ public class OrderService {
         responseOrder.setStatus(order.getStatus());
         responseOrder.setTotalPrice(order.getTotalPrice());
         responseOrder.setCreateAt(order.getCreateAt());
+        responseOrder.setPay(order.isPay());
         List<OrderResponse.OrderDetailDTO> orderDetails = new ArrayList<>();
 
         for (OrderDetail detail : order.getOrderDetails()) {
