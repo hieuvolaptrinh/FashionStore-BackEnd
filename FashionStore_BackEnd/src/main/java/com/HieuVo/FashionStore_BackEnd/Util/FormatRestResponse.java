@@ -21,21 +21,22 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body,
-            MethodParameter returnType,
-            MediaType selectedContentType,
-            Class<? extends HttpMessageConverter<?>> selectedConverterType,
-            ServerHttpRequest request, ServerHttpResponse response) {
+                                  MethodParameter returnType,
+                                  MediaType selectedContentType,
+                                  Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                  ServerHttpRequest request, ServerHttpResponse response) {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
 
         // Nếu body đã là RestResponse, trả về nguyên bản
-        if (body instanceof RestResponse) {
+        if (body instanceof RestResponse || body instanceof String) {
             return body;
         }
-        if (body instanceof String) {
+// Bỏ qua các endpoint Swagger
+        String path = request.getURI().getPath();
+        if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
             return body;
         }
-
 
         RestResponse<Object> restResponse = new RestResponse<>();
         restResponse.setStatus(status);

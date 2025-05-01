@@ -64,8 +64,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/payment/vnpay-return").permitAll()
                         .requestMatchers( Endpoints.ADMIN_ENDPOINTS).hasAuthority("ADMIN")
                         .requestMatchers(Endpoints.USER_ENDPOINTS).hasAnyAuthority("USER", "ADMIN")
-//                         .requestMatchers("/**").permitAll() )// Tạm thời thôi để test
-                        // .requestMatchers("/users/**").hasAnyAuthority("USER","ADMIN")
+//                         .requestMatchers("/**").permitAll() )//
+
                         .anyRequest().authenticated())
 
 //                cors

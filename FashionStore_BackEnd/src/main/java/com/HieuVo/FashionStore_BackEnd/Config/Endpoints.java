@@ -8,13 +8,18 @@ public class Endpoints {
             "/review-list/**",
             "/api/v1/products/**",
             "/api/v1/products",
-//            "/api/v1/user/**",
+
             "/api/v1/user/activateAccount",
             "/api/v1/review-list/**",
             "/api/v1/roles/**",
             "/api/v1/user/*/avatar",
             "/api/payment/vnpay-return",
-            "/api/v1/review-list/**"};
+            "/api/v1/review-list/**",
+//            swagger
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+            };
     public static final String[] PUBLIC_POST_ENDPOINTS = {
             "/api/v1/user/register",
             "/api/v1/users/login",
