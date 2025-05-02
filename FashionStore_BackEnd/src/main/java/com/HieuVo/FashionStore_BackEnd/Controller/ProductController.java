@@ -1,6 +1,8 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.ProductDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.ProductRequest;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.ProductResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PageResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.Image;
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
@@ -13,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,9 +33,9 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     @ApiMessage("Lấy sản phẩm thành công")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable int productId) {
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable int productId) {
         Product product = productService.getProductById(productId);
-        return ResponseEntity.ok(new ProductDTO(product));
+        return ResponseEntity.ok(new ProductResponse(product));
     }
 
     @GetMapping("/{productId}/listImages")
@@ -44,11 +48,12 @@ public class ProductController {
 
     @GetMapping() // trả về List hay Page đều được
     @ApiMessage("Lấy danh sách sản phẩm thành công")
-    public ResponseEntity<PageResponse<ProductDTO>> getProducts(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-                                                                @RequestParam(name = "size", required = false, defaultValue = "5") int size
+    public ResponseEntity<PageResponse<ProductResponse>> getProducts(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        PageResponse<ProductDTO>  pageResponse =this.productService.getProducts(pageable);
+        PageResponse<ProductResponse> pageResponse = this.productService.getProducts(pageable);
         return ResponseEntity.ok(pageResponse);
     }
 
@@ -58,29 +63,42 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductTypes());
     }
 
-    @PostMapping("")
-    @ApiMessage("Tạo mới sản phẩm thành công")
-    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO dto) {
-//      if(1==1){
-//          throw new MainException("test lỗi");
-//      }
-        Product created = productService.createProduct(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(created));
-    }
 
+    //    @RequestBody và @RequestPart cùng lúc=> lỗi vì chúng yêu cầu kiểu Content-Type khác nhau
+//    @PostMapping("")
+//    @ApiMessage("Tạo mới sản phẩm thành công")
+//    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest dto,
+//                                                         @RequestPart(value = "images", required = false) List<MultipartFile> images) throws Exception {
+//        Product created = productService.createProduct(dto, images);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponse(created));
+//    }
+    @PostMapping(consumes = {"multipart/form-data"})
+    @ApiMessage("Tạo mới sản phẩm thành công")
+    public ResponseEntity<ProductResponse> createProduct(
+            @Valid @RequestPart("product") ProductRequest productRequest, //@RequestPart("product") để nhận JSON của ProductRequest từ phần product của multipart/form-data.
+            @RequestPart(value = "images", required = false) List<MultipartFile> images) throws Exception {
+        Product created = productService.createProduct(productRequest, images);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponse(created));
+    }
     @GetMapping("/search")
-    public ResponseEntity<PageResponse<ProductDTO>> searchProduct(
+    public ResponseEntity<PageResponse<ProductResponse>> searchProduct(
             @RequestParam(name = "typeId", required = false) Integer typeId,
             @RequestParam(name = "productName", required = false) String productName,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-
-        PageResponse<ProductDTO> pageResponse = productService.searchProduct(typeId, productName, pageable);
-
+        PageResponse<ProductResponse> pageResponse = productService.searchProduct(typeId, productName, pageable);
         return ResponseEntity.ok(pageResponse);
     }
 
+    @PutMapping("/{productId}")
+    @ApiMessage("Cập nhật sản phẩm thành công")
+    public ResponseEntity<Notification> updateProduct(
+
+            @Valid @RequestBody ProductRequest dto) {
+        String result = productService.updateProduct(dto);
+        return ResponseEntity.ok(new Notification(result));
+    }
 
 }

@@ -1,8 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
-import com.HieuVo.FashionStore_BackEnd.Model.User;
+
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,7 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
-    //khóa
+    //key
     public static final String SECRET_KEY = "HIEUVODEPTRAI123456789MDHAUFGUYHJFGSDFvietchonodailenchukodudaithikhongcoduocdaunha";
 
     private final UserService userService;

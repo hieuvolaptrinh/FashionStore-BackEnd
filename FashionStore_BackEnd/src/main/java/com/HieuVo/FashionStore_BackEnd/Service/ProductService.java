@@ -1,32 +1,42 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
 
-import com.HieuVo.FashionStore_BackEnd.DTO.ProductDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.ProductRequest;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.ProductResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PageResponse;
+
 import com.HieuVo.FashionStore_BackEnd.Model.Image;
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
 import com.HieuVo.FashionStore_BackEnd.Model.Type;
 import com.HieuVo.FashionStore_BackEnd.Repository.ImageRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.ProductRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.TypeRepository;
+import com.HieuVo.FashionStore_BackEnd.Util.GoogleDriveUploader;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class ProductService {
-    private ProductRepository productRepository;
-    private ImageRepository imageRepository;
-    private TypeRepository typeRepository;
+    private final ProductRepository productRepository;
+    private final ImageRepository imageRepository;
+    private final TypeRepository typeRepository;
+    private final GoogleDriveUploader googleDriveUploader;
 
-    public ProductService(ProductRepository productRepository, ImageRepository imageRepository, TypeRepository typeRepository) {
+    public ProductService(ProductRepository productRepository, ImageRepository imageRepository,
+                          TypeRepository typeRepository, GoogleDriveUploader googleDriveUploader) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
         this.typeRepository = typeRepository;
+        this.googleDriveUploader = googleDriveUploader;
 
     }
 
@@ -34,28 +44,12 @@ public class ProductService {
         return imageRepository.findByProduct_productId(productId);
     }
 
-    public PageResponse<ProductDTO> getProducts(Pageable pageable ) {
+    public PageResponse<ProductResponse> getProducts(Pageable pageable) {
+        Page<Product> productPage = this.productRepository.findAll(pageable);
 
-        Page<Product> productPage=this.productRepository.findAll(pageable);
-
-        Page<ProductDTO> productDTOs = productPage.map(product -> {
+        Page<ProductResponse> productDTOs = productPage.map(product -> {
             // Tạo ProductDTO từ Product
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setProductId(product.getProductId());
-            productDTO.setProductName(product.getProductName());
-            productDTO.setDescription(product.getDescription());
-            productDTO.setOriginalPrice(product.getOriginalPrice());
-            productDTO.setProductionInfor(product.getProductionInfor());
-            productDTO.setSalePrice(product.getSalePrice());
-            productDTO.setQuantity(product.getQuantity());
-            productDTO.setManufactureDate(product.getManufactureDate());
-            productDTO.setAvgStars(product.getAvgStars());
-
-            // Lấy danh sách hình ảnh của sản phẩm từ imageRepository
-            List<Image> images = imageRepository.findByProduct_productId(product.getProductId());
-            List<String> listImages = images.stream().map(Image::getLink).collect(Collectors.toList());
-            productDTO.setListImages(listImages);  // Đừng quên dấu chấm phẩy ở đây!
-
+            ProductResponse productDTO = new ProductResponse(product);
             return productDTO;
         });
 
@@ -68,10 +62,17 @@ public class ProductService {
     }
 
     public Product getProductById(int productId) {
-        return productRepository.getOne(productId);
+        return productRepository.findById(productId).get();
     }
 
-    public Product createProduct(ProductDTO dto) {
+    @Transactional
+    public Product createProduct(ProductRequest dto, List<MultipartFile> images) throws Exception {
+        // Kiểm tra dữ liệu đầu vào
+        if (dto == null) {
+            throw new IllegalArgumentException("ProductRequest không được null");
+        }
+
+        // Tạo Product
         Product product = new Product();
         product.setProductName(dto.getProductName());
         product.setDescription(dto.getDescription());
@@ -81,26 +82,56 @@ public class ProductService {
         product.setQuantity(dto.getQuantity());
         product.setManufactureDate(dto.getManufactureDate());
         product.setAvgStars(0);
-        Product saved = productRepository.save(product);
 
-        if(dto.getListImages() != null) {
-            List<Image> images = dto.getListImages().stream().map(link -> {
-                Image image = new Image();
-                image.setLink(link);
-                image.setProduct(saved);
-                return image;
-            }).toList();
-            // Gắn loại sản phẩm
-            imageRepository.saveAll(images);
-        }
-        if(dto.getListTypes()!=null) {
-            List<Type> types = typeRepository.findAllById(dto.getListTypes());
+        // Gán danh sách Type
+        if (dto.getListTypes() != null && !dto.getListTypes().isEmpty()) {
+            List<Type> types = typeRepository.findAllByTypeIdIsIn(dto.getListTypes());
+            if (types.size() != dto.getListTypes().size()) {
+                throw new IllegalArgumentException("Một số Type không tồn tại");
+            }
             product.setListTypes(types);
         }
-        return saved;
-    }
 
-    public PageResponse<ProductDTO> searchProduct(Integer typeId, String productName, Pageable pageable) {
+        // Xử lý hình ảnh
+        List<Image> imageList = new ArrayList<>();
+        if (images != null && !images.isEmpty()) {
+            for (MultipartFile file : images) {
+                // Kiểm tra file
+                if (file.isEmpty()) {
+                    throw new IllegalArgumentException("Có file hình ảnh rỗng: " + file.getOriginalFilename());
+                }
+                String contentType = file.getContentType();
+                if (contentType == null || (!contentType.equals("image/jpeg") && !contentType.equals("image/png"))) {
+                    throw new IllegalArgumentException("Chỉ hỗ trợ định dạng JPEG hoặc PNG: " + contentType);
+                }
+
+                // Tạo file tạm (nếu uploadImageToDrive vẫn yêu cầu File)
+                File tempFile = File.createTempFile("temp", null);
+                try {
+                    file.transferTo(tempFile);
+
+                    // Tải file lên Google Drive
+                    String link = googleDriveUploader.uploadImageToDrive(tempFile);
+
+                    // Tạo Image
+                    Image image = new Image();
+                    image.setLink(link);
+                    image.setProduct(product);
+                    imageList.add(image);
+                } finally {
+                    // Xóa file tạm
+                    if (tempFile.exists()) {
+                        tempFile.delete();
+                    }
+                }
+            }
+            product.setListImages(imageList); // Gán vào Product để cascade lưu
+        }
+
+        // Lưu Product (tự động lưu Images nhờ cascade)
+        return productRepository.save(product);
+    }
+    public PageResponse<ProductResponse> searchProduct(Integer typeId, String productName, Pageable pageable) {
         Page<Product> productPage;
 
         if (typeId != null && productName != null && !productName.isEmpty()) {
@@ -118,24 +149,9 @@ public class ProductService {
         }
 
         // Chuyển đổi từ Page<Product> sang Page<ProductDTO>
-        Page<ProductDTO> productDTOs = productPage.map(product -> {
+        Page<ProductResponse> productDTOs = productPage.map(product -> {
             // Tạo ProductDTO từ Product
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setProductId(product.getProductId());
-            productDTO.setProductName(product.getProductName());
-            productDTO.setDescription(product.getDescription());
-            productDTO.setOriginalPrice(product.getOriginalPrice());
-            productDTO.setProductionInfor(product.getProductionInfor());
-            productDTO.setSalePrice(product.getSalePrice());
-            productDTO.setQuantity(product.getQuantity());
-            productDTO.setManufactureDate(product.getManufactureDate());
-            productDTO.setAvgStars(product.getAvgStars());
-
-            // Lấy danh sách hình ảnh của sản phẩm từ imageRepository
-            List<Image> images = imageRepository.findByProduct_productId(product.getProductId());
-            List<String> listImages = images.stream().map(Image::getLink).collect(Collectors.toList());
-            productDTO.setListImages(listImages);  // Đừng quên dấu chấm phẩy ở đây!
-
+            ProductResponse productDTO = new ProductResponse(product);
             return productDTO;
         });
 
@@ -143,4 +159,37 @@ public class ProductService {
         return new PageResponse<>(productDTOs);
     }
 
+
+    public String updateProduct(ProductRequest dto) {
+
+        Product product = productRepository.findById(dto.getProductId()).get();
+        product.setProductName(dto.getProductName());
+        product.setDescription(dto.getDescription());
+        product.setOriginalPrice(dto.getOriginalPrice());
+        product.setProductionInfor(dto.getProductionInfor());
+        product.setSalePrice(dto.getSalePrice());
+        product.setQuantity(dto.getQuantity());
+        product.setManufactureDate(dto.getManufactureDate());
+
+//        // Xóa ảnh cũ
+//        if (dto.getListImages() != null) {
+//            List<Image> images = imageRepository.findByProduct_productId(dto.getProductId());
+//            for (Image image : images) {
+//                imageRepository.delete(image);
+//            }
+//            List<Image> newImages = dto.getListImages().stream().map(link -> {
+//                Image image = new Image();
+//                image.setLink(link);
+//                image.setProduct(product);
+//                return image;
+//            }).toList();
+//            imageRepository.saveAll(newImages);
+//        }
+        if (dto.getListTypes() != null) {
+            List<Type> types = typeRepository.findAllById(dto.getListTypes());
+            product.setListTypes(types);
+        }
+        productRepository.save(product);
+        return "Cập nhật sản phẩm thành công";
+    }
 }

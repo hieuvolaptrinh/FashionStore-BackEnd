@@ -19,6 +19,7 @@ public class BookStoreBackEndApplication {
         // payment
         System.setProperty("VNPAY_TMN_CODE", dotenv.get("VNPAY_TMN_CODE"));
         System.setProperty("VNPAY_HASH_SECRET", dotenv.get("VNPAY_HASH_SECRET"));
+        System.setProperty("VNPAY_VNP_RETURNURL", dotenv.get("VNPAY_VNP_RETURNURL"));
 
         SpringApplication.run(BookStoreBackEndApplication.class, args);
     }

@@ -33,7 +33,7 @@ public class GoogleDriveUploader {
     }
 
     public String uploadImageToDrive(File file) throws Exception {
-        String imageUrl="";
+        String imageUrl = "";
         try {
             String folderId = "1gcZ357GSFH0pTPyXHBB6JV_BsrAKTpiK";
             Drive drive = createDriveService();
@@ -57,9 +57,8 @@ public class GoogleDriveUploader {
                     .setFields("id")
                     .execute();
 
-             imageUrl = "https://drive.google.com/thumbnail?id=" + uploadedFile.getId();
+            imageUrl = "https://drive.google.com/thumbnail?id=" + uploadedFile.getId();
             file.delete();
-
 
 
         } catch (Exception e) {
@@ -82,28 +81,58 @@ public class GoogleDriveUploader {
                 .build();
 
     }
-//    duyệt qua lấy id của folder gắn tay vào csdl
-public void listFilesInFolder() throws Exception {
-    Drive driveService = createDriveService(); // Dùng lại hàm của bạn
 
-    String folderId = "1gcZ357GSFH0pTPyXHBB6JV_BsrAKTpiK";
-    String query = "'" + folderId + "' in parents";
+    //    duyệt qua lấy id của folder gắn tay vào csdl
+    public void listFilesInFolder() throws Exception {
+        Drive driveService = createDriveService(); // Dùng lại hàm của bạn
 
-    FileList result = driveService.files().list()
-            .setQ(query)
-            .setFields("files(id, name)")
-            .execute();
+        String folderId = "1gcZ357GSFH0pTPyXHBB6JV_BsrAKTpiK";
+        String query = "'" + folderId + "' in parents";
 
-    List<com.google.api.services.drive.model.File> files = result.getFiles();
-    if (files.isEmpty()) {
-        System.out.println("Không tìm thấy file nào.");
-    } else {
-        for (com.google.api.services.drive.model.File file : files) {
-            System.out.println("Tên ảnh: " + file.getName());
-            System.out.println("Link truy cập: https://drive.google.com/uc?export=view&id=" + file.getId());
-            System.out.println("ID: " + file.getId());
-            System.out.println("-----------------------------------");
+        FileList result = driveService.files().list()
+                .setQ(query)
+                .setFields("files(id, name)")
+                .execute();
+
+        List<com.google.api.services.drive.model.File> files = result.getFiles();
+        if (files.isEmpty()) {
+            System.out.println("Không tìm thấy file nào.");
+        } else {
+            for (com.google.api.services.drive.model.File file : files) {
+                System.out.println("Tên ảnh: " + file.getName());
+                System.out.println("Link truy cập: https://drive.google.com/uc?export=view&id=" + file.getId());
+                System.out.println("ID: " + file.getId());
+                System.out.println("-----------------------------------");
+            }
         }
     }
-}
+
+
+    //    delete file
+    public void deleteFileFromDrive(String url) throws Exception {
+        try {
+            Drive drive = createDriveService();
+            String fileId = extractFileIdFromUrl(url);
+            drive.files().delete(fileId).execute();
+            System.out.println("Đã xóa file với ID: " + fileId);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi xóa file: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    public String extractFileIdFromUrl(String url) {
+        String fileId = "";
+        try {
+            String[] parts = url.split("id=");
+            if (parts.length > 1) {
+                fileId = parts[1].split("&")[0];
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi khi trích xuất file ID từ URL: " + e.getMessage());
+        }
+        return fileId;
+    }
+
+
 }

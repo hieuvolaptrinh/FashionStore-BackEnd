@@ -4,11 +4,14 @@ package com.HieuVo.FashionStore_BackEnd.Repository;
 
 
 import com.HieuVo.FashionStore_BackEnd.Model.Product;
+import com.HieuVo.FashionStore_BackEnd.Model.Type;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
