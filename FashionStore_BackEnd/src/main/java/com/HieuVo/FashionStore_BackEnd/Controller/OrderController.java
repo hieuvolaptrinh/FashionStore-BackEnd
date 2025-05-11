@@ -1,7 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
 
-import com.HieuVo.FashionStore_BackEnd.DTO.AddressDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.AddressRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.OrderRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.PaymentTypeResponse;
@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     @GetMapping("/address")
-    public ResponseEntity<List<AddressDTO>> getAddress(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<AddressRequest>> getAddress(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(this.addressService.getAddressByUser(userDetails));
     }
 

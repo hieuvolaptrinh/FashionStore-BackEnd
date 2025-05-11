@@ -1,4 +1,4 @@
-package com.HieuVo.FashionStore_BackEnd.Service;
+package com.HieuVo.FashionStore_BackEnd.Util.Mail;
 
 
 import jakarta.mail.MessagingException;
@@ -9,11 +9,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService implements IEmailService {
+public class SendEmailController implements IEmail {
+
     private final JavaMailSender emailSender;
 
-    @Autowired
-    public EmailService(JavaMailSender emailSender) {
+    public SendEmailController(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 

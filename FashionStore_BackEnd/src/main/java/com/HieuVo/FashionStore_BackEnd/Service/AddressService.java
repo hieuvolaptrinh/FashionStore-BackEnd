@@ -1,6 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.AddressDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.AddressRequest;
 import com.HieuVo.FashionStore_BackEnd.Model.Address;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Repository.AdderssRepository;
@@ -23,7 +23,7 @@ public class AddressService {
     }
 
 
-    public List<AddressDTO> getAddressByUser(UserDetails userDetails) {
+    public List<AddressRequest> getAddressByUser(UserDetails userDetails) {
 
         if (userDetails == null) {
             throw new RuntimeException("User not authenticated");
@@ -32,9 +32,9 @@ public class AddressService {
 
         List<Address> adrs = adderssRepository.findAddressByUser_UserName(username);
 
-        List<AddressDTO> addressDTOS = adrs.stream().map(
+        List<AddressRequest> addressDTOS = adrs.stream().map(
                 address -> {
-                    AddressDTO addressDTO = new AddressDTO();
+                    AddressRequest addressDTO = new AddressRequest();
                     addressDTO.setAddressId(address.getAddressId());
                     addressDTO.setStreetName(address.getStreetName());
                     addressDTO.setCityName(address.getCityName());

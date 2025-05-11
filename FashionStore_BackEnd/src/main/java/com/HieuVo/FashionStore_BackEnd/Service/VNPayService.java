@@ -1,7 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
 import com.HieuVo.FashionStore_BackEnd.Config.VNPayConfig;
-import com.HieuVo.FashionStore_BackEnd.DTO.PaymentDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.PaymentRequest;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
@@ -21,7 +21,7 @@ public class VNPayService {
         this.vnPayConfig = vnPayConfig;
     }
 
-    public String createPaymentUrl(PaymentDTO paymentDTO) throws Exception {
+    public String createPaymentUrl(PaymentRequest paymentDTO) throws Exception {
         String vnp_TmnCode = vnPayConfig.getVnp_TmnCode();
         String vnp_HashSecret = vnPayConfig.getVnp_HashSecret();
         String vnp_Url = vnPayConfig.getVnp_Url();

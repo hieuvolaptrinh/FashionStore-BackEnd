@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalException {
     @ExceptionHandler(value = { MainException.class,
-            Exception.class,
+            Exception.class, // một mình cái này là lấy full lỗi r
             BadRequestException.class })
     public ResponseEntity<RestResponse<Object>> handleMainException(Exception exception) {
         RestResponse<Object> restResponse = new RestResponse<>();

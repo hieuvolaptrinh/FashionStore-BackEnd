@@ -4,10 +4,13 @@ import com.HieuVo.FashionStore_BackEnd.DTO.Request.RestPasswordRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.AuthRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.AuthResponse;
+import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
+import com.HieuVo.FashionStore_BackEnd.Service.AuthService;
 import com.HieuVo.FashionStore_BackEnd.Service.JwtService;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,15 +25,28 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager; // cần phải vết bên security
-
+    private final AuthService authService;// cần phải vết bên security
+    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserService userService;
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.userService = userService;
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager, JwtService jwtService, UserService userService) {
+        this.authService = authService;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.userService = userService;
+    }
+
+    @GetMapping("/activateAccount")
+    public ResponseEntity<Notification> confirmNewUser(@RequestParam String email, @RequestParam String activationCode) throws Exception {
+        return this.authService.confirmEmail(email, activationCode);
+    }
+
+    @PostMapping("/register")
+    @ApiMessage("Đã đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản.")
+    public ResponseEntity<Notification> registrerNewUser(@Valid @RequestBody UserDTO userDTO) {
+        String response = this.authService.registerUser(userDTO);
+        return ResponseEntity.ok(new Notification(response));
     }
 
     @PostMapping("/login")
@@ -45,7 +61,7 @@ public class AuthController {
             );
             if (authentication.isAuthenticated()) {
                 User user = this.userService.fetchUserByUsername(authRequest.getUserName());
-                if(user.isActive()==false){
+                if (user.isActive() == false) {
                     return ResponseEntity.badRequest().body(new Notification("Tài khoản chưa được kích hoạt"));
                 }
                 // Lấy roles của người dùng từ Authentication
@@ -66,7 +82,17 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody RestPasswordRequest restPasswordRequest) {
-      return this.userService.restPassword(restPasswordRequest);
+    @ApiMessage("Đã gửi email để lấy lại mật khẩu")
+    public ResponseEntity<Notification> resetPassword(@RequestBody RestPasswordRequest restPasswordRequest) throws Exception {
+
+        return ResponseEntity.ok(new Notification(this.authService.restPassword(restPasswordRequest)));
     }
+
+    @PostMapping("/new-password")
+    @ApiMessage("Cập nhật mật khẩu thành công")
+    public ResponseEntity<Notification> newPassword(@RequestParam String email, @RequestParam String password, @RequestParam String activationCode) throws Exception {
+        return ResponseEntity.ok(new Notification(this.authService.newPassword(email, password,activationCode)));
+
+    }
+
 }

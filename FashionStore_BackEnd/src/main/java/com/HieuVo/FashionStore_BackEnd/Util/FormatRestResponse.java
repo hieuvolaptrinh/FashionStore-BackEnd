@@ -1,5 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Util;
 
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.RestResponse;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,7 +45,7 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
         // Xử lý lỗi
         if (status >= 400) {
             if (body instanceof String) {
-                restResponse.setError((String) body);
+                restResponse.setError(new Notification((String)body));
             } else {
                 restResponse.setError(body);
             }

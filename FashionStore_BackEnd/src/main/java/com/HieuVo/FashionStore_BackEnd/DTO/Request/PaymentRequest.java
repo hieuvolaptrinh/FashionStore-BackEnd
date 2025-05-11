@@ -1,11 +1,11 @@
-package com.HieuVo.FashionStore_BackEnd.DTO;
+package com.HieuVo.FashionStore_BackEnd.DTO.Request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PaymentDTO {
+public class PaymentRequest {
     private int orderId;
     private long amount; // tổng tiền
     private String orderInfo;

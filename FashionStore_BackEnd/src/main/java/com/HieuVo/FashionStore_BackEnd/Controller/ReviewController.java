@@ -1,6 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.ReviewDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.ReviewRequest;
 import com.HieuVo.FashionStore_BackEnd.Model.Review;
 import com.HieuVo.FashionStore_BackEnd.Repository.ReviewRepository;
 import com.HieuVo.FashionStore_BackEnd.Service.ReviewService;
@@ -31,15 +31,15 @@ public class ReviewController {
     }
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<List<ReviewDTO>> getReviews(@PathVariable Integer productId) {
-        List<ReviewDTO> reviews = reviewService .getReviewsWithUser(productId);
+    public ResponseEntity<List<ReviewRequest>> getReviews(@PathVariable Integer productId) {
+        List<ReviewRequest> reviews = reviewService .getReviewsWithUser(productId);
         return ResponseEntity.ok(reviews);
     }
 
 //    comment
     @PostMapping()
     @ApiMessage("thêm đánh giá thành công")
-    public ResponseEntity<Void> createReview(@Valid @AuthenticationPrincipal UserDetails userDetails, @RequestBody ReviewDTO review, Principal principal) {
+    public ResponseEntity<Void> createReview(@Valid @AuthenticationPrincipal UserDetails userDetails, @RequestBody ReviewRequest review, Principal principal) {
         reviewService.comment(userDetails,review);
         return ResponseEntity.ok().build();
     }

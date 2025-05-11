@@ -24,11 +24,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registrerNewUser ( @Valid  @RequestBody UserDTO userDTO) {
-        ResponseEntity<String> response = this.userService.registerUser(userDTO);
-        return ResponseEntity.ok(response.getBody());
-    }
 
 
     @GetMapping("/{username}/avatar")
@@ -42,10 +37,6 @@ public class UserController {
         return ResponseEntity.ok(base64Image);
     }
 
-    @GetMapping("/activateAccount")
-    public ResponseEntity<Notification> confirmNewUser(@RequestParam String email, @RequestParam String activationCode) {
-        return this.userService.confirmEmail(email, activationCode);
-    }
 
 //    CRUD admin
     @GetMapping()

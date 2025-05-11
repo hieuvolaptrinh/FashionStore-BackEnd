@@ -14,21 +14,19 @@ import java.util.List;
 public class UserDTO {
     private Integer userId;
 
-    @NotBlank(message = "Họ không được để trống")
+    @NotBlank(message = "Họ không được để trống test")
     @Size(min = 2, max = 50, message = "Họ phải có độ dài từ 2 đến 50 ký tự")
     private String firstName;
 
     @NotBlank(message = "Tên không được để trống")
-    @Size(min = 2, max = 50, message = "Tên phải có độ dài từ 2 đến 50 ký tự")
+    @Size(min = 2, max = 50, message = "Tên phải có độ dài từ 2 đến 50 ký tự đang test")
     private String lastName;
 
     @NotBlank(message = "Email không được để trống")
-//    @Email(message = "Email không hợp lệ")
     private String email;
 
     @NotBlank(message = "Mật khẩu không được để trống")
-    @Size(min = 8, message = "Mật khẩu phải có ít nhất 8 ký tự")
-//    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", message = "Mật khẩu phải chứa ít nhất 1 chữ số, 1 chữ hoa, 1 chữ thường và 1 ký tự đặc biệt")
+    @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String password;
 
     @NotBlank(message = "Tên đăng nhập không được để trống")

@@ -1,9 +1,12 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.PaymentDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.PaymentRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
+import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
 import com.HieuVo.FashionStore_BackEnd.Service.OrderService;
 import com.HieuVo.FashionStore_BackEnd.Service.VNPayService;
+import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +26,7 @@ public class PaymentController {
     }
 
     @PostMapping("/create-payment")
-    public ResponseEntity<Notification> createPayment(@RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<Notification> createPayment(@RequestBody PaymentRequest paymentDTO) {
         try {
             String paymentUrl = vnPayService.createPaymentUrl(paymentDTO);
             return ResponseEntity.ok(new Notification(paymentUrl));

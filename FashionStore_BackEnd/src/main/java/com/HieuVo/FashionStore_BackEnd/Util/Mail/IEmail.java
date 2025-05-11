@@ -1,8 +1,8 @@
-package com.HieuVo.FashionStore_BackEnd.Service;
+package com.HieuVo.FashionStore_BackEnd.Util.Mail;
 
 import jakarta.mail.MessagingException;
 
-public interface IEmailService {
+public interface IEmail {
     void sendMessage(String from, String to, String subject, String plainText);
     void sendHtmlMessage(String from, String to, String subject, String htmlContent) throws MessagingException, MessagingException;
 }
