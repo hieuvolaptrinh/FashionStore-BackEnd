@@ -42,4 +42,6 @@ public class ProductRequest {
 
     private List<Integer> listTypes;
 
+    private List<Long> deletedImageIds; // Danh sách ID hình ảnh cần xóa
+
 }

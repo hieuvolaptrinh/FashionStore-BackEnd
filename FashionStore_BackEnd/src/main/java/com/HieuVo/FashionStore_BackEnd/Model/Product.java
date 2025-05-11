@@ -22,7 +22,6 @@ public class Product {
         @Column(columnDefinition = "NVARCHAR(256)")
         private String productName;
 
-        @Size(min = 10, max = 1000, message = "Mô tả phải có độ dài từ 10 đến 1000 ký tự")
         @Column(length = 256, columnDefinition = "NVARCHAR(256)")
         private String description;
 

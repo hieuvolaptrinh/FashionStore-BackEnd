@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -71,8 +72,6 @@ public class ProductService {
         if (dto == null) {
             throw new IllegalArgumentException("ProductRequest không được null");
         }
-
-        // Tạo Product
         Product product = new Product();
         product.setProductName(dto.getProductName());
         product.setDescription(dto.getDescription());
@@ -104,12 +103,10 @@ public class ProductService {
                 if (contentType == null || (!contentType.equals("image/jpeg") && !contentType.equals("image/png"))) {
                     throw new IllegalArgumentException("Chỉ hỗ trợ định dạng JPEG hoặc PNG: " + contentType);
                 }
-
                 // Tạo file tạm (nếu uploadImageToDrive vẫn yêu cầu File)
                 File tempFile = File.createTempFile("temp", null);
                 try {
                     file.transferTo(tempFile);
-
                     // Tải file lên Google Drive
                     String link = googleDriveUploader.uploadImageToDrive(tempFile);
 
@@ -131,6 +128,7 @@ public class ProductService {
         // Lưu Product (tự động lưu Images nhờ cascade)
         return productRepository.save(product);
     }
+
     public PageResponse<ProductResponse> searchProduct(Integer typeId, String productName, Pageable pageable) {
         Page<Product> productPage;
 
@@ -160,9 +158,11 @@ public class ProductService {
     }
 
 
-    public String updateProduct(ProductRequest dto) {
-
+    @Transactional
+    public Product updateProduct(ProductRequest dto, List<MultipartFile> images) throws Exception {
         Product product = productRepository.findById(dto.getProductId()).get();
+
+        // Cập nhật thông tin sản phẩm
         product.setProductName(dto.getProductName());
         product.setDescription(dto.getDescription());
         product.setOriginalPrice(dto.getOriginalPrice());
@@ -171,25 +171,49 @@ public class ProductService {
         product.setQuantity(dto.getQuantity());
         product.setManufactureDate(dto.getManufactureDate());
 
-//        // Xóa ảnh cũ
-//        if (dto.getListImages() != null) {
-//            List<Image> images = imageRepository.findByProduct_productId(dto.getProductId());
-//            for (Image image : images) {
-//                imageRepository.delete(image);
-//            }
-//            List<Image> newImages = dto.getListImages().stream().map(link -> {
-//                Image image = new Image();
-//                image.setLink(link);
-//                image.setProduct(product);
-//                return image;
-//            }).toList();
-//            imageRepository.saveAll(newImages);
-//        }
-        if (dto.getListTypes() != null) {
-            List<Type> types = typeRepository.findAllById(dto.getListTypes());
+        // Cập nhật danh sách Type
+        if (dto.getListTypes() != null && !dto.getListTypes().isEmpty()) {
+            List<Type> types = typeRepository.findAllByTypeIdIsIn(dto.getListTypes());
+            if (types.size() != dto.getListTypes().size()) {
+                throw new IllegalArgumentException("Một số Type không tồn tại");
+            }
             product.setListTypes(types);
+        } else {
+            product.setListTypes(new ArrayList<>());
         }
-        productRepository.save(product);
-        return "Cập nhật sản phẩm thành công";
+
+        // Xóa hình ảnh
+        if (dto.getDeletedImageIds() != null && !dto.getDeletedImageIds().isEmpty()) {
+            List<Image> imagesToDelete = imageRepository.findAllByImageIdIsIn(dto.getDeletedImageIds());
+            for (Image image : imagesToDelete) {
+               this.googleDriveUploader.deleteFileFromDrive(image.getLink());
+                this.imageRepository.delete(image);
+                System.out.println("đã xóa hình ảnh: " + image.getLink());
+            }
+        }
+        List<Image> imageList = new ArrayList<>();
+        if (images != null && !images.isEmpty()) {
+            for (MultipartFile file : images) {
+                // Kiểm tra file
+                if (file.isEmpty()) {
+                    throw new IllegalArgumentException("Có file hình ảnh rỗng: " + file.getOriginalFilename());
+                }
+                File tempFile = File.createTempFile("temp", null);
+                    file.transferTo(tempFile);
+                    String link = googleDriveUploader.uploadImageToDrive(tempFile);
+                    // Tạo Image
+                    Image image = new Image();
+                    image.setLink(link);
+                    image.setProduct(product);
+                    imageList.add(image);
+                    // Xóa file tạm
+                    if (tempFile.exists()) {
+                        tempFile.delete();
+                    }
+            }
+            product.setListImages(imageList);
+        }
+
+        return productRepository.save(product);
     }
 }

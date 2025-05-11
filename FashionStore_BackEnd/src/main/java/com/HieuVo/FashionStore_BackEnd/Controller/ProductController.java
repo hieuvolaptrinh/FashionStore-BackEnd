@@ -63,7 +63,6 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductTypes());
     }
 
-
     //    @RequestBody và @RequestPart cùng lúc=> lỗi vì chúng yêu cầu kiểu Content-Type khác nhau
 //    @PostMapping("")
 //    @ApiMessage("Tạo mới sản phẩm thành công")
@@ -80,6 +79,7 @@ public class ProductController {
         Product created = productService.createProduct(productRequest, images);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponse(created));
     }
+
     @GetMapping("/search")
     public ResponseEntity<PageResponse<ProductResponse>> searchProduct(
             @RequestParam(name = "typeId", required = false) Integer typeId,
@@ -92,13 +92,13 @@ public class ProductController {
         return ResponseEntity.ok(pageResponse);
     }
 
-    @PutMapping("/{productId}")
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
     @ApiMessage("Cập nhật sản phẩm thành công")
-    public ResponseEntity<Notification> updateProduct(
-
-            @Valid @RequestBody ProductRequest dto) {
-        String result = productService.updateProduct(dto);
-        return ResponseEntity.ok(new Notification(result));
+    public ResponseEntity<Product> updateProduct(
+            @Valid @RequestPart("product") ProductRequest productRequest, //@RequestPart("product") để nhận JSON của ProductRequest từ phần product của multipart/form-data.
+            @RequestPart(value = "images", required = false) List<MultipartFile> images) throws Exception {
+        Product result = productService.updateProduct(productRequest, images);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
 }

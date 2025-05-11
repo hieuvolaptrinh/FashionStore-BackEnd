@@ -1,5 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.RestPasswordRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.AuthRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.AuthResponse;
@@ -62,5 +63,10 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new Notification(" tên đăng nhập hoặc mật khẩu sai"));
         }
         return ResponseEntity.badRequest().body(new Notification("Đăng nhập không thành công"));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody RestPasswordRequest restPasswordRequest) {
+      return this.userService.restPassword(restPasswordRequest);
     }
 }

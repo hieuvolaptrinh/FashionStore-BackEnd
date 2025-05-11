@@ -41,8 +41,18 @@ public class ProductResponse {
 
     private float avgStars;
 
-    private List<String> listImages;
+    private List<ImageResponse> listImages;
     private List<TypeResponse> listTypes;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ImageResponse {
+        private int imageId;
+        private String link;
+
+    }
 
     public ProductResponse(Product product) {
         this.productId = product.getProductId();
@@ -58,7 +68,7 @@ public class ProductResponse {
             this.listTypes = product.getListTypes().stream().map(type -> new TypeResponse(type.getTypeId(), type.getTypeName())).toList();
         }
         if (product.getListImages() != null) {
-            this.listImages = product.getListImages().stream().map(image -> image.getLink()).toList();
+            this.listImages = product.getListImages().stream().map(image -> new ImageResponse(image.getImageId(), image.getLink())).toList();
         }
     }
 

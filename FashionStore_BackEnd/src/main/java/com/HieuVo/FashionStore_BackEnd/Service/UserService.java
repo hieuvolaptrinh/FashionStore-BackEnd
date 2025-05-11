@@ -31,7 +31,6 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final SendEmailController emailService;
     private final RoleRepository roleRepository;
-    private final AdderssRepository addressRepository;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
                        SendEmailController emailService, RoleRepository roleRepository,
@@ -40,7 +39,7 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.roleRepository = roleRepository;
-        this.addressRepository = addressRepository;
+
 
     }
 
