@@ -62,7 +62,7 @@ public class GoogleDriveUploader {
 
 
         } catch (Exception e) {
-
+            System.out.println("Error uploading file: " + e.getMessage());
         }
         listFilesInFolder();
         return imageUrl;

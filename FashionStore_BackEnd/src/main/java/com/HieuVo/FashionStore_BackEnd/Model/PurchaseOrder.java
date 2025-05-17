@@ -2,6 +2,7 @@ package com.HieuVo.FashionStore_BackEnd.Model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -10,7 +11,7 @@ public class PurchaseOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer purchaseId;
 
-    private String purchaseDate;
+    private Date purchaseDate;
 
     @OneToMany(mappedBy = "purchaseOrder")
     private List<PurchaseOrderDetail> purchaseOrderDetails;
