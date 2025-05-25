@@ -1,23 +1,18 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
-import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.Role;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
-import com.HieuVo.FashionStore_BackEnd.Repository.AdderssRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.RoleRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.UserRepository;
 
-import com.HieuVo.FashionStore_BackEnd.Util.Mail.SendEmailController;
-import io.github.cdimascio.dotenv.Dotenv;
-import jakarta.mail.MessagingException;
-import org.springframework.http.ResponseEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -30,15 +25,15 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository
-    ) {
+                       RoleRepository roleRepository,
+                       BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
 
         this.roleRepository = roleRepository;
-
-
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -78,28 +73,37 @@ public class UserService implements UserDetailsService {
     }
 
 
+    private UserDTO convertToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUserName(user.getUserName());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setActive(user.isActive());
+        userDTO.setRoles(user.getListRoles().stream()
+                .map(Role::getRoleName)
+                .collect(Collectors.toList()));
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+
+        if (user.getAvatarData() != null) {
+            userDTO.setAvatarBase64(Base64.getEncoder().encodeToString(user.getAvatarData()));
+        }
+
+        return userDTO;
+    }
+
+    public UserDTO getUser(String username) {
+        Optional<User> user = this.userRepository.findByUserName(username);
+
+        return convertToDTO(user.orElse(null));
+    }
+
     public List<UserDTO> getAllUsers() {
         List<User> users = this.userRepository.findAll();
-        List<UserDTO> userDTOs = users.stream().map(user -> {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUserId(user.getUserId());
-            userDTO.setUserName(user.getUserName());
-            userDTO.setFirstName(user.getFirstName());
-            userDTO.setLastName(user.getLastName());
-            userDTO.setEmail(user.getEmail());
-            userDTO.setActive(user.isActive());
-            userDTO.setRoles(user.getListRoles().stream()
-                    .map(Role::getRoleName)
-                    .collect(Collectors.toList()));
-
-            userDTO.setPhoneNumber(user.getPhoneNumber());
-            if (user.getAvatarData() != null) {
-                userDTO.setAvatarBase64(Base64.getEncoder().encodeToString(user.getAvatarData()));
-            }
-            return userDTO;
-
-        }).collect(Collectors.toList());
-        return userDTOs;
+        return users.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     //
@@ -114,7 +118,7 @@ public class UserService implements UserDetailsService {
         user.setEmail(userDTO.getEmail());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setActive(userDTO.getActive());
-
+user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 //        Không update password và username
         List<Role> roles = this.roleRepository.findAllByRoleNameIn(userDTO.getRoles());
         user.setListRoles(roles);

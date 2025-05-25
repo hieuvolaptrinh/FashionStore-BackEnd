@@ -17,11 +17,11 @@ public class PaymentType {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int paymentTypeID;
 
+    @Column(columnDefinition = "NVARCHAR(256)")
     @NotBlank(message = "Tên phương thức thanh toán không được để trống")
-    @Column(columnDefinition = "NVARCHAR(500)")
     private String paymentTypeName;
 
-
+    @Column(columnDefinition = "NVARCHAR(256)")
     private String description;
 
     @NotNull(message = "Phí không được để trống")

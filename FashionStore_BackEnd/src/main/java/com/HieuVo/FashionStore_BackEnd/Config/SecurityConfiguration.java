@@ -43,8 +43,6 @@ public class SecurityConfiguration {
     }
 
 
-
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -62,7 +60,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
                         .requestMatchers("/api/payment/vnpay-return").permitAll()
-                        .requestMatchers( Endpoints.ADMIN_ENDPOINTS).hasAuthority("ADMIN")
+                        .requestMatchers(Endpoints.ADMIN_ENDPOINTS).hasAuthority("ADMIN")
+                        .requestMatchers(Endpoints.SHIPPER_ENDPOINTS).hasAuthority("SHIPPER")
                         .requestMatchers(Endpoints.USER_ENDPOINTS).hasAnyAuthority("USER", "ADMIN")
 //                         .requestMatchers("/**").permitAll() )//
 
@@ -71,22 +70,22 @@ public class SecurityConfiguration {
 //                cors
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(url,"http://192.168.1.6:5173"));
+                    config.setAllowedOrigins(List.of(url, "http://192.168.1.6:5173"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*")); // chấp nhận tất cả các header từ request
                     config.setAllowCredentials(true);// cho phép gửi cookie, token (JWT) từ frontend
                     return config;
                 }))
                 .formLogin(Customizer.withDefaults()) // cho phép login bằng form (chỉ dùng nếu dùng session hoặc dev
-                                                      // đang test).
+                // đang test).
                 .httpBasic(Customizer.withDefaults()); // login bằng HTTP basic (có thể tắt nếu chỉ dùng JWT)
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // không lưu
-                                                                                                            // session
-                                                                                                            // về sử
-                                                                                                            // dụng jwt
+                // session
+                // về sử
+                // dụng jwt
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // filter jwt
-                                                                                                       // trước filter
-                                                                                                       // mặc định
+        // trước filter
+        // mặc định
 
         return http.build();
     }

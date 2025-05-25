@@ -8,8 +8,8 @@ IF EXISTS (
 BEGIN  
 		USE master
 		
-		alter database FashionStore1 set single_user with rollback immediate
-		drop database FashionStore1;
+		alter database Handmade set single_user with rollback immediate
+		drop database Handmade;
 END  
 GO
 CREATE DATABASE FashionStore1
@@ -86,7 +86,7 @@ INSERT INTO type (type_name) VALUES
     (N'Phụ kiện');
 GO
 
--- Insert vào bảng product
+
 INSERT INTO product_type (type_id, product_id) VALUES 
     (1, 1), -- Áo sơ mi nam -> Áo quần nam
     (2, 2), -- Áo thun nữ -> Áo quần nữ
@@ -103,7 +103,7 @@ GO
 
 
 -- Insert vào bảng cart
-/*
+
 INSERT INTO cart ( create_at, update_at, total_prices) VALUES 
 ('2024-03-01', '2024-03-02', 380000),
 ( '2024-03-05', '2024-03-06', 220000),
@@ -111,9 +111,9 @@ INSERT INTO cart ( create_at, update_at, total_prices) VALUES
 ( '2024-03-10', '2024-03-11', 210000),
 ('2024-03-12', '2024-03-13', 150000);
 GO
-*/
 
-/*
+
+
 -- Insert vào bảng cart_detail
 INSERT INTO cart_detail (cart_id, product_id, quantity, price) VALUES 
 (1, 1, 2, 360000), (1, 2, 1, 220000),
@@ -125,11 +125,11 @@ GO
 -- Insert vào bảng orders
 go
 INSERT INTO orders (user_id, create_at, delivery_date, total_price, payment_type_id, shipping_method_id, shipping_address_id, status,is_pay) 
-VALUES (3, '2024-02-20', '2024-02-25', 380000, 1, 1, 1, N'Đã giao',0),
-       (2, '2024-02-22', '2024-02-27', 220000, 2, 2, 2, N'Chưa xử lý',1),
-       (3, '2024-02-23', '2024-02-28', 170000, 1, 3, 3, N'Đã giao',0),
-       (4, '2024-02-25', '2024-03-01', 210000, 2, 1, 4, N'Đang vận chuyển',0),
-       (5, '2024-02-28', '2024-03-04', 150000, 1, 2, 5, N'Đã giao',0);
+VALUES (3, '2024-02-20', '2024-02-25', 380000, 1, 1, 1, 'PENDING',0),
+       (2, '2024-02-22', '2024-02-27', 220000, 2, 2, 2, 'PENDING',1),
+       (3, '2024-02-23', '2024-02-28', 170000, 1, 3, 3, 'DELIVERED',0),
+       (4, '2024-02-25', '2024-03-01', 210000, 2, 1, 4, 'SHIPPING',0),
+       (5, '2024-02-28', '2024-03-04', 150000, 1, 2, 5, 'SHIPPING',0);
 GO
 
 -- Insert vào bảng order_detail

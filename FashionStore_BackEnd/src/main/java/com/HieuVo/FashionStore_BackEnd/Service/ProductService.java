@@ -158,11 +158,11 @@ public class ProductService {
     }
 
 
-    @Transactional
+//    @Transactional
     public Product updateProduct(ProductRequest dto, List<MultipartFile> images) throws Exception {
         Product product = productRepository.findById(dto.getProductId()).get();
 
-        // Cập nhật thông tin sản phẩm
+
         product.setProductName(dto.getProductName());
         product.setDescription(dto.getDescription());
         product.setOriginalPrice(dto.getOriginalPrice());
@@ -171,7 +171,7 @@ public class ProductService {
         product.setQuantity(dto.getQuantity());
         product.setManufactureDate(dto.getManufactureDate());
 
-        // Cập nhật danh sách Type
+        //  Type
         if (dto.getListTypes() != null && !dto.getListTypes().isEmpty()) {
             List<Type> types = typeRepository.findAllByTypeIdIsIn(dto.getListTypes());
             if (types.size() != dto.getListTypes().size()) {
@@ -182,34 +182,43 @@ public class ProductService {
             product.setListTypes(new ArrayList<>());
         }
 
-        // Xóa hình ảnh
+        // xóa hình ảnh nếu có yêu cầu
         if (dto.getDeletedImageIds() != null && !dto.getDeletedImageIds().isEmpty()) {
             List<Image> imagesToDelete = imageRepository.findAllByImageIdIsIn(dto.getDeletedImageIds());
+
             for (Image image : imagesToDelete) {
-               this.googleDriveUploader.deleteFileFromDrive(image.getLink());
-                this.imageRepository.delete(image);
-                System.out.println("đã xóa hình ảnh: " + image.getLink());
+                // thử xóa trên Google Drive, nếu lỗi vẫn tiếp tục xóa DB
+                try {
+                    googleDriveUploader.deleteFileFromDrive(image.getLink());
+                    System.out.println(" Đã xóa file trên Google Drive: " + image.getLink());
+                } catch (Exception e) {
+                    System.err.println(" Không thể xóa file trên Google Drive (có thể không tồn tại): " + image.getLink());
+                    System.err.println("Chi tiết lỗi: " + e.getMessage());
+                }
+
+                imageRepository.deleteByLink(image.getLink());
+                System.out.println("️ Đã xóa hình ảnh khỏi DB: " + image.getLink());
             }
         }
+
         List<Image> imageList = new ArrayList<>();
         if (images != null && !images.isEmpty()) {
             for (MultipartFile file : images) {
-                // Kiểm tra file
+
                 if (file.isEmpty()) {
                     throw new IllegalArgumentException("Có file hình ảnh rỗng: " + file.getOriginalFilename());
                 }
                 File tempFile = File.createTempFile("temp", null);
-                    file.transferTo(tempFile);
-                    String link = googleDriveUploader.uploadImageToDrive(tempFile);
-                    // Tạo Image
-                    Image image = new Image();
-                    image.setLink(link);
-                    image.setProduct(product);
-                    imageList.add(image);
-                    // Xóa file tạm
-                    if (tempFile.exists()) {
-                        tempFile.delete();
-                    }
+                file.transferTo(tempFile);
+                String link = googleDriveUploader.uploadImageToDrive(tempFile);
+                Image image = new Image();
+                image.setLink(link);
+                image.setProduct(product);
+                imageList.add(image);
+
+                if (tempFile.exists()) {
+                    tempFile.delete();
+                }
             }
             product.setListImages(imageList);
         }

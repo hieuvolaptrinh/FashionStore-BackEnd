@@ -15,5 +15,5 @@ public interface ImageRepository extends JpaRepository<Image, Integer> {
     List<Image> findByProduct_productId(int productId);
 
     List<Image> findAllByImageIdIsIn(List<Long> ids);
-
+    Boolean  deleteByLink(String link);
 }

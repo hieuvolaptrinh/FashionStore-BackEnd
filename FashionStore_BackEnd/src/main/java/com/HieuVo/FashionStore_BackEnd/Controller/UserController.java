@@ -7,6 +7,8 @@ import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
@@ -24,7 +26,14 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+        if(userDetails == null) {
+            return ResponseEntity.status(401).body(null);
+        }
+        return ResponseEntity.ok(userService.getUser(userDetails.getUsername()));
 
+    }
 
     @GetMapping("/{username}/avatar")
     public ResponseEntity<String> getAvatar(@PathVariable String username) {

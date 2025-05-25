@@ -16,6 +16,7 @@ public class ShippingMethod {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int shippingMethodId;
 
+    @Column(columnDefinition = "NVARCHAR(256)")
     @NotBlank(message = "Tên phương thức vận chuyển không được để trống")
     @Size(min = 2, max = 256, message = "Tên phương thức vận chuyển phải có độ dài từ 2 đến 256 ký tự")
     private String shippingMethodName;

@@ -6,6 +6,7 @@ import com.HieuVo.FashionStore_BackEnd.DTO.Response.OrderResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.ShippingMethodResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.*;
 import com.HieuVo.FashionStore_BackEnd.Repository.*;
+import com.HieuVo.FashionStore_BackEnd.Util.ENUM.OrderStatusEnum;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -104,7 +105,7 @@ public class OrderService {
         // order.setCreateAt(Date.valueOf(LocalDate.now()));
         // order.setStatus(" chờ đại ka hiếu Xử lý/ trừ trước luôn số lượng sản phẩm ở
         // code hoặc code trigger cx đc");
-        order.setStatus("Chưa xử lý");
+        order.setStatus(OrderStatusEnum.PENDING); //chưa xử lý
 
         double totalPrice = cartDetails.stream()
                 .mapToDouble(cd -> cd.getPrice() * cd.getQuantity())
@@ -157,7 +158,8 @@ public class OrderService {
     private OrderResponse convertToResponseOrder(Order order) {
         OrderResponse responseOrder = new OrderResponse();
         responseOrder.setOrderId(order.getOrderId());
-        responseOrder.setStatus(order.getStatus());
+
+        responseOrder.setStatus(order.getStatus().getLabel());
         responseOrder.setTotalPrice(order.getTotalPrice());
         responseOrder.setCreateAt(order.getCreateAt());
         responseOrder.setPay(order.isPay());
@@ -192,11 +194,18 @@ public class OrderService {
         return responseOrder;
     }
 
-    public void updateOrderStatus(int orderId, String status) {
+    public void updateOrderStatus(int orderId, String statusLabel) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-        order.setStatus(status);
-        orderRepository.save(order);
+
+        try {
+            // Tìm enum từ nhãn tiếng Việt
+            OrderStatusEnum orderStatus = OrderStatusEnum.fromLabel(statusLabel);
+            order.setStatus(orderStatus);
+            orderRepository.save(order);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Trạng thái không hợp lệ: " + statusLabel);
+        }
     }
 
     public void updatePaymentStatus(int orderId, boolean isPaid) {
