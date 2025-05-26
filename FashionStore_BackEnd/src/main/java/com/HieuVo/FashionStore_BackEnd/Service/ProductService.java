@@ -158,7 +158,7 @@ public class ProductService {
     }
 
 
-//    @Transactional
+    @Transactional
     public Product updateProduct(ProductRequest dto, List<MultipartFile> images) throws Exception {
         Product product = productRepository.findById(dto.getProductId()).get();
 
@@ -201,28 +201,39 @@ public class ProductService {
             }
         }
 
-        List<Image> imageList = new ArrayList<>();
         if (images != null && !images.isEmpty()) {
-            for (MultipartFile file : images) {
+            // Khởi tạo list nếu null
+            if (product.getListImages() == null) {
+                product.setListImages(new ArrayList<>());
+            }
 
+            for (MultipartFile file : images) {
                 if (file.isEmpty()) {
                     throw new IllegalArgumentException("Có file hình ảnh rỗng: " + file.getOriginalFilename());
                 }
-                File tempFile = File.createTempFile("temp", null);
-                file.transferTo(tempFile);
-                String link = googleDriveUploader.uploadImageToDrive(tempFile);
-                Image image = new Image();
-                image.setLink(link);
-                image.setProduct(product);
-                imageList.add(image);
 
-                if (tempFile.exists()) {
-                    tempFile.delete();
+                File tempFile = File.createTempFile("temp", null);
+                try {
+                    file.transferTo(tempFile);
+                    String link = googleDriveUploader.uploadImageToDrive(tempFile);
+
+                    Image image = new Image();
+                    image.setLink(link);
+                    image.setProduct(product);
+
+                    // Thêm vào collection của product
+                    product.getListImages().add(image);
+
+                } finally {
+                    // Đảm bảo xóa temp file
+                    if (tempFile.exists()) {
+                        tempFile.delete();
+                    }
                 }
             }
-            product.setListImages(imageList);
         }
-
         return productRepository.save(product);
+
     }
+
 }

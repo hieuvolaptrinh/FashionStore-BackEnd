@@ -42,7 +42,6 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -50,7 +49,6 @@ public class SecurityConfiguration {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -60,14 +58,14 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
                         .requestMatchers("/api/payment/vnpay-return").permitAll()
+                        .requestMatchers(Endpoints.USER_ENDPOINTS).hasAnyAuthority("USER", "ADMIN", "SHIPPER")
+                        .requestMatchers(Endpoints.SHIPPER_ENDPOINTS).hasAnyAuthority("SHIPPER", "ADMIN")
                         .requestMatchers(Endpoints.ADMIN_ENDPOINTS).hasAuthority("ADMIN")
-                        .requestMatchers(Endpoints.SHIPPER_ENDPOINTS).hasAuthority("SHIPPER")
-                        .requestMatchers(Endpoints.USER_ENDPOINTS).hasAnyAuthority("USER", "ADMIN")
-//                         .requestMatchers("/**").permitAll() )//
+                        // .requestMatchers("/**").permitAll() )//
 
                         .anyRequest().authenticated())
 
-//                cors
+                // cors
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of(url, "http://192.168.1.6:5173"));

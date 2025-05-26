@@ -109,26 +109,31 @@ public class GoogleDriveUploader {
 
 
     //    delete file
-    public void deleteFileFromDrive(String url) throws Exception {
+    public boolean deleteFileFromDrive(String url) {
         try {
             Drive drive = createDriveService();
             String fileId = extractFileIdFromUrl(url);
             if (fileId == null || fileId.isEmpty()) {
                 System.err.println("Không thể trích xuất fileId từ URL: " + url);
-                return;
+                return false; // Trả về false thay vì throw exception
             }
             drive.files().delete(fileId).execute();
             System.out.println("Đã xóa file trên Google Drive: " + fileId);
+            return true;
         } catch (com.google.api.client.googleapis.json.GoogleJsonResponseException e) {
             if (e.getStatusCode() == 404) {
-                System.err.println("File không tồn tại trên Google Drive, tiếp tục xóa DB: " + url);
+                System.err.println("File không tồn tại trên Google Drive: " + url);
+                return true; // Trả về true vì file đã không tồn tại rồi
             } else {
                 System.err.println("Lỗi Google Drive khác: " + e.getDetails());
+                return false;
             }
         } catch (Exception e) {
             System.err.println("Lỗi khi xóa file: " + e.getMessage());
+            return false;
         }
     }
+
 
     public String extractFileIdFromUrl(String url) {
         String fileId = "";

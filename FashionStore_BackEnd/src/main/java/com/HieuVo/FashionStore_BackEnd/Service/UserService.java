@@ -28,8 +28,8 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository,
-                       BCryptPasswordEncoder passwordEncoder) {
+            RoleRepository roleRepository,
+            BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
 
         this.roleRepository = roleRepository;
@@ -45,8 +45,7 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),
                 user.getPassword(),
-                rolesToAuthorites(user.getListRoles())
-        );
+                rolesToAuthorites(user.getListRoles()));
 
     }
 
@@ -60,18 +59,16 @@ public class UserService implements UserDetailsService {
     }
 
     // Lấy danh sách role của user, tránh lỗi nếu roles == null
-//    vì chỗ này trả về GrantedAuthority nên bên security phải sử dụng hasAuthority("ADMIN") thay vì hasRole("ADMIN")
+    // vì chỗ này trả về GrantedAuthority nên bên security phải sử dụng
+    // hasAuthority("ADMIN") thay vì hasRole("ADMIN")
     private Collection<? extends GrantedAuthority> rolesToAuthorites(Collection<Role> roles) {
-
         if (roles == null || roles.isEmpty()) {
-//            return List.of(new SimpleGrantedAuthority("USER")); // Gán quyền mặc định nếu user chưa có quyền
-            return List.of(); // Trả về danh sách trống thay vì null]
+            return List.of(new SimpleGrantedAuthority("USER")); // Gán quyền mặc định nếu user chưa có quyền
         }
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
     }
-
 
     private UserDTO convertToDTO(User user) {
         UserDTO userDTO = new UserDTO();
@@ -95,7 +92,7 @@ public class UserService implements UserDetailsService {
 
     public UserDTO getUser(String username) {
         Optional<User> user = this.userRepository.findByUserName(username);
-
+        System.out.println("--------------------------------get oke---------------: " + username);
         return convertToDTO(user.orElse(null));
     }
 
@@ -118,14 +115,15 @@ public class UserService implements UserDetailsService {
         user.setEmail(userDTO.getEmail());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setActive(userDTO.getActive());
-user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-//        Không update password và username
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        // Không update password và username
         List<Role> roles = this.roleRepository.findAllByRoleNameIn(userDTO.getRoles());
         user.setListRoles(roles);
         if (userDTO.getAvatarBase64() != null && !userDTO.getAvatarBase64().isEmpty()) {
             // Chuyển đổi chuỗi base64 thành byte[] trước khi lưu
             user.setAvatarData(Base64.getDecoder().decode(userDTO.getAvatarBase64()));
         }
+        System.out.println("đã cập nhật user: " + user.getUserName() + " với các quyền: " + user.getListRoles());
         this.userRepository.save(user);
         return "Cập nhật thành công";
     }

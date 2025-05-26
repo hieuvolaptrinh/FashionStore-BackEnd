@@ -7,7 +7,7 @@ import com.HieuVo.FashionStore_BackEnd.DTO.Response.AuthResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.AuthService;
-import com.HieuVo.FashionStore_BackEnd.Service.JwtService;
+import com.HieuVo.FashionStore_BackEnd.Filter.JwtService;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
 import jakarta.validation.Valid;

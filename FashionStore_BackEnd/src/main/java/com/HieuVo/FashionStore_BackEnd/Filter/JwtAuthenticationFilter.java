@@ -1,7 +1,6 @@
 package com.HieuVo.FashionStore_BackEnd.Filter;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.RestResponse;
-import com.HieuVo.FashionStore_BackEnd.Service.JwtService;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -36,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+            FilterChain filterChain) throws IOException {
         try {
             String authHeader = request.getHeader("Authorization");
             String token = null;
@@ -45,19 +44,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 token = authHeader.substring(7);
                 username = jwtService.extractUsername(token);
             }
+            System.out.println("Request URI: " + request.getRequestURI());
+            System.out.println("Token: " + token);
+            System.out.println("Username: " + username);
+            System.out.println("AuthHeader: " + authHeader);
+
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userService.loadUserByUsername(username);
+                System.out.println("UserDetails: " + userDetails);
+                System.out.println("UserDetails Authorities: " + userDetails.getAuthorities());
+
                 if (jwtService.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("Authentication set in SecurityContext: "
+                            + SecurityContextHolder.getContext().getAuthentication());
+                } else {
+                    System.out.println("Token validation failed");
                 }
             }
-            System.out.println("Token: " + token);
-            System.out.println("Username: " + username);
-            System.out.println("AuthHeader: " + authHeader);
-            System.out.println("SecurityContextHolder: " + SecurityContextHolder.getContext().getAuthentication());
             filterChain.doFilter(request, response);
         } catch (SignatureException e) {
             handleJwtError(response, "JWT signature không hợp lệ", "Token không hợp lệ (chữ ký không khớp)");
