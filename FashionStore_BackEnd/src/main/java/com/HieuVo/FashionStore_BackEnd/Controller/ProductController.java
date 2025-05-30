@@ -82,13 +82,13 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<PageResponse<ProductResponse>> searchProduct(
-            @RequestParam(name = "typeId", required = false) Integer typeId,
+            @RequestParam(name = "typeIds", required = false) String typeIdsString,
             @RequestParam(name = "productName", required = false) String productName,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        PageResponse<ProductResponse> pageResponse = productService.searchProduct(typeId, productName, pageable);
+        PageResponse<ProductResponse> pageResponse = productService.searchProduct(typeIdsString, productName, pageable);
         return ResponseEntity.ok(pageResponse);
     }
 

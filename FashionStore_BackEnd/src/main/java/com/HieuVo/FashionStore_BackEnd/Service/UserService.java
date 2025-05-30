@@ -1,12 +1,12 @@
 package com.HieuVo.FashionStore_BackEnd.Service;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.UserRequest;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.UserResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.Role;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Repository.RoleRepository;
 import com.HieuVo.FashionStore_BackEnd.Repository.UserRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -70,8 +70,8 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    private UserDTO convertToDTO(User user) {
-        UserDTO userDTO = new UserDTO();
+    private UserResponse convertToDTO(User user) {
+        UserResponse userDTO = new UserResponse();
         userDTO.setUserId(user.getUserId());
         userDTO.setUserName(user.getUserName());
         userDTO.setFirstName(user.getFirstName());
@@ -90,13 +90,13 @@ public class UserService implements UserDetailsService {
         return userDTO;
     }
 
-    public UserDTO getUser(String username) {
+    public UserResponse getUser(String username) {
         Optional<User> user = this.userRepository.findByUserName(username);
         System.out.println("--------------------------------get oke---------------: " + username);
         return convertToDTO(user.orElse(null));
     }
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         List<User> users = this.userRepository.findAll();
         return users.stream()
                 .map(this::convertToDTO)
@@ -104,7 +104,7 @@ public class UserService implements UserDetailsService {
     }
 
     //
-    public String updateUser(Integer userId, UserDTO userDTO) {
+    public String updateUser(Integer userId, UserRequest userDTO) {
         User user = this.userRepository.findById(userId).orElse(null);
         if (user == null) {
             return "Không tìm thấy người dùng với ID: " + userId;
@@ -115,7 +115,9 @@ public class UserService implements UserDetailsService {
         user.setEmail(userDTO.getEmail());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setActive(userDTO.getActive());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        if(userDTO.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                    }
         // Không update password và username
         List<Role> roles = this.roleRepository.findAllByRoleNameIn(userDTO.getRoles());
         user.setListRoles(roles);

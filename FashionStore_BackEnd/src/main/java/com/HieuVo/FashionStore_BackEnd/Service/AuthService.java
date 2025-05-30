@@ -2,7 +2,7 @@ package com.HieuVo.FashionStore_BackEnd.Service;
 
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.RestPasswordRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
-import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.UserResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.Role;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Repository.AdderssRepository;
@@ -36,7 +36,7 @@ public class AuthService {
 
     }
 
-    public String registerUser(UserDTO userDTO) {
+    public String registerUser(UserResponse userDTO) {
         if (this.userRepository.existsByUserName(userDTO.getUserName())) {
             return "Tài khoản đã tồn tại";
         }

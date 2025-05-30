@@ -19,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -129,17 +129,24 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public PageResponse<ProductResponse> searchProduct(Integer typeId, String productName, Pageable pageable) {
+    public PageResponse<ProductResponse> searchProduct(String typeIdsString, String productName, Pageable pageable) {
         Page<Product> productPage;
+        List<Integer> typeIds = null;
+        if (typeIdsString != null && !typeIdsString.isEmpty()) {
+            typeIds = Arrays.stream(typeIdsString.split(","))
+                    .map(String::trim)
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
+        }
 
-        if (typeId != null && productName != null && !productName.isEmpty()) {
-            // Tìm kiếm theo cả typeId và productName
-            productPage = productRepository.findByProductNameContainingAndListTypes_TypeId(productName, typeId, pageable);
-        } else if (typeId != null) {
-            // Tìm kiếm theo typeId
-            productPage = productRepository.findByListTypes_TypeId(typeId, pageable);
+        if (typeIds != null && productName != null && !productName.isEmpty()) {
+
+            productPage = productRepository.findByProductNameContainingAndListTypes_TypeIdIn(productName, typeIds, pageable);
+        } else if (typeIds != null) {
+
+            productPage = productRepository.findByListTypes_TypeIdIn(typeIds, pageable);
         } else if (productName != null && !productName.isEmpty()) {
-            // Tìm kiếm theo productName
+
             productPage = productRepository.findByProductNameContaining(productName, pageable);
         } else {
             // Tìm kiếm tất cả sản phẩm nếu không có điều kiện nào

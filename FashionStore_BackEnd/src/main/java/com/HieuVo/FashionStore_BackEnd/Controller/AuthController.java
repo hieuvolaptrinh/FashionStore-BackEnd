@@ -4,7 +4,7 @@ import com.HieuVo.FashionStore_BackEnd.DTO.Request.RestPasswordRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.DTO.Request.AuthRequest;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.AuthResponse;
-import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.UserResponse;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.AuthService;
 import com.HieuVo.FashionStore_BackEnd.Filter.JwtService;
@@ -44,7 +44,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ApiMessage("Đã đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản.")
-    public ResponseEntity<Notification> registrerNewUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Notification> registrerNewUser(@Valid @RequestBody UserResponse userDTO) {
         String response = this.authService.registerUser(userDTO);
         return ResponseEntity.ok(new Notification(response));
     }

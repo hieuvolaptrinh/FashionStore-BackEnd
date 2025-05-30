@@ -27,17 +27,15 @@ public class Endpoints {
         };
         public static final String[] USER_ENDPOINTS = {
                         "/api/v1/cart/**",
-                        "/api/v1/user/me",
-                        "/api/v1/user/profile",
-                        "/api/v1/user/update-profile"
+                        "/api/v1/user/*",
+                "/api/v1/user/{id}"
         };
 
         public static final String[] SHIPPER_ENDPOINTS = {
                         "/api/v1/products/**",
                         "/api/v1/orders/admin/**",
-                        "/api/v1/user/me",
-                        "/api/v1/user/profile",
-                        "/api/v1/user/update-profile"
+                        "/api/v1/user/*",
+                "/api/v1/user/{id}"
         };
         public static final String[] ADMIN_ENDPOINTS = {
                         "/uploadToGoogleDrive/**",

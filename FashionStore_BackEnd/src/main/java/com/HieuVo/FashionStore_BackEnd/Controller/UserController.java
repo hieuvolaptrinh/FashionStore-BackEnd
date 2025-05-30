@@ -1,11 +1,11 @@
 package com.HieuVo.FashionStore_BackEnd.Controller;
 
-import com.HieuVo.FashionStore_BackEnd.DTO.UserDTO;
+import com.HieuVo.FashionStore_BackEnd.DTO.Request.UserRequest;
+import com.HieuVo.FashionStore_BackEnd.DTO.Response.UserResponse;
 import com.HieuVo.FashionStore_BackEnd.DTO.Response.Notification;
 import com.HieuVo.FashionStore_BackEnd.Model.User;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import com.HieuVo.FashionStore_BackEnd.Util.Anotation.ApiMessage;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<UserResponse> getUser(@AuthenticationPrincipal UserDetails userDetails) {
         if(userDetails == null) {
             return ResponseEntity.status(401).body(null);
         }
@@ -49,14 +49,14 @@ public class UserController {
 
 //    CRUD admin
     @GetMapping()
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> users = userService.getAllUsers();
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{userId}")
     @ApiMessage("Cập nhật người dùng thành công")
-    public ResponseEntity<Notification> updateUser(@PathVariable Integer userId, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Notification> updateUser(@PathVariable Integer userId, @RequestBody UserRequest userDTO) {
         System.out.println("Received userDTO: " + userDTO);
         return ResponseEntity.ok(new Notification(this.userService.updateUser(userId, userDTO)) );
     }
