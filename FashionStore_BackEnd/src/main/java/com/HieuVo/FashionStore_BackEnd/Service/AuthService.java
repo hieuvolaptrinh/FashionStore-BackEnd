@@ -163,7 +163,7 @@ public class AuthService {
             String code = userRepository.findByUserName(restPasswordRequest.getUserName()).get().getActivationCode();
 
             Dotenv dotenv = Dotenv.load();
-            String frontendUrl = dotenv.get("URL") + "/rest-password" + restPasswordRequest.getEmail() + "/" + code;
+            String frontendUrl = dotenv.get("URL") + "/rest-password/" + restPasswordRequest.getEmail() + "/" + code;
             String mail = dotenv.get("MAIL_USERNAME");
             String subject = "Khôi phục mật khẩu tài khoản";
 

@@ -38,7 +38,8 @@ VALUES (N'admin', N'Hiếu Đại Ka', N'A', N'admin@example.com', '$2a$12$TYBg.
        (N'user', N'User', N'B', N'user@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0976543210', N'Nữ',1),
        (N'lequocd', N'Lê Quốc', N'D', N'quocd@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0912345678', N'Nam',1),
        (N'phamthie', N'Phạm Thị', N'E', N'thie@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0934567890', N'Nữ',1),
-       (N'hoangminh', N'Hoàng', N'Minh', N'minh@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0967891234', N'Nam',1);
+       (N'hoangminh', N'Hoàng', N'Minh', N'minh@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0967891234', N'Nam',1),
+	   (N'shipper', N'Hiếu Đại Ka', N'A', N'shipper@example.com', '$2a$12$TYBg.L1b5mq463Cyg4BU4.aeK/Emj79KzmfamvcNW8qQmIWC6X.fi', N'0987654321', N'Nam',1);
 GO
 
 INSERT INTO Address (street_name, city_name, district_name, ward_name,user_id)
@@ -58,11 +59,11 @@ VALUES
 INSERT INTO role (role_name, description) VALUES 
 (N'ADMIN', N'Quản trị viên'), 
 (N'USER', N'Người mua hàng'), 
-(N'STAFF', N'Nhân viên cửa hàng');
+(N'SHIPEER', N'Shipper giao hàng');
 GO
 -- Insert vào bảng user_role
 INSERT INTO user_role (user_id, role_id) VALUES 
-(1, 1), (2, 2), (3, 2),(3, 1), (4, 2), (5, 3);
+(1, 1),(1,2), (2, 2), (3, 2),(3, 1), (4, 2), (5, 2),(6,3);
 GO
 
 INSERT INTO product (product_name, description, production_infor, original_price, sale_price, manufacture_date, quantity, avg_stars)
@@ -70,7 +71,7 @@ VALUES
     (N'Áo sơ mi nam', N'Áo sơ mi nam dài tay, chất liệu cotton', N'Công ty TNHH Võ Nguyễn Đại Hiếu, chuyên cung cấp sản phẩm thời trang chất lượng cao', 300000, 250000, '2024-01-10', 100,1.2),
     (N'Áo thun nữ', N'Áo thun nữ cổ tròn, phong cách trẻ trung', N'Công ty TNHH Võ Nguyễn Đại Hiếu, chuyên cung cấp sản phẩm thời trang chất lượng cao', 200000, 180000, '2024-02-05', 120, 4.6),
     (N'Quần jean nam', N'Quần jean nam ống đứng, chất vải bền đẹp',N'Công ty TNHH Võ Nguyễn Đại Hiếu, chuyên cung cấp sản phẩm thời trang chất lượng cao', 450000, 400000, '2024-01-15', 80, 3),
-    (N'Giày sneaker', N'Giày sneaker phong cách thể thao, phù hợp đi chơi, đi học',N'Công ty TNHH Võ Nguyễn Đại Hiếu, chuyên cung cấp sản phẩm thời trang chất lượng cao', 500000, 450000, '2024-01-20', 90, 4.8),
+    (N'Quần jean nam', N'Giày sneaker phong cách thể thao, phù hợp đi chơi, đi học',N'Công ty TNHH Võ Nguyễn Đại Hiếu, chuyên cung cấp sản phẩm thời trang chất lượng cao', 500000, 450000, '2024-01-20', 90, 4.8),
     (N'Giày cao gót nữ', N'Giày cao gót nữ thanh lịch, gót 5cm',N'Công ty TNHH Võ Nguyễn Đại Hiếu, chuyên cung cấp sản phẩm thời trang chất lượng cao', 550000, 500000, '2024-02-01', 70, 4.6),
     (N'Áo khoác da nam', N'Áo khoác da cao cấp, phong cách lịch lãm', N'Công ty TNHH Võ Nguyễn Đại Hiếu, chuyên cung cấp sản phẩm thời trang chất lượng cao', 800000, 750000, '2024-02-10', 50, 2),
     (N'Váy dạ hội', N'Váy dạ hội sang trọng, chất liệu cao cấp', N'Công ty TNHH Võ Nguyễn Đại Hiếu, chuyên cung cấp sản phẩm thời trang chất lượng cao', 1200000, 1100000, '2024-03-01', 40, 1.7),
@@ -151,40 +152,58 @@ GO
 
 
 GO
-
 INSERT INTO [image](link, icon, image_name, product_id)
 VALUES
-('https://drive.google.com/thumbnail?id=1mw5eullXeislchPhVusoFktaw52B6F9d', 1, N'Ảnh 1', 7),
-('https://drive.google.com/thumbnail?id=1jUClkB0tUo4H5javEoUJ5ioA12CmrdZi', 0, N'Ảnh 2', 2),
-('https://drive.google.com/thumbnail?id=14I1XkVcBSX3oFdBsO67DmItDgQxSsD9U', 0, N'Ảnh 2', 9),
-('https://drive.google.com/thumbnail?id=1I6Mkp-HH7PhqpRO-CmBrxDpQjUtimjYt', 0, N'Ảnh 2', 4),
-('https://drive.google.com/thumbnail?id=1I9BljbtMfgP6zMwF31wAdkXg2zvacgup', 1, N'Ảnh 2', 10),
-('https://drive.google.com/thumbnail?id=1hLFaEnfKNkN4jJ_o-uzePbLdeMAbo6O-', 1, N'Ảnh 1', 3),
-('https://drive.google.com/thumbnail?id=1gAN_nAEdLaaL_DsZqOPVZhBo9qaaWskt', 1, N'Ảnh 1', 8),
-('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 4),
-('https://drive.google.com/thumbnail?id=1ln8Ph8bcyiwK6FMUmy1u7-NBCsaJWZ6K', 1, N'Ảnh 1', 5),
-('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 9),
-('https://drive.google.com/thumbnail?id=1I6Mkp-HH7PhqpRO-CmBrxDpQjUtimjYt', 1, N'Ảnh 1', 1),
-('https://drive.google.com/thumbnail?id=1jUClkB0tUo4H5javEoUJ5ioA12CmrdZi', 1, N'Ảnh 1', 10),
-('https://drive.google.com/thumbnail?id=1hLFaEnfKNkN4jJ_o-uzePbLdeMAbo6O-', 1, N'Ảnh 1', 8),
-('https://drive.google.com/thumbnail?id=1gAN_nAEdLaaL_DsZqOPVZhBo9qaaWskt', 1, N'Ảnh 1', 6),
-('https://drive.google.com/thumbnail?id=1gAN_nAEdLaaL_DsZqOPVZhBo9qaaWskt', 1, N'Ảnh 1', 1),
-('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 4),
-('https://drive.google.com/thumbnail?id=1Q1lvEfB-276ThWaDbZKEBjYt6aGsSF8K', 1, N'Ảnh 1', 6),
-('https://drive.google.com/thumbnail?id=1I6Mkp-HH7PhqpRO-CmBrxDpQjUtimjYt', 1, N'Ảnh 1', 3),
-('https://drive.google.com/thumbnail?id=1jUClkB0tUo4H5javEoUJ5ioA12CmrdZi', 1, N'Ảnh 1', 10),
-('https://drive.google.com/thumbnail?id=1gAN_nAEdLaaL_DsZqOPVZhBo9qaaWskt', 1, N'Ảnh 1', 1),
-('https://drive.google.com/thumbnail?id=1I9BljbtMfgP6zMwF31wAdkXg2zvacgup', 1, N'Ảnh 1', 2),
-('https://drive.google.com/thumbnail?id=1I6Mkp-HH7PhqpRO-CmBrxDpQjUtimjYt', 1, N'Ảnh 1', 6),
-('https://drive.google.com/thumbnail?id=1jUClkB0tUo4H5javEoUJ5ioA12CmrdZi', 1, N'Ảnh 1', 2),
-('https://drive.google.com/thumbnail?id=14I1XkVcBSX3oFdBsO67DmItDgQxSsD9U', 1, N'Ảnh 1', 3),
-('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 4),
-('https://drive.google.com/thumbnail?id=19IgXuJ-fG8ezmgJGbc5UmYKqZTaDX7kw', 1, N'Ảnh 1', 5),
-('https://drive.google.com/thumbnail?id=1mScTwqSFQAPtjh4W-iUXrc4-C_fKG88y', 1, N'Ảnh 1', 6),
-('https://drive.google.com/thumbnail?id=1XOP6HkAAcGjxPVL4tHnR5qmsAzH5bckK', 1, N'Ảnh 1', 7),
-('https://drive.google.com/thumbnail?id=1MMikX09-CmbPvnsg8L1dkg8LjROg7H8g', 1, N'Ảnh 1', 9),
-('https://drive.google.com/thumbnail?id=1XYvjjgtQaJHqaEStlWdd2T2EujyAIaNY', 1, N'Ảnh 1', 10),
-('https://drive.google.com/thumbnail?id=1gXcUNaaT0YqujrYBBNiS7XVffNcfhG47', 1, N'Ảnh 1', 1);
+-- Product 1
+('https://drive.google.com/thumbnail?id=1uZCCymfEEX64DmSPi3pved4dN82m-Ylv', 1, N'p01_1', 1),
+('https://drive.google.com/thumbnail?id=1_f3qhdxxSN2wIMlGD7vJfFZDjADK979m', 0, N'p01_2', 1),
+('https://drive.google.com/thumbnail?id=1s021rWJyb2dTu2FjoQAJKmi6mqmIdAcF', 0, N'p01_3', 1),
+('https://drive.google.com/thumbnail?id=1cgtXb56jbbS5qczTGOkDylRv4Q161eF9', 0, N'p01_4', 1),
+
+-- Product 2
+('https://drive.google.com/thumbnail?id=1CgPXqT8pTXA0FEEM3iz-gxlkYc-b8VYy', 1, N'p02_1', 2),
+('https://drive.google.com/thumbnail?id=1UE0_OO8T8KwRnZCff0reLwNfkIYuaQ1K', 0, N'p02_2', 2),
+('https://drive.google.com/thumbnail?id=1C19oBGbWK6XXg1MO4fiNOl4BbzQ5nEtB', 0, N'p02_3', 2),
+
+-- Product 3
+('https://drive.google.com/thumbnail?id=12ytR2xjJChylncGz1UDvUxMpolAnoChY', 1, N'p03_1', 3),
+('https://drive.google.com/thumbnail?id=1jldtc9F0EQdD6cRc2TseVOTgwkjrR8DJ', 0, N'p03_2', 3),
+('https://drive.google.com/thumbnail?id=1NMNVS8L15HabmR9i0uNd3WBfItIwIrNK', 0, N'p03_3', 3),
+('https://drive.google.com/thumbnail?id=1KVWYOR_embqbNUSEIyozjVsy89_OBwYp', 0, N'p03_4', 3),
+
+-- Product 4
+('https://drive.google.com/thumbnail?id=1vLCzY205TfH8dnNTIpmk1qeg9tIZAiHu', 1, N'p04_1', 4),
+('https://drive.google.com/thumbnail?id=1zrjJYVvQlYXW9JzEuslESHHPDWXwI1ov', 0, N'p04_2', 4),
+
+-- Product 5
+('https://drive.google.com/thumbnail?id=1FHCR81eoZ8HMxoVS_uTceVijmB1S3IEO', 1, N'p05_1', 5),
+('https://drive.google.com/thumbnail?id=1yO5grCcC5pX7SDT6AwzxvA52yV5SmA5V', 0, N'p05_2', 5),
+('https://drive.google.com/thumbnail?id=1z1n1yNN16AS7eWB6k_XMZIYLwEsqmDlF', 0, N'p05_3', 5),
+
+-- Product 6
+('https://drive.google.com/thumbnail?id=16Ey_vJM1T-rCwQMzN5vrhxr9peVsvlSB', 1, N'p06_1', 6),
+('https://drive.google.com/thumbnail?id=1XGEpMkHqlFseEOid9_GOJYL2KYrRG3lG', 0, N'p06_2', 6),
+('https://drive.google.com/thumbnail?id=1Qz_sQkNfzYwE9c49AzMBR8hZMa66lxwa', 0, N'p06_3', 6),
+
+-- Product 7
+('https://drive.google.com/thumbnail?id=1ftuCIDFDmC2WdwkFHBSUIDBzMlHowas3', 1, N'p07_1', 7),
+('https://drive.google.com/thumbnail?id=1K5LS2lyBFVYfDspCHm4OoBnmxxCWTFop', 0, N'p07_2', 7),
+('https://drive.google.com/thumbnail?id=1c08TakWyCE_BrBKLFuTgrrXnowlnJ5lW', 0, N'p07_3', 7),
+
+-- Product 8
+('https://drive.google.com/thumbnail?id=1iaQEfadxqDA0sNQ1u-TyZ0Lz51SLhg7w', 1, N'p08_1', 8),
+('https://drive.google.com/thumbnail?id=1VLM9B55uIxhFHMLXhlOCGyzNMcFcoJrT', 0, N'p08_2', 8),
+
+-- Product 9
+('https://drive.google.com/thumbnail?id=1zyZoXTHHFiHsuaOd9fp-O70Rh4sG160V', 1, N'p09_1', 9),
+('https://drive.google.com/thumbnail?id=1xoPcW7FAS_jD_BBcQCG9I4Y-5pCQukQS', 0, N'p09_2', 9),
+('https://drive.google.com/thumbnail?id=16sj1JsCpYmqUPC1iMhbzEWZ_uc8IXiRN', 0, N'p09_3', 9),
+('https://drive.google.com/thumbnail?id=1dERmwj031cZekDfivKf68qXnnCYZ7QqM', 0, N'p09_4', 9),
+
+-- Product 10
+('https://drive.google.com/thumbnail?id=1cJtDPFfQyz999xDp7mVI8qlntJyGg1ml', 1, N'p10_1', 10),
+('https://drive.google.com/thumbnail?id=1WZsMtDWUIEa1jYoXUjagmli7DcVDyB9P', 0, N'p10_2', 10),
+('https://drive.google.com/thumbnail?id=1dI8LRQaSFBpr-gG5-TpY9Ecvuza3RMsG', 0, N'p10_3', 10);
 
 
 
