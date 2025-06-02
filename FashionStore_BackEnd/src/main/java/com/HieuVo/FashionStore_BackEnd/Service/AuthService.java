@@ -62,7 +62,7 @@ public class AuthService {
         if (userDTO.getRoles() != null) {
             List<Role> roles = this.roleRepository.findAllByRoleNameIn(userDTO.getRoles());
         } else {
-            user.setListRoles(Collections.singletonList(this.roleRepository.findByRoleName("USER")));
+            user.setListRoles(Collections.singletonList(this.roleRepository.findByRoleName("USER").get()));
 
         }
 
@@ -137,7 +137,7 @@ public class AuthService {
     }
 
     public ResponseEntity<Notification> confirmEmail(String email, String activationCode) throws Exception {
-        User user = this.userRepository.findByEmail(email);
+        User user = this.userRepository.findByEmail(email).get();
         System.out.println("Request activation code: '" + activationCode + "'");
         System.out.println("DB activation code: '" + (user != null ? user.getActivationCode() : "null") + "'");
 

@@ -47,4 +47,17 @@ public class Endpoints {
                         "/api/v1/user/**",
                         "/api/v1/orders/admin/**"
         };
+        // Thêm mảng mới chứa tất cả các endpoint OAuth2 cần permitAll
+        public static final String[] OAUTH2_ENDPOINTS = {
+                        "/oauth2/**",
+                        "/login/oauth2/code/**",
+                        "/api/v1/oauth2/**",
+                        "/oauth2/authorization/google",
+                        "/login/oauth2/code/google",
+                        "/oauth2/authorization/google",
+                        "/login",
+                        "/oauth2/authorization/**",
+                        "/login/oauth2/code/**",
+                        "/api/v1/oauth2/authorization/**"
+        };
 }
