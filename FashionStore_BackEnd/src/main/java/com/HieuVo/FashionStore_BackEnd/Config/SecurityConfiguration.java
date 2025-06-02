@@ -68,8 +68,11 @@ public class SecurityConfiguration {
                 // cors
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(url, "http://192.168.1.6:5173"));
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    // Cho phép tất cả origins trong mạng local
+                    config.setAllowedOriginPatterns(List.of(
+                            "*"
+                    ));
+                                        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*")); // chấp nhận tất cả các header từ request
                     config.setAllowCredentials(true);// cho phép gửi cookie, token (JWT) từ frontend
                     return config;

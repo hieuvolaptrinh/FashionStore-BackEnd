@@ -122,7 +122,7 @@ INSERT INTO cart_detail (cart_id, product_id, quantity, price) VALUES
 (3, 5, 1, 170000), (4, 1, 1, 180000),
 (5, 2, 1, 220000);
 GO
-*/
+
 -- Insert vào bảng orders
 go
 INSERT INTO orders (user_id, create_at, delivery_date, total_price, payment_type_id, shipping_method_id, shipping_address_id, status,is_pay) 
@@ -155,56 +155,54 @@ GO
 INSERT INTO [image](link, icon, image_name, product_id)
 VALUES
 -- Product 1
-('https://drive.google.com/thumbnail?id=1uZCCymfEEX64DmSPi3pved4dN82m-Ylv', 1, N'p01_1', 1),
-('https://drive.google.com/thumbnail?id=1_f3qhdxxSN2wIMlGD7vJfFZDjADK979m', 0, N'p01_2', 1),
-('https://drive.google.com/thumbnail?id=1s021rWJyb2dTu2FjoQAJKmi6mqmIdAcF', 0, N'p01_3', 1),
-('https://drive.google.com/thumbnail?id=1cgtXb56jbbS5qczTGOkDylRv4Q161eF9', 0, N'p01_4', 1),
+('https://drive.google.com/thumbnail?id=1jaYKEd4dArK6xHmALF-jM1O1TlW-Zl2Y', 1, N'p01_1', 1),
+('https://drive.google.com/thumbnail?id=1-ZxGxBG4AZnoRNdcFZXIBJKLbM54fZtA', 0, N'p01_2', 1),
+('https://drive.google.com/thumbnail?id=1j6N1H3bnYQ4-1lJNaPWjVMlcUOkaGy99', 0, N'p01_3', 1),
+('https://drive.google.com/thumbnail?id=1oDzf_tcX9v7viG3Aonai1BpAiRv51Qnk', 0, N'p01_4', 1),
 
 -- Product 2
-('https://drive.google.com/thumbnail?id=1CgPXqT8pTXA0FEEM3iz-gxlkYc-b8VYy', 1, N'p02_1', 2),
-('https://drive.google.com/thumbnail?id=1UE0_OO8T8KwRnZCff0reLwNfkIYuaQ1K', 0, N'p02_2', 2),
-('https://drive.google.com/thumbnail?id=1C19oBGbWK6XXg1MO4fiNOl4BbzQ5nEtB', 0, N'p02_3', 2),
+('https://drive.google.com/thumbnail?id=1pG1mrn-I_qmKDyAOONF5-4TBnKjlBxE4', 1, N'p02_1', 2),
+('https://drive.google.com/thumbnail?id=1mlEBU8IxAofhodJbN7r5dLtinVTX4L_M', 0, N'p02_2', 2),
+('https://drive.google.com/thumbnail?id=1n4IacmWWMfNRbJuXCFO2vlUYwy9GvZdA', 0, N'p02_3', 2),
 
 -- Product 3
-('https://drive.google.com/thumbnail?id=12ytR2xjJChylncGz1UDvUxMpolAnoChY', 1, N'p03_1', 3),
-('https://drive.google.com/thumbnail?id=1jldtc9F0EQdD6cRc2TseVOTgwkjrR8DJ', 0, N'p03_2', 3),
-('https://drive.google.com/thumbnail?id=1NMNVS8L15HabmR9i0uNd3WBfItIwIrNK', 0, N'p03_3', 3),
-('https://drive.google.com/thumbnail?id=1KVWYOR_embqbNUSEIyozjVsy89_OBwYp', 0, N'p03_4', 3),
+('https://drive.google.com/thumbnail?id=1OVtqQuUihe3NaxHzsBou51KWXUjGyMuh', 1, N'p03_1', 3),
+('https://drive.google.com/thumbnail?id=1bq3eC3tHvcGM0Ipo3B5CEippf6LfHTdQ', 0, N'p03_2', 3),
+('https://drive.google.com/thumbnail?id=1rY-gnG3BwR8n_83gn3VsL6Iih1H7qLi0', 0, N'p03_3', 3),
+('https://drive.google.com/thumbnail?id=1jja5-dQDpYrCbgErG3GyKhLCKojn1NP3', 0, N'p03_4', 3),
 
 -- Product 4
-('https://drive.google.com/thumbnail?id=1vLCzY205TfH8dnNTIpmk1qeg9tIZAiHu', 1, N'p04_1', 4),
-('https://drive.google.com/thumbnail?id=1zrjJYVvQlYXW9JzEuslESHHPDWXwI1ov', 0, N'p04_2', 4),
+('https://drive.google.com/thumbnail?id=1wsa73cmtMo3OIIhIQtHhWBNK4qsSdnDd', 1, N'p04_1', 4),
+('https://drive.google.com/thumbnail?id=15F8P0gxnWsMTIIUxuI27CAQDiZjBgMwA', 0, N'p04_2', 4),
 
 -- Product 5
-('https://drive.google.com/thumbnail?id=1FHCR81eoZ8HMxoVS_uTceVijmB1S3IEO', 1, N'p05_1', 5),
-('https://drive.google.com/thumbnail?id=1yO5grCcC5pX7SDT6AwzxvA52yV5SmA5V', 0, N'p05_2', 5),
-('https://drive.google.com/thumbnail?id=1z1n1yNN16AS7eWB6k_XMZIYLwEsqmDlF', 0, N'p05_3', 5),
+('https://drive.google.com/thumbnail?id=1RIEzr8hZ1EZpJM3Enfeuij_GQp0-id4s', 1, N'p05_1', 5),
+('https://drive.google.com/thumbnail?id=16jtVGL3LV0CUQT4TFgw4CtMQMSmZszYX', 0, N'p05_2', 5),
+('https://drive.google.com/thumbnail?id=1jlMB5VA0Q1w-UoUL0COeXJB6205Y0lim', 0, N'p05_3', 5),
 
 -- Product 6
-('https://drive.google.com/thumbnail?id=16Ey_vJM1T-rCwQMzN5vrhxr9peVsvlSB', 1, N'p06_1', 6),
-('https://drive.google.com/thumbnail?id=1XGEpMkHqlFseEOid9_GOJYL2KYrRG3lG', 0, N'p06_2', 6),
-('https://drive.google.com/thumbnail?id=1Qz_sQkNfzYwE9c49AzMBR8hZMa66lxwa', 0, N'p06_3', 6),
+('https://drive.google.com/thumbnail?id=1b1hW7lDEPApUYFVTtvyR7-8f2lnmNkl6', 1, N'p06_1', 6),
+('https://drive.google.com/thumbnail?id=1GAEDMDDGhAqh177zxs87zLoC-N8iYWDA', 0, N'p06_2', 6),
+('https://drive.google.com/thumbnail?id=1T2ZgZn4H5tuJ-rFK8B-7-5D-jUp1Q5Fy', 0, N'p06_3', 6),
 
 -- Product 7
-('https://drive.google.com/thumbnail?id=1ftuCIDFDmC2WdwkFHBSUIDBzMlHowas3', 1, N'p07_1', 7),
-('https://drive.google.com/thumbnail?id=1K5LS2lyBFVYfDspCHm4OoBnmxxCWTFop', 0, N'p07_2', 7),
-('https://drive.google.com/thumbnail?id=1c08TakWyCE_BrBKLFuTgrrXnowlnJ5lW', 0, N'p07_3', 7),
+('https://drive.google.com/thumbnail?id=1FT6UP3YhxSHhUGbXBSwZWalB38yevrei', 1, N'p07_1', 7),
+('https://drive.google.com/thumbnail?id=14dSd3vFkM1GVDqYVdFdvFAMzZkmdiMfP', 0, N'p07_2', 7),
+('https://drive.google.com/thumbnail?id=1g8gaBfcsd0I7GPrm3-KG5gahkPtVz52n', 0, N'p07_3', 7),
 
 -- Product 8
-('https://drive.google.com/thumbnail?id=1iaQEfadxqDA0sNQ1u-TyZ0Lz51SLhg7w', 1, N'p08_1', 8),
-('https://drive.google.com/thumbnail?id=1VLM9B55uIxhFHMLXhlOCGyzNMcFcoJrT', 0, N'p08_2', 8),
+('https://drive.google.com/thumbnail?id=1Hw2MeF1OnG_LZAkOBkZ1Dn5hgkACXKP4', 1, N'p08_1', 8),
+('https://drive.google.com/thumbnail?id=1VwzoUrVZpRXjFfJIYW4tXr9z1MHAxceS', 0, N'p08_2', 8),
 
 -- Product 9
-('https://drive.google.com/thumbnail?id=1zyZoXTHHFiHsuaOd9fp-O70Rh4sG160V', 1, N'p09_1', 9),
-('https://drive.google.com/thumbnail?id=1xoPcW7FAS_jD_BBcQCG9I4Y-5pCQukQS', 0, N'p09_2', 9),
-('https://drive.google.com/thumbnail?id=16sj1JsCpYmqUPC1iMhbzEWZ_uc8IXiRN', 0, N'p09_3', 9),
-('https://drive.google.com/thumbnail?id=1dERmwj031cZekDfivKf68qXnnCYZ7QqM', 0, N'p09_4', 9),
+('https://drive.google.com/thumbnail?id=11FC8SZOIsBtcnaWrAvznw5VaxbuQL5q6', 1, N'p09_1', 9),
+('https://drive.google.com/thumbnail?id=19uvA5aLbpK6QzquHwO5r80L76yGKSWqV', 0, N'p09_2', 9),
+('https://drive.google.com/thumbnail?id=117iwnUqJEnv5Bgc5TULHASF_B6dVuC-H', 0, N'p09_3', 9),
+('https://drive.google.com/thumbnail?id=1NZAiWRVcqPSm6-DsjwQSKxbMcL_d2M_C', 0, N'p09_4', 9),
 
 -- Product 10
-('https://drive.google.com/thumbnail?id=1cJtDPFfQyz999xDp7mVI8qlntJyGg1ml', 1, N'p10_1', 10),
-('https://drive.google.com/thumbnail?id=1WZsMtDWUIEa1jYoXUjagmli7DcVDyB9P', 0, N'p10_2', 10),
-('https://drive.google.com/thumbnail?id=1dI8LRQaSFBpr-gG5-TpY9Ecvuza3RMsG', 0, N'p10_3', 10);
-
+('https://drive.google.com/thumbnail?id=18Qgalh_wk7toQjXFGI64Lg95V5iFC52p', 1, N'p10_1', 10),
+('https://drive.google.com/thumbnail?id=1HszspEzGSwzaZGtINbhbhI8c7N50Wsdw', 0, N'p10_2', 10);
 
 
 --select users.password, users.user_name, user_role.role_id , role.role_name
