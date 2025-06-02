@@ -6,11 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class BookStoreBackEndApplication {
-
     public static void main(String[] args) {
         // Khởi tạo dotenv và tải file .env
         Dotenv dotenv = Dotenv.load();
-
         // Đặt các biến môi trường trong hệ thống
         System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
@@ -20,6 +18,9 @@ public class BookStoreBackEndApplication {
         System.setProperty("VNPAY_TMN_CODE", dotenv.get("VNPAY_TMN_CODE"));
         System.setProperty("VNPAY_HASH_SECRET", dotenv.get("VNPAY_HASH_SECRET"));
         System.setProperty("VNPAY_VNP_RETURNURL", dotenv.get("VNPAY_VNP_RETURNURL"));
+
+        System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
+        System.setProperty("GOOGLE_CLIENT_ID", dotenv.get("GOOGLE_CLIENT_ID"));
 
         SpringApplication.run(BookStoreBackEndApplication.class, args);
     }

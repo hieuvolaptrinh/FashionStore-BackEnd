@@ -11,6 +11,10 @@ public class Endpoints {
                         "/api/v1/user/*/avatar",
                         "/api/payment/vnpay-return",
                         "/api/v1/review-list/**",
+                        // oauth2
+                        "/oauth2/**",
+                        "/login/oauth2/code/**",
+                        "/api/v1/oauth2/**",
                         // swagger
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
@@ -28,14 +32,14 @@ public class Endpoints {
         public static final String[] USER_ENDPOINTS = {
                         "/api/v1/cart/**",
                         "/api/v1/user/*",
-                "/api/v1/user/{id}"
+                        "/api/v1/user/{id}"
         };
 
         public static final String[] SHIPPER_ENDPOINTS = {
                         "/api/v1/products/**",
                         "/api/v1/orders/admin/**",
                         "/api/v1/user/*",
-                "/api/v1/user/{id}"
+                        "/api/v1/user/{id}"
         };
         public static final String[] ADMIN_ENDPOINTS = {
                         "/uploadToGoogleDrive/**",

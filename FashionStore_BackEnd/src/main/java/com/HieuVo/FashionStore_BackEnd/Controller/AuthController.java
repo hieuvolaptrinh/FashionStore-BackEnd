@@ -37,6 +37,9 @@ public class AuthController {
         this.userService = userService;
     }
 
+
+
+
     @GetMapping("/activateAccount")
     public ResponseEntity<Notification> confirmNewUser(@RequestParam String email, @RequestParam String activationCode) throws Exception {
         return this.authService.confirmEmail(email, activationCode);

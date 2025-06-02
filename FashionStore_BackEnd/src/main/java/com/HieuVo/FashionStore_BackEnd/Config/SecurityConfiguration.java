@@ -1,6 +1,7 @@
 package com.HieuVo.FashionStore_BackEnd.Config;
 
 import com.HieuVo.FashionStore_BackEnd.Filter.JwtAuthenticationFilter;
+import com.HieuVo.FashionStore_BackEnd.Service.CustomOAuth2UserService;
 import com.HieuVo.FashionStore_BackEnd.Service.UserService;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +26,17 @@ public class SecurityConfiguration {
     Dotenv dotenv = Dotenv.load();
     private String url = dotenv.get("URL");
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     // thêm lazy để tránh lỗi khi khởi tạo bean vì nó phụ thuộc vòng tròn mất
-    public SecurityConfiguration(@Lazy JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfiguration(
+            @Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
+            CustomOAuth2UserService customOAuth2UserService,
+            OAuth2SuccessHandler oAuth2SuccessHandler) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
     }
 
     @Bean
@@ -57,12 +65,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
-                        .requestMatchers("/api/payment/vnpay-return").permitAll()
+                        .requestMatchers("/api/payment/vnpay-return", "/api/v1/oauth2/**").permitAll()
+                        .requestMatchers("/login/oauth2/code/**", "/oauth2/**").permitAll() // Cho phép các endpoint
+                                                                                            // OAuth2
                         .requestMatchers(Endpoints.USER_ENDPOINTS).hasAnyAuthority("USER", "ADMIN", "SHIPPER")
                         .requestMatchers(Endpoints.SHIPPER_ENDPOINTS).hasAnyAuthority("SHIPPER", "ADMIN")
                         .requestMatchers(Endpoints.ADMIN_ENDPOINTS).hasAuthority("ADMIN")
-                        // .requestMatchers("/**").permitAll() )//
-
                         .anyRequest().authenticated())
 
                 // cors
@@ -70,25 +78,30 @@ public class SecurityConfiguration {
                     CorsConfiguration config = new CorsConfiguration();
                     // Cho phép tất cả origins trong mạng local
                     config.setAllowedOriginPatterns(List.of(
-                            "*"
-                    ));
-                                        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                            "*"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*")); // chấp nhận tất cả các header từ request
                     config.setAllowCredentials(true);// cho phép gửi cookie, token (JWT) từ frontend
                     return config;
                 }))
-                .formLogin(Customizer.withDefaults()) // cho phép login bằng form (chỉ dùng nếu dùng session hoặc dev
-                // đang test).
-                .httpBasic(Customizer.withDefaults()); // login bằng HTTP basic (có thể tắt nếu chỉ dùng JWT)
+
+                .formLogin(formLogin -> formLogin.permitAll()) // cho phép login bằng form
+                .httpBasic(httpBasic -> httpBasic.disable()) // tắt HTTP basic authentication
+
+                // Cấu hình OAuth2
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler)
+                        .permitAll());
+
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // không lưu
                 // session
                 // về sử
                 // dụng jwt
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // filter jwt
-        // trước filter
-        // mặc định
 
         return http.build();
     }
-
 }
