@@ -8,8 +8,8 @@ IF EXISTS (
 BEGIN  
 		USE master
 		
-		alter database Handmade set single_user with rollback immediate
-		drop database Handmade;
+		alter database FashionStore1 set single_user with rollback immediate
+		drop database FashionStore1;
 END  
 GO
 CREATE DATABASE FashionStore1

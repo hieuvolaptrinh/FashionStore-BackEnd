@@ -48,16 +48,6 @@ public class UserService implements UserDetailsService {
                 rolesToAuthorites(user.getListRoles()));
 
     }
-
-    public User fetchUserByUsername(String username) {
-        Optional<User> user = this.userRepository.findByUserName(username);
-        if (user.isPresent()) {
-            return user.get();
-        }
-        return null;
-
-    }
-
     // Lấy danh sách role của user, tránh lỗi nếu roles == null
     // vì chỗ này trả về GrantedAuthority nên bên security phải sử dụng
     // hasAuthority("ADMIN") thay vì hasRole("ADMIN")
@@ -69,6 +59,16 @@ public class UserService implements UserDetailsService {
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
     }
+
+    public User fetchUserByUsername(String username) {
+        Optional<User> user = this.userRepository.findByUserName(username);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        return null;
+
+    }
+
 
     private UserResponse convertToDTO(User user) {
         UserResponse userDTO = new UserResponse();

@@ -17,7 +17,7 @@ public class BookStoreBackEndApplication {
         // payment
         System.setProperty("VNPAY_TMN_CODE", dotenv.get("VNPAY_TMN_CODE"));
         System.setProperty("VNPAY_HASH_SECRET", dotenv.get("VNPAY_HASH_SECRET"));
-        System.setProperty("VNPAY_VNP_RETURNURL", dotenv.get("VNPAY_VNP_RETURNURL"));
+//        System.setProperty("VNPAY_VNP_RETURNURL", dotenv.get("VNPAY_VNP_RETURNURL"));
 
         System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
         System.setProperty("GOOGLE_CLIENT_ID", dotenv.get("GOOGLE_CLIENT_ID"));

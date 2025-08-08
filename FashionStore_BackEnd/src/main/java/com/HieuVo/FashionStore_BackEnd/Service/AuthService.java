@@ -24,7 +24,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final SendEmailController emailService;
     private final RoleRepository roleRepository;
-
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
                        SendEmailController emailService, RoleRepository roleRepository,
                        AdderssRepository addressRepository) {
@@ -35,7 +34,6 @@ public class AuthService {
 
 
     }
-
     public String registerUser(UserResponse userDTO) {
         if (this.userRepository.existsByUserName(userDTO.getUserName())) {
             return "Tài khoản đã tồn tại";

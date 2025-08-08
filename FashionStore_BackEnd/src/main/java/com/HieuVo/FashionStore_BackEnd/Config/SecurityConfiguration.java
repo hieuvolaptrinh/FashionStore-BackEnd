@@ -24,7 +24,7 @@ import java.util.List;
 @Configuration
 public class SecurityConfiguration {
         Dotenv dotenv = Dotenv.load();
-        private String url = dotenv.get("URL");
+
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
         private final CustomOAuth2UserService customOAuth2UserService;
         private final OAuth2SuccessHandler oAuth2SuccessHandler;
@@ -88,8 +88,7 @@ public class SecurityConfiguration {
                                         return config;
                                 }))
 
-                                .formLogin(formLogin -> formLogin.disable()) // Tắt form login vì chúng ta sử dụng
-                                                                             // RESTful API
+                                .formLogin(formLogin -> formLogin.disable()) // rest API không sử dụng form login
                                 .httpBasic(httpBasic -> httpBasic.disable()) // tắt HTTP basic authentication
 
                                 // Cấu hình OAuth2
